@@ -1,6 +1,6 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+App+是一个手机软件管理软件，恩，这是目前的定义，以后还不一定，现在就是做着玩玩啦。
 
 ### What is this repository for? ###
 

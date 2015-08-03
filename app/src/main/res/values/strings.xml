@@ -53,4 +53,5 @@
     <string name="title_activity_app_detail">AppDetailActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="search_title">搜索</string>
 </resources>

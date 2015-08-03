@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_drawer_theme"
+        android:icon="?ic_nav_menu_theme"
+        android:title="@string/menu_main_theme" />
+
+    <item
+        android:id="@+id/menu_drawer_opinion"
+        android:icon="?ic_nav_menu_opinion"
+        android:title="@string/menu_main_opinion" />
+
+    <item
+        android:id="@+id/menu_drawer_setting"
+        android:icon="?ic_nav_menu_setting"
+        android:title="@string/menu_main_setting" />
+</menu>

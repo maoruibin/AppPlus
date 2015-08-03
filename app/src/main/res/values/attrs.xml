@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="themeOverFlowDrawable" format="reference"/>
+    <!-- 标题颜色 主色-->
+    <attr name="title_text" format="color"/>
+    <!-- 内容颜色 副色-->
+    <attr name="body_text" format="color"/>
+    <attr name="ic_menu_export" format="reference"/>
+    <attr name="ic_menu_share" format="reference"/>
+    <attr name="ic_nav_menu_support" format="reference"/>
+    <attr name="ic_nav_menu_theme" format="reference"/>
+    <attr name="ic_nav_menu_setting" format="reference"/>
+    <attr name="ic_nav_menu_opinion" format="reference"/>
+</resources>

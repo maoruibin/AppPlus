@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_advanced">
+        <com.jenzz.materialpreference.SwitchPreference
+            android:title="@string/switch_preference_develop_title"
+            android:key="@string/switch_preference_develop_key"
+            android:summaryOn="@string/switch_preference_develop_on"
+            android:summaryOff="@string/switch_preference_develop_off"/>
+    </com.jenzz.materialpreference.PreferenceCategory>
+
+    <com.jenzz.materialpreference.PreferenceCategory
+        android:title="@string/category_other">
+        <com.jenzz.materialpreference.Preference
+            android:title="@string/preference_title_score"
+            android:summary="@string/preference_summary_score"
+            android:key="@string/preference_key_score"/>
+        <com.jenzz.materialpreference.Preference
+            android:title="@string/preference_title_about"
+            android:key="@string/preference_key_about"/>
+    </com.jenzz.materialpreference.PreferenceCategory>
+</PreferenceScreen>

@@ -29,9 +29,9 @@ public class ThemeUtils {
 
     public int getCurrent(){
         if(darkMode){
-            return R.style.Theme_AppTheme_Dark;
+            return R.style.Theme_AppPlusDark_NavStatusTranslucent;
         }else{
-            return R.style.Theme_AppTheme;
+            return R.style.Theme_AppPlus_NavStatusTranslucent;
         }
     }
 

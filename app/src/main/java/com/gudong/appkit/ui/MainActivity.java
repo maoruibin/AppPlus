@@ -1,6 +1,7 @@
 package com.gudong.appkit.ui;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
@@ -21,6 +22,8 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.ThemeSingleton;
@@ -29,6 +32,7 @@ import com.gudong.appkit.adapter.AppPageListAdapter;
 import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.entity.AppEntity;
 import com.gudong.appkit.ui.base.BaseActivity;
+import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.ChangelogDialog;
 import com.gudong.appkit.utils.ThemeUtils;
@@ -58,7 +62,6 @@ public class MainActivity extends BaseActivity {
         }
 
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
@@ -67,7 +70,6 @@ public class MainActivity extends BaseActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
@@ -84,7 +86,6 @@ public class MainActivity extends BaseActivity {
         }
 
         mFlSearchResult = (FrameLayout) findViewById(R.id.fl_contain_search_result);
-
         initSearchContent();
 
         versionCheck();
@@ -98,23 +99,14 @@ public class MainActivity extends BaseActivity {
     }
 
     private void versionCheck() {
-        String currentVersion = getAppVersion();
+        String currentVersion = Utils.getAppVersion(this);
         String localVersionName = Utils.getLocalVersion(this);
         if(!localVersionName.equals(currentVersion)){
             showVersionLogView();
-            Utils.setCurrentVersion(this,currentVersion);
+            Utils.setCurrentVersion(this, currentVersion);
         }
     }
 
-    private String getAppVersion(){
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
-            return info.versionName;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
     /*
       Check if permission enabled
      */
@@ -135,7 +127,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getString(R.string.search_app_hint));
         searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
@@ -155,7 +147,9 @@ public class MainActivity extends BaseActivity {
                     mSearchResultFragment.cleatData();
 
                     AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS| AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                    //收起searchView  这里不要使用searchView
+                    searchItem.collapseActionView();
                 }
             }
         });
@@ -167,8 +161,12 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                List<AppEntity>result = searchApp(getAllInstalledApp(),newText);
-                mSearchResultFragment.setData(result);
+                if (TextUtils.isEmpty(newText)) {
+                    mSearchResultFragment.cleatData();
+                } else {
+                    List<AppEntity> result = searchApp(getAllInstalledApp(), newText);
+                    mSearchResultFragment.setData(result);
+                }
                 return false;
             }
         });
@@ -204,7 +202,7 @@ public class MainActivity extends BaseActivity {
                                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                                 break;
                             case R.id.menu_drawer_opinion:
-                                sendOpinion();
+                                NavigationManager.gotoSendOpinion(MainActivity.this);
                                 break;
                         }
                         menuItem.setChecked(true);
@@ -212,14 +210,6 @@ public class MainActivity extends BaseActivity {
                         return true;
                     }
                 });
-    }
-
-
-    private void sendOpinion(){
-        Intent localIntent = new Intent("android.intent.action.SENDTO", Uri.parse("mailto:" + "1252768410@qq.com"));
-        localIntent.putExtra("android.intent.extra.SUBJECT", getString(R.string.title_email_opinion));
-        localIntent.putExtra("android.intent.extra.TEXT", Utils.getLog(this));
-        startActivity(localIntent);
     }
 
     private void showVersionLogView() {

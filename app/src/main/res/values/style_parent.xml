@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme_AppPlus_Parent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="ic_menu_export">@mipmap/ic_exit_to_app_black_24dp</item>
+        <item name="ic_menu_share">@mipmap/ic_share_black_24dp</item>
+
+        <item name="ic_nav_menu_support">@mipmap/ic_favorite_black_24dp</item>
+        <item name="ic_nav_menu_theme">@mipmap/ic_color_lens_black_24dp</item>
+        <item name="ic_nav_menu_setting">@mipmap/ic_settings_black_24dp</item>
+        <item name="ic_nav_menu_opinion">@mipmap/ic_email_black_24dp</item>
+
+    </style>
+
+    <style name="Theme_AppPlus_Dark_Parent" parent="Theme.AppCompat.NoActionBar">
+        <item name="ic_menu_export">@mipmap/ic_exit_to_app_white_24dp</item>
+        <item name="ic_menu_share">@mipmap/ic_share_white_24dp</item>
+
+        <item name="ic_nav_menu_support">@mipmap/ic_favorite_white_24dp</item>
+        <item name="ic_nav_menu_theme">@mipmap/ic_color_lens_white_24dp</item>
+        <item name="ic_nav_menu_setting">@mipmap/ic_settings_white_24dp</item>
+        <item name="ic_nav_menu_opinion">@mipmap/ic_email_white_24dp</item>
+    </style>
+
+</resources>

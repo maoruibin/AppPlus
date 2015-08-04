@@ -60,5 +60,20 @@ public class Utils {
 
         return sb.toString();
     }
+
+    /**
+     * 获取当前App版本号
+     * @param context
+     * @return
+     */
+    public static String getAppVersion(Context context){
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            return info.versionName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }
 

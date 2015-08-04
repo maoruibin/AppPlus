@@ -170,4 +170,9 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     public void setClickListItem(IClickListItem mClickListItem) {
         this.mClickListItem = mClickListItem;
     }
+
+    public List<AppEntity>getListData(){
+        return listData;
+    }
+
 }

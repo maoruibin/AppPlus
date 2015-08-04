@@ -54,4 +54,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="search_title">搜索</string>
+    <string name="search_app_hint">请输入应用关键字</string>
+
 </resources>

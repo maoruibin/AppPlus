@@ -34,5 +34,4 @@
         <item name="ic_nav_menu_setting">@mipmap/ic_settings_white_24dp</item>
         <item name="ic_nav_menu_opinion">@mipmap/ic_email_white_24dp</item>
     </style>
-
 </resources>

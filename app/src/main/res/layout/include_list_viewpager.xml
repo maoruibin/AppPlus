@@ -32,4 +32,12 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <!-- 显示搜索结果的容器 -->
+    <FrameLayout
+        android:id="@+id/fl_contain_search_result"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:visibility="gone"/>
+
 </android.support.design.widget.CoordinatorLayout>

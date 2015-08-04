@@ -19,6 +19,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by mao on 15/7/8.
@@ -54,6 +56,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     private Handler mHandler;
     private RecyclerView mRecyclerView;
     private AppInfoListAdapter mAdapter;
+    /**appInfo对应的list类型，小于0表示是搜索列表，大于等于0，则是正常的分页列表**/
     private int mType = 0;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,9 +66,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-
-                List<AppEntity>list = (List<AppEntity>) msg.obj;
-                mAdapter.update(list);
+                setData((List<AppEntity>) msg.obj);
             }
         };
         mType = getArguments().getInt("type");
@@ -91,7 +92,10 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onResume() {
         super.onResume();
-        fillData();
+        Log.i("----","type : "+mType);
+        if(mType>=0){
+            fillData();
+        }
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
@@ -123,6 +127,21 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 mHandler.sendMessage(mHandler.obtainMessage(1,list));
             }
         }).start();
+    }
+
+    /**
+     * 为列表设置数据
+     * @param data
+     */
+    public void setData(List<AppEntity>data){
+        mAdapter.update(data);
+    }
+
+    /**
+     * 清空列表数据
+     */
+    public void cleatData(){
+        mAdapter.update(new ArrayList<AppEntity>());
     }
 
     @Override
@@ -219,7 +238,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
         String exportFileName = entity.getAppName()+".apk";
         final File exportFile = new File(exportParentFile,exportFileName);
-        String contentInfo = String.format(getString(R.string.dialog_message_file_exist),exportFileName,exportFile.getParentFile().getAbsolutePath());
+        String contentInfo = String.format(getString(R.string.dialog_message_file_exist), exportFileName, exportFile.getParentFile().getAbsolutePath());
         if(exportFile.exists()){
             new MaterialDialog.Builder(getActivity())
                     .title(R.string.title_export)
@@ -318,4 +337,14 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         animationSet.setDuration(500);
         animationSet.start();
     }
+
+    /**
+     * 根据Adapter获取到adapter的数据
+     * @return
+     */
+    public List<AppEntity>getListEntity(){
+        if(mAdapter == null)return new ArrayList<>();
+        return mAdapter.getListData();
+    }
 }
+

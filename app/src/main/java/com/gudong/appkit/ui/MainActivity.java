@@ -7,30 +7,46 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.ThemeSingleton;
 import com.gudong.appkit.R;
+import com.gudong.appkit.adapter.AppPageListAdapter;
 import com.gudong.appkit.dao.AppInfoEngine;
+import com.gudong.appkit.entity.AppEntity;
 import com.gudong.appkit.ui.base.BaseActivity;
 import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.ChangelogDialog;
 import com.gudong.appkit.utils.ThemeUtils;
 import com.gudong.appkit.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends BaseActivity {
+    Toolbar mToolbar;
+    AppBarLayout mAppBar;
     DrawerLayout mDrawerLayout;
+    TabLayout mTabLayout;
+    ViewPager mViewPager;
+    FrameLayout mFlSearchResult;
+    AppListFragment mSearchResultFragment;
+    List<AppEntity>mListInstalled;
+    AppPageListAdapter mFragmentAdapter;
     private static int[]mTitles = new int[]{R.string.tab_recent,R.string.tab_installed};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +57,10 @@ public class MainActivity extends BaseActivity {
             checkPermission();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.mipmap.ic_menu);
@@ -55,17 +73,28 @@ public class MainActivity extends BaseActivity {
             setupDrawerContent(navigationView);
         }
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if (viewPager != null) {
-            setupViewPager(viewPager);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        if (mViewPager != null) {
+            setupViewPager(mViewPager);
         }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        if (tabLayout != null) {
-            tabLayout.setupWithViewPager(viewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        if (mTabLayout != null) {
+            mTabLayout.setupWithViewPager(mViewPager);
         }
+
+        mFlSearchResult = (FrameLayout) findViewById(R.id.fl_contain_search_result);
+
+        initSearchContent();
 
         versionCheck();
+    }
+
+    private void initSearchContent(){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        mSearchResultFragment = AppListFragment.getInstance(-1);
+        fragmentTransaction.add(R.id.fl_contain_search_result,mSearchResultFragment);
+        fragmentTransaction.commit();
     }
 
     private void versionCheck() {
@@ -99,13 +128,50 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
+        mFragmentAdapter = new AppPageListAdapter(getSupportFragmentManager(),this,mTitles);
+        viewPager.setAdapter(mFragmentAdapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_app_hint));
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mTabLayout.setVisibility(View.GONE);
+                    mViewPager.setVisibility(View.GONE);
+                    mFlSearchResult.setVisibility(View.VISIBLE);
+                    //设置toolbar的scrollFlag 让他不响应RecycleView的滑动事件
+                    AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                } else {
+                    mTabLayout.setVisibility(View.VISIBLE);
+                    mViewPager.setVisibility(View.VISIBLE);
+                    mFlSearchResult.setVisibility(View.GONE);
+                    mSearchResultFragment.cleatData();
+
+                    AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS| AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                }
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                List<AppEntity>result = searchApp(getAllInstalledApp(),newText);
+                mSearchResultFragment.setData(result);
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -128,10 +194,10 @@ public class MainActivity extends BaseActivity {
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.menu_drawer_theme:
                                 boolean isDark = ThemeUtils.isDarkMode(MainActivity.this);
-                                ThemeUtils.setTheme(MainActivity.this,!isDark);
+                                ThemeUtils.setTheme(MainActivity.this, !isDark);
                                 recreate();
                                 break;
                             case R.id.menu_drawer_setting:
@@ -148,27 +214,6 @@ public class MainActivity extends BaseActivity {
                 });
     }
 
-    class Adapter extends FragmentPagerAdapter {
-
-        public Adapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return AppListFragment.getInstance(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mTitles.length;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return getString(mTitles[position]).toString();
-        }
-    }
 
     private void sendOpinion(){
         Intent localIntent = new Intent("android.intent.action.SENDTO", Uri.parse("mailto:" + "1252768410@qq.com"));
@@ -184,5 +229,33 @@ public class MainActivity extends BaseActivity {
 
         ChangelogDialog.create(false, accentColor)
                 .show(getSupportFragmentManager(), "changelog");
+    }
+
+    private List<AppEntity>getAllInstalledApp(){
+        if(mListInstalled == null){
+            AppInfoEngine mEngine = new AppInfoEngine(this);
+            mListInstalled = mEngine.getInstalledAppList();
+        }
+        return mListInstalled;
+    }
+
+    /**
+     * 根据关键字搜索App
+     * @param list
+     * @param key
+     * @return
+     */
+    private List<AppEntity>searchApp(List<AppEntity>list,String key){
+        if(TextUtils.isEmpty(key)){
+            return list;
+        }
+        List<AppEntity>resultList = new ArrayList<>();
+        for(AppEntity entity:list){
+            String appName = entity.getAppName();
+            if(!TextUtils.isEmpty(appName) && appName.contains(key)){
+                resultList.add(entity);
+            }
+        }
+        return resultList;
     }
 }

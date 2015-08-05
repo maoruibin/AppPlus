@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -23,15 +22,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
-import android.view.animation.AnimationSet;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.entity.AppEntity;
-import com.gudong.appkit.ui.AppDetailActivity;
+import com.gudong.appkit.ui.activity.AppDetailActivity;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.Utils;
@@ -40,7 +37,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by mao on 15/7/8.
@@ -92,7 +88,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("----","type : "+mType);
+        Log.i("----", "type : " + mType);
         if(mType>=0){
             fillData();
         }
@@ -153,17 +149,21 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             case R.id.pop_share:
                 onTransferClick(entity);
                 break;
+            case R.id.pop_open:
+                onOpenClick(entity);
+                break;
         }
     }
+
 
     @Override
     public void onClickListItemContent(AppEntity entity) {
 
         if(Utils.isDevelopMode(getActivity())){
-//            showInstalledAppDetails(entity);
-            Intent intent = new Intent(getActivity(), AppDetailActivity.class);
-            intent.putExtra("detail",entity);
-            startActivity(intent);
+            showInstalledAppDetails(entity);
+//            Intent intent = new Intent(getActivity(), AppDetailActivity.class);
+//            intent.putExtra("detail",entity);
+//            startActivity(intent);
         }else{
             onTransferClick(entity);
         }
@@ -262,6 +262,22 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         }else{
             copyFile(srcFile, exportFile);
         }
+    }
+
+
+    private void onOpenClick(AppEntity entity) {
+//        Intent intent = new Intent();
+//        intent.setClassName("package.name", entity.getPackageName());
+//        startActivity(intent);
+
+//        Intent startApp = new Intent();
+//        ComponentName component = new ComponentName(
+//                entity.getPackageName(),
+//                rowClicked.getClassName());
+//        startApp.setComponent(component);
+//        startApp.setAction(Intent.ACTION_MAIN);
+//
+//        startActivity(startApp);
     }
 
     private void copyFile(File srcFile, final File exportFile) {

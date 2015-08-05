@@ -1,4 +1,4 @@
-package com.gudong.appkit.ui;
+package com.gudong.appkit.ui.activity;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.layouts.DataBindingInfo;

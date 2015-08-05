@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme_AppPlus_NavStatusTranslucent" parent="@style/Theme_AppPlus">
-        <!--<item name="android:windowTranslucentStatus">true</item>-->
+    <style name="Theme_AppPlus" parent="@style/Theme_AppPlus_temp">
+        <!--Translucent system bars-->
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <!--<item name="android:windowContentOverlay">@null</item>-->
+
+        <item name="fits_windows">true</item>
     </style>
 
-    <style name="Theme_AppPlusDark_NavStatusTranslucent" parent="@style/Theme_AppPlus_Dark">
+    <style name="Theme_AppPlus_Dark" parent="@style/Theme_AppPlus_Dark_temp">
         <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 </resources>

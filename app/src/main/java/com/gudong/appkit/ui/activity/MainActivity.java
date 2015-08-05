@@ -1,10 +1,8 @@
-package com.gudong.appkit.ui;
+package com.gudong.appkit.ui.activity;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -22,8 +20,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.ThemeSingleton;
@@ -37,12 +33,12 @@ import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.ChangelogDialog;
 import com.gudong.appkit.utils.ThemeUtils;
 import com.gudong.appkit.utils.Utils;
+import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity {
-    Toolbar mToolbar;
     AppBarLayout mAppBar;
     DrawerLayout mDrawerLayout;
     TabLayout mTabLayout;
@@ -52,18 +48,20 @@ public class MainActivity extends BaseActivity {
     List<AppEntity>mListInstalled;
     AppPageListAdapter mFragmentAdapter;
     private static int[]mTitles = new int[]{R.string.tab_recent,R.string.tab_installed};
+
+    @Override
+    protected int initLayout() {
+        return R.layout.activity_main;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
             checkPermission();
         }
 
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.mipmap.ic_menu);
@@ -90,6 +88,7 @@ public class MainActivity extends BaseActivity {
 
         versionCheck();
     }
+
 
     private void initSearchContent(){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -138,7 +137,7 @@ public class MainActivity extends BaseActivity {
                     mViewPager.setVisibility(View.GONE);
                     mFlSearchResult.setVisibility(View.VISIBLE);
                     //设置toolbar的scrollFlag 让他不响应RecycleView的滑动事件
-                    AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+                    AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) getToolbar().getLayoutParams();
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                 } else {
                     mTabLayout.setVisibility(View.VISIBLE);
@@ -146,7 +145,7 @@ public class MainActivity extends BaseActivity {
                     mFlSearchResult.setVisibility(View.GONE);
                     mSearchResultFragment.cleatData();
 
-                    AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) mToolbar.getLayoutParams();
+                    AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) getToolbar().getLayoutParams();
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                     //收起searchView  这里不要使用searchView
                     searchItem.collapseActionView();

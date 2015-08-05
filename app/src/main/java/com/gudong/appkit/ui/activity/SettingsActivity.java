@@ -1,4 +1,4 @@
-package com.gudong.appkit.ui;
+package com.gudong.appkit.ui.activity;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -11,21 +11,15 @@ import com.gudong.appkit.ui.fragment.SettingsFragment;
 
 public class SettingsActivity extends BaseActivity {
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting);
-
-        setToolbar();
-
-        addContent();
+    protected int initLayout() {
+        return R.layout.activity_setting;
     }
 
-    private void setToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.action_settings);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar= getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setupToolBar(R.string.action_settings, true);
+        addContent();
     }
 
     private void addContent(){
@@ -33,7 +27,5 @@ public class SettingsActivity extends BaseActivity {
         fragmentTransaction.replace(R.id.fl_container,new SettingsFragment());
         fragmentTransaction.commit();
     }
-
-
 
 }

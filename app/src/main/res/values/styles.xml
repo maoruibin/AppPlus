@@ -1,7 +1,7 @@
 <resources>
 
 
-    <style name="Theme_AppPlus" parent="@style/Theme_AppPlus_Parent">
+    <style name="Theme_AppPlus_temp" parent="@style/Theme_AppPlus_Parent">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -11,7 +11,7 @@
 
     </style>
 
-    <style name="Theme_AppPlus_Dark" parent="@style/Theme_AppPlus_Dark_Parent">
+    <style name="Theme_AppPlus_Dark_temp" parent="@style/Theme_AppPlus_Dark_Parent">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -19,9 +19,9 @@
         <item name="title_text">@android:color/white</item>
         <item name="body_text">#b4b4b4</item>
     </style>
-
-    <style name="Theme_AppPlus_NavStatusTranslucent" parent="@style/Theme_AppPlus"/>
-
-    <style name="Theme_AppPlusDark_NavStatusTranslucent" parent="@style/Theme_AppPlus_Dark"/>
+    <!-- 正常主题-->
+    <style name="Theme_AppPlus" parent="@style/Theme_AppPlus_temp"/>
+    <!-- 夜间模式-->
+    <style name="Theme_AppPlus_Dark" parent="@style/Theme_AppPlus_Dark_temp"/>
 
 </resources>

@@ -9,4 +9,9 @@
         android:title="@string/menu_pop_item_share"
         android:icon="?ic_menu_share"
         android:id="@+id/pop_share"/>
+    <item
+        android:title="@string/menu_pop_item_open"
+        android:icon="?ic_menu_open"
+        android:visible="false"
+        android:id="@+id/pop_open"/>
 </menu>

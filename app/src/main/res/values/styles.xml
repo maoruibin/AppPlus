@@ -5,7 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="themeOverFlowDrawable">@mipmap/ic_overflow_dark</item>
+        <item name="themeOverFlowDrawable">@drawable/ic_overflow_dark</item>
         <item name="title_text">@android:color/black</item>
         <item name="body_text">#303030</item>
 
@@ -15,7 +15,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="themeOverFlowDrawable">@mipmap/ic_overflow</item>
+        <item name="themeOverFlowDrawable">@drawable/ic_overflow</item>
         <item name="title_text">@android:color/white</item>
         <item name="body_text">#b4b4b4</item>
     </style>

@@ -2,23 +2,23 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.android.databinding'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "23.0.0 rc2"
+    compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
+    buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
     defaultConfig {
-        applicationId "com.gudong.appkit"
-        minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 2
-        versionName "0.2.0"
+        applicationId project.GROUP
+        minSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_MIN_VERSION)
+        targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
+        versionCode Integer.parseInt(project.VERSION_CODE)
+        versionName project.VERSION_NAME
     }
 
     signingConfigs {
         release {
-            storeFile file("gudong.jks")
-            storePassword "228560"
-            keyAlias "desert"
-            keyPassword "228560"
+            storeFile file(project.KEY_FILE)
+            storePassword project.STORE_PASSWORD
+            keyAlias project.KEY_ALIAS
+            keyPassword project.KEY_PASSWORD
         }
     }
 
@@ -32,8 +32,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-
-
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'

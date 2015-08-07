@@ -1,10 +1,29 @@
-.gradle
-/local.properties
-#/signing.properties
+### Android template
+# Built application files
+*.apk
+*.ap_
+
+# Files for the Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Gradle files
+.gradle/
+build/
+/*/build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+#mac temp file
+.DS_Store
+
+#idea
 /.idea/workspace.xml
 /.idea/libraries
-.DS_Store
-/build
-/captures
-.jks
-.iml
+
+# iml Files
+appkit.iml
+

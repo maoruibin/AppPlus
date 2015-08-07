@@ -1,1 +1,24 @@
-/build
+
+### Android template
+# Built application files
+*.apk
+*.ap_
+
+# Files for the Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+signing.properties
+
+# iml Files
+app.iml
+
+

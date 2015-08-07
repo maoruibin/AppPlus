@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme_AppPlus" parent="@style/Theme_AppPlus_temp">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">?colorPrimaryDark</item>
+    </style>
+
+    <style name="Theme_AppPlus_Dark" parent="@style/Theme_AppPlus_Dark_temp">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">?colorPrimaryDark</item>
+    </style>
+</resources>

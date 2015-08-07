@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.android.databinding'
 
+Properties prop = new Properties()
+prop.load(new FileInputStream(file("signing.properties")))
+
 android {
     compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
@@ -15,17 +18,21 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(project.KEY_FILE)
-            storePassword project.STORE_PASSWORD
-            keyAlias project.KEY_ALIAS
-            keyPassword project.KEY_PASSWORD
+            storeFile file(prop['KEY_FILE'])
+            storePassword prop['STORE_PASSWORD']
+            keyAlias prop['KEY_ALIAS']
+            keyPassword prop['KEY_PASSWORD']
         }
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            signingConfig signingConfigs.release
         }
     }
 }

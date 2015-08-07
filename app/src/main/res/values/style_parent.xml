@@ -12,6 +12,7 @@
         <item name="ic_nav_menu_opinion">@drawable/ic_email_black_24dp</item>
         <!-- app 主题颜色 不论是不是夜间模式，这个颜色值都是固定的 -->
         <item name="appColorPrimary">@color/colorPrimary</item>
+        <item name="fits_windows">true</item>
     </style>
 
     <style name="Theme_AppPlus_Dark_Parent" parent="Theme.AppCompat.NoActionBar">
@@ -25,6 +26,7 @@
         <item name="ic_nav_menu_opinion">@drawable/ic_email_white_24dp</item>
         <!-- app 主题颜色 -->
         <item name="appColorPrimary">@color/colorPrimary</item>
+        <item name="fits_windows">true</item>
     </style>
 
 </resources>

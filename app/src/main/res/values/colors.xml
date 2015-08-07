@@ -3,24 +3,16 @@
     <color name="window_background">#FFF5F5F5</color>
     <color name="window_background_dark">#de252525</color>
     <color name="grey">#FFcccccc</color>
-    <!-- brand color: orange -->
-    <!--<color name="colorPrimary">#673AB7</color>-->
-    <!--<color name="colorPrimaryDark">#512DA8</color>-->
-    <!--<color name="colorPrimaryLight">#9575CD</color>-->
-    <!-- accent color: red -->
-    <!--<color name="colorAccent">#FF4081</color>-->
 
-    <!-- brand color: green -->
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorPrimaryLight">#7986CB</color>
-    <!-- accent color: red -->
     <color name="colorAccent">#E91E63</color>
 
-    <!-- text color: white -->
+
     <color name="textColorPrimary">#DE000000</color>
     <color name="textColorSecondary">#9E9E9E</color>
-    <!-- inverse text color: 87% black -->
+
     <color name="textColorPrimaryInverse">#ffffff</color>
     <color name="textColorSecondaryInverse">#9E9E9E</color>
 </resources>

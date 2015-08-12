@@ -19,6 +19,6 @@ build/
 signing.properties
 
 # iml Files
-app.iml
+*.iml
 
 

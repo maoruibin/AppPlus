@@ -2,7 +2,6 @@ package com.gudong.appkit.ui.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -15,9 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +31,6 @@ import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.ChangelogDialog;
 import com.gudong.appkit.utils.ThemeUtils;
 import com.gudong.appkit.utils.Utils;
-import com.readystatesoftware.systembartint.SystemBarTintManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +108,7 @@ public class MainActivity extends BaseActivity {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void checkPermission(){
-        AppInfoEngine engine = new AppInfoEngine(this);
+        AppInfoEngine engine = AppInfoEngine.getInstance(this);
         if (engine.getUsageStatsList().isEmpty()){
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
             startActivity(intent);
@@ -195,8 +191,10 @@ public class MainActivity extends BaseActivity {
                         switch (menuItem.getItemId()) {
                             case R.id.menu_drawer_theme:
                                 boolean isDark = ThemeUtils.isDarkMode(MainActivity.this);
-                                ThemeUtils.setTheme(MainActivity.this, !isDark);
-                                recreate();
+                                getThemeUtils().setIsDarkTheme(!isDark);
+
+
+                                reload();
                                 break;
                             case R.id.menu_drawer_setting:
                                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
@@ -223,7 +221,7 @@ public class MainActivity extends BaseActivity {
 
     private List<AppEntity>getAllInstalledApp(){
         if(mListInstalled == null){
-            AppInfoEngine mEngine = new AppInfoEngine(this);
+            AppInfoEngine mEngine = AppInfoEngine.getInstance(this);
             mListInstalled = mEngine.getInstalledAppList();
         }
         return mListInstalled;
@@ -242,7 +240,7 @@ public class MainActivity extends BaseActivity {
         List<AppEntity>resultList = new ArrayList<>();
         for(AppEntity entity:list){
             String appName = entity.getAppName();
-            if(!TextUtils.isEmpty(appName) && appName.contains(key)){
+            if(!TextUtils.isEmpty(appName) && appName.contains(key.toLowerCase())){
                 resultList.add(entity);
             }
         }

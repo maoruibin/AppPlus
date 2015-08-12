@@ -38,23 +38,35 @@
     <string name="title_email_opinion">给App+的反馈</string>
 
     <string name="category_advanced">高级</string>
+
     <string name="switch_preference_develop_title">开发者模式</string>
     <string name="switch_preference_develop_key">mode_develop</string>
     <string name="switch_preference_develop_on">已启用。(点击首页Item将会打开应用详情)</string>
     <string name="switch_preference_develop_off">已关闭</string>
 
+    <string name="switch_preference_show_self_title">最近列表显示App+</string>
+    <string name="switch_preference_show_self_key">show_self</string>
+    <string name="switch_preference_show_self_on">最近打开列表将会显示App+</string>
+    <string name="switch_preference_show_self_off">最近打开列表将会过滤掉App+</string>
+
+    <string name="preference_title_theme_primary">主题颜色</string>
+    <string name="preference_summary_theme_primary">界面主色调，默认为Material蓝色</string>
+
     <string name="category_other">其他</string>
     <string name="preference_title_about">关于</string>
     <string name="preference_title_score">去市场评分</string>
+
     <string name="preference_summary_score">支持该应用</string>
+
     <string name="preference_key_about">about</string>
     <string name="preference_key_score">score</string>
-    <string name="app_about">App+目前主要的功能是传输软件安装包。\n当你有一个好的软件要分享给你的好友，你就可以打开App+，然后轻松传输安装包到对方手机，或通过蓝牙，或通过手机QQ。\n\n如果你有别的功能需要App+实现，请通过邮件的方式告诉我，我将会考虑在以后的版本中实现。\n\n微博：@AppPlusOne\n知乎：@AppPlus</string>
+    <string name="preference_key_theme_primary">theme_primary</string>
+    <string name="app_about">App+目前主要的功能是传输软件安装包。\n当你有一个好的软件要分享给你的好友，你就可以打开App+，然后轻松传输安装包到对方手机，或通过蓝牙，或通过手机QQ。\n\n如果你有别的功能需要App+实现，请通过邮件的方式告诉我，我将会考虑在以后的版本中实现。\n\n微博：@大侠咕咚\n知乎：@AppPlus</string>
     <string name="change_log">更新日志</string>
     <string name="title_activity_app_detail">AppDetailActivity</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="search_title">搜索</string>
     <string name="search_app_hint">请输入应用关键字</string>
+    <string name="color_chooser">选择颜色</string>
 
 </resources>

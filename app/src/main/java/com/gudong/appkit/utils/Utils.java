@@ -32,6 +32,16 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean(context.getString(R.string.switch_preference_develop_key), false);
     }
+
+    /**
+     * 最近列表是否显示App+
+     * @param context
+     * @return
+     */
+    public static boolean isShowSelf(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(context.getString(R.string.switch_preference_show_self_key), false);
+    }
     /**
      * 发送邮件的头信息
      * @param activity
@@ -75,5 +85,38 @@ public class Utils {
         }
         return "";
     }
+
+    public static float getDensity(Context context){
+        float scale = context.getResources().getDisplayMetrics().density;
+        return scale;
+    }
+
+    public static int convertDiptoPix(Context context,int dip){
+        float scale = getDensity(context);
+        return (int) (dip * scale + 0.5f);
+    }
+
+    // -------------------    SharePreference Util    -------------------  //
+
+    public static void putIntPreference(Context context,String key,int value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putInt(key, value).commit();
+    }
+
+    public static int getIntPreference(Context context,String key,int def){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getInt(key, def);
+    }
+
+    public static void putBooleanPreference(Context context,String key,boolean value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putBoolean(key, value).commit();
+    }
+
+    public static boolean getBooleanPreference(Context context,String key){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getBoolean(key,false);
+    }
+
 }
 

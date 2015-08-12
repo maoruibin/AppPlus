@@ -7,27 +7,25 @@
         <item>Facebook</item>
     </string-array>
 
-    <array name="colors">
-        <item>#3F51B5</item>
-        <item>#9E9E9E</item>
-        <item>#424242</item>
-        <item>#1F1F1F</item>
-        <item>#607D8B</item>
-        <item>#795548</item>
-        <item>#D32F2F</item>
-        <item>#E91E63</item>
-        <item>#9C27B0</item>
-        <item>#5E35B1</item>
-        <item>#1E88E5</item>
-        <item>#03A9F4</item>
-        <item>#00BCD4</item>
+    <array name="material_designer_colors">
+        <item>#f44336</item>
+        <item>#e91e63</item>
+        <item>#9c27b0</item>
+        <item>#673ab7</item>
+        <item>#3f51b5</item>
+        <item>#2196f3</item>
+        <item>#03a9f4</item>
+        <item>#00bcd4</item>
         <item>#009688</item>
-        <item>#4CAF50</item>
-        <item>#8BC34A</item>
-        <item>#CDDC39</item>
-        <item>#FFEB3B</item>
-        <item>#FFC107</item>
-        <item>#FF9800</item>
-        <item>#FF5722</item>
+        <item>#4caf50</item>
+        <item>#8bc34a</item>
+        <item>#cddc39</item>
+        <item>#ffeb3b</item>
+        <item>#ffc107</item>
+        <item>#ff9800</item>
+        <item>#ff5722</item>
+        <item>#795548</item>
+        <item>#9e9e9e</item>
+        <item>#607d8b</item>
     </array>
 </resources>

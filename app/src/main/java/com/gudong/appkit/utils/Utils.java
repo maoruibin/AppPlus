@@ -71,6 +71,16 @@ public class Utils {
         return sb.toString();
     }
 
+
+    /**
+     * 获得品牌名称
+     * @return
+     */
+    public static String getBrand(){
+        return android.os.Build.BRAND;
+    }
+
+
     /**
      * 获取当前App版本号
      * @param context
@@ -118,5 +128,19 @@ public class Utils {
         return sp.getBoolean(key,false);
     }
 
+    public static class Setting{
+        public static void setDoNotShowPointForSumBug(Context context){
+            putBooleanPreference(context,"do_not_show_point",true);
+        }
+
+        /**
+         *
+         * @param context
+         * @return def retrun false
+         */
+        public static boolean isNotShowPointForSumBug(Context context){
+            return getBooleanPreference(context,"do_not_show_point");
+        }
+    }
 }
 

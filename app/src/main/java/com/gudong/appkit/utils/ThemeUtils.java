@@ -61,11 +61,10 @@ public class ThemeUtils {
 
     /**
      * 判断当前主题是不是暗色主题
-     * @param context
      * @return
      */
-    public static boolean isDarkMode(Context context) {
-        return Utils.getBooleanPreference(context,"dark_mode");
+    public boolean isDarkMode() {
+        return Utils.getBooleanPreference(mContext,"dark_mode");
     }
 
     public void setIsDarkTheme(boolean isDark){

@@ -101,6 +101,15 @@ public class MainActivity extends BaseActivity {
             showVersionLogView();
             Utils.setCurrentVersion(this, currentVersion);
         }
+        //0.2.1版本产生的主题问题 之前的版本可能因为已经设置了夜间模式 这里需要强制改为白天模式
+        forceUpdateLightThemeForVersion021();
+    }
+
+    private void forceUpdateLightThemeForVersion021() {
+        if(getThemeUtils().isDarkMode()){
+            getThemeUtils().setIsDarkTheme(false);
+            reload();
+        }
     }
 
     /*
@@ -190,10 +199,8 @@ public class MainActivity extends BaseActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.menu_drawer_theme:
-                                boolean isDark = ThemeUtils.isDarkMode(MainActivity.this);
+                                boolean isDark = getThemeUtils().isDarkMode();
                                 getThemeUtils().setIsDarkTheme(!isDark);
-
-
                                 reload();
                                 break;
                             case R.id.menu_drawer_setting:

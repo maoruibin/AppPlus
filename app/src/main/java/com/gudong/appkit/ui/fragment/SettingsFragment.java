@@ -54,7 +54,7 @@ public class SettingsFragment extends PreferenceFragment implements android.pref
 
     @Override
     public void onClickSelectCallback(int position, int color) {
-        boolean isDark = ThemeUtils.isDarkMode(mContext);
+        boolean isDark = mContext.getThemeUtils().isDarkMode();
         int positionArray = isDark?1:0;
         mContext.getThemeUtils().setTheme(ThemeUtils.themeArr()[position][positionArray]);
         mContext.getThemeUtils().setThemePosition(position);

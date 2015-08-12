@@ -1,6 +1,7 @@
 package com.gudong.appkit.ui.activity;
 
 import android.annotation.TargetApi;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.ThemeSingleton;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppPageListAdapter;
@@ -29,7 +31,6 @@ import com.gudong.appkit.ui.base.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.ChangelogDialog;
-import com.gudong.appkit.utils.ThemeUtils;
 import com.gudong.appkit.utils.Utils;
 
 import java.util.ArrayList;
@@ -119,8 +120,34 @@ public class MainActivity extends BaseActivity {
     private void checkPermission(){
         AppInfoEngine engine = AppInfoEngine.getInstance(this);
         if (engine.getUsageStatsList().isEmpty()){
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            startActivity(intent);
+            if(Utils.Setting.isNotShowPointForSumBug(getBaseContext()))return;
+            if(Utils.getBrand().contains("sam") || Utils.getBrand().contains("lg")){
+                new MaterialDialog.Builder(this)
+                        .negativeText(R.string.dialog_cancel)
+                        .positiveText(R.string.dialog_go_setting_safe)
+                        .neutralText(R.string.dialog_do_not_point)
+                        .content(R.string.dialog_message_sam_usage)
+                        .title(R.string.title_point)
+                        .callback(new MaterialDialog.ButtonCallback() {
+                            @Override
+                            public void onPositive(MaterialDialog dialog) {
+                                super.onPositive(dialog);
+                                Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+                                intent.setComponent(new ComponentName("com.android.settings", "com.android.settings.Settings$SecuritySettingsActivity"));
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onNeutral(MaterialDialog dialog) {
+                                super.onNeutral(dialog);
+                                Utils.Setting.setDoNotShowPointForSumBug(getBaseContext());
+                            }
+                        })
+                        .show();
+            }else{
+                Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                startActivity(intent);
+            }
         }
     }
 

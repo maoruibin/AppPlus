@@ -1,9 +1,13 @@
 package com.gudong.appkit.ui.base;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.MenuItem;
 
 import com.gudong.appkit.R;
@@ -16,11 +20,13 @@ import com.readystatesoftware.systembartint.SystemBarTintManager;
 public abstract class BaseActivity extends AppCompatActivity {
     private ThemeUtils mThemeUtils;
     private Toolbar mToolbar;
+    private boolean hasRecreate = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mThemeUtils = new ThemeUtils(this);
         // 设置当前主题 （白天模式或者夜间模式）
-        setTheme(mThemeUtils.getCurrent());
+        setTheme(mThemeUtils.getTheme(this));
+        hasRecreate = true;
         super.onCreate(savedInstanceState);
         // 设置布局
         setContentView(initLayout());
@@ -28,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initToolBar();
         // 对Android4.4已上设备设置沉浸效果
         setTintLayout();
+
     }
 
     private void initToolBar(){
@@ -39,6 +46,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public Toolbar getToolbar() {
         return mToolbar;
+    }
+
+    public ThemeUtils getThemeUtils() {
+        return mThemeUtils;
     }
 
     /**
@@ -72,7 +83,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(getResources().getColor(R.color.colorPrimary));
+        tintManager.setTintColor(darkThemeColor());
+    }
+
+    /**
+     * 获取当前主题颜色
+     * @return
+     */
+    private int darkThemeColor(){
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = getTheme();
+        theme.resolveAttribute(R.attr.theme_color_dark, typedValue, true);
+
+        return typedValue.data;
     }
 
     /**
@@ -82,12 +105,27 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int initLayout();
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        if (mThemeUtils.isChanged()) {
-            setTheme(mThemeUtils.getCurrent());
-            recreate();
+        if (mThemeUtils.isChanged() && !hasRecreate) {
+            reload();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hasRecreate = false;
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        hasRecreate = false;
     }
 
     @Override
@@ -98,5 +136,26 @@ public abstract class BaseActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void reload() {
+
+        Intent intent = getIntent();
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(intent);
+
+//        recreate();
+    }
+
+    @Override
+    protected void onApplyThemeResource(Resources.Theme theme, int resid, boolean first) {
+//        TypedValue typedValue = new TypedValue();
+//        typedValue.data = R.color.md_orange_500;
+//        theme.resolveAttribute(R.attr.theme_color_dark, typedValue, true);
+        super.onApplyThemeResource(theme, resid, first);
+
     }
 }

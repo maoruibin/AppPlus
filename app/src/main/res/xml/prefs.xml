@@ -6,6 +6,18 @@
             android:key="@string/switch_preference_develop_key"
             android:summaryOn="@string/switch_preference_develop_on"
             android:summaryOff="@string/switch_preference_develop_off"/>
+
+        <com.jenzz.materialpreference.SwitchPreference
+            android:title="@string/switch_preference_show_self_title"
+            android:key="@string/switch_preference_show_self_key"
+            android:summaryOn="@string/switch_preference_show_self_on"
+            android:summaryOff="@string/switch_preference_show_self_off"/>
+
+        <com.jenzz.materialpreference.Preference
+            android:title="@string/preference_title_theme_primary"
+            android:summary="@string/preference_summary_theme_primary"
+            android:key="@string/preference_key_theme_primary"/>
+
     </com.jenzz.materialpreference.PreferenceCategory>
 
     <com.jenzz.materialpreference.PreferenceCategory

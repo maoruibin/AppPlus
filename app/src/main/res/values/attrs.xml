@@ -15,4 +15,8 @@
 
     <attr name="fits_windows" format="boolean"/>
     <attr name="appColorPrimary" format="color"/>
+
+    <!--主题颜色-->
+    <attr name="theme_color" format="reference|color"/>
+    <attr name="theme_color_dark" format="reference|color"/>
 </resources>

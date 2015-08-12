@@ -57,7 +57,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEngine = new AppInfoEngine(getActivity());
+        mEngine =  AppInfoEngine.getInstance(getActivity());
         mHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
@@ -88,7 +88,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("----", "type : " + mType);
         if(mType>=0){
             fillData();
         }

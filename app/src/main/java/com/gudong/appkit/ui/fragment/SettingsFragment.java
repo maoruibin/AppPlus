@@ -1,23 +1,26 @@
 package com.gudong.appkit.ui.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.AppCompatActivity;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.gudong.appkit.R;
+import com.gudong.appkit.ui.base.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
-import com.jenzz.materialpreference.Preference;
+import com.gudong.appkit.utils.ThemeUtils;
 
 
-public class SettingsFragment extends PreferenceFragment implements android.preference.Preference.OnPreferenceClickListener {
+public class SettingsFragment extends PreferenceFragment implements android.preference.Preference.OnPreferenceClickListener, ColorChooseDialog.IClickColorSelectCallback {
+    private BaseActivity mContext;
         @Override public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            mContext = (BaseActivity) getActivity();
             addPreferencesFromResource(R.xml.prefs);
 
             findPreference(getString(R.string.preference_key_about)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.preference_key_score)).setOnPreferenceClickListener(this);
+            findPreference(getString(R.string.preference_key_theme_primary)).setOnPreferenceClickListener(this);
         }
 
     @Override
@@ -40,8 +43,22 @@ public class SettingsFragment extends PreferenceFragment implements android.pref
         if(key.equals(getString(R.string.preference_key_score))){
             NavigationManager.gotoScore(getActivity());
         }
+        if(key.equals(getString(R.string.preference_key_theme_primary))){
+            ColorChooseDialog dialog = new ColorChooseDialog();
+            dialog.setColorSelectCallback(this);
+            dialog.show(mContext, mContext.getThemeUtils().getThemePosition());
+        }
         return false;
     }
 
 
+    @Override
+    public void onClickSelectCallback(int position, int color) {
+        boolean isDark = ThemeUtils.isDarkMode(mContext);
+        int positionArray = isDark?1:0;
+        mContext.getThemeUtils().setTheme(ThemeUtils.themeArr()[position][positionArray]);
+        mContext.getThemeUtils().setThemePosition(position);
+        mContext.reload();
+
+    }
 }

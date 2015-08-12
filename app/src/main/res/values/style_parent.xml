@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme_AppPlus_Parent" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LightParent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="theme_color">@color/colorPrimary</item>
+        <item name="theme_color_dark">@color/colorPrimaryDark</item>
+
         <item name="ic_menu_export">@drawable/ic_exit_to_app_black_24dp</item>
         <item name="ic_menu_share">@drawable/ic_share_black_24dp</item>
         <item name="ic_menu_open">@drawable/ic_open_with_black_24dp</item>
@@ -15,7 +18,11 @@
         <item name="fits_windows">true</item>
     </style>
 
-    <style name="Theme_AppPlus_Dark_Parent" parent="Theme.AppCompat.NoActionBar">
+    <!--<style name="Theme_AppPlus_Dark_Parent" parent="Theme.AppCompat.NoActionBar">-->
+    <style name="DarkParent" parent="Theme.AppCompat.NoActionBar">
+        <item name="theme_color">@color/colorPrimary</item>
+        <item name="theme_color_dark">@color/colorPrimaryDark</item>
+
         <item name="ic_menu_export">@drawable/ic_exit_to_app_white_24dp</item>
         <item name="ic_menu_share">@drawable/ic_share_white_24dp</item>
         <item name="ic_menu_open">@drawable/ic_open_with_white_24dp</item>

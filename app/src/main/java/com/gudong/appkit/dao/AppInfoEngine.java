@@ -21,6 +21,7 @@ import android.util.Log;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.entity.AppEntity;
+import com.gudong.appkit.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,9 +34,18 @@ import java.util.List;
 public class AppInfoEngine {
     private Context mContext;
     private PackageManager mPackageManager;
-    public AppInfoEngine(Context context) {
+    private static AppInfoEngine mInstance;
+    private AppInfoEngine(Context context) {
         this.mContext = context;
         mPackageManager = mContext.getApplicationContext().getPackageManager();
+        Log.i("----","new mPackageManager");
+    }
+
+    public synchronized static AppInfoEngine getInstance(Context context){
+        if(mInstance == null){
+            mInstance = new AppInfoEngine(context);
+        }
+        return mInstance;
     }
 
     /**
@@ -74,7 +84,7 @@ public class AppInfoEngine {
             ActivityInfo activityInfo = resolveInfo.activityInfo;
             if(activityInfo==null)continue;
 
-            if (isSelf(activityInfo.packageName)) continue;
+            if (isShowSelf(activityInfo.packageName)) continue;
             AppEntity entity = new AppEntity();
             entity.setAppIcon(drawableToBitmap(resolveInfo.loadIcon(mPackageManager)));
             entity.setAppName(resolveInfo.loadLabel(mPackageManager).toString());
@@ -91,6 +101,14 @@ public class AppInfoEngine {
         return list;
     }
 
+    /**
+     * 判断是不是在最近列表显示App+
+     * @param packagename
+     * @return 如果显示返回false 否则返回true
+     */
+    private boolean isShowSelf(String packagename){
+        return !Utils.isShowSelf(mContext) && isSelf(packagename);
+    }
 
     public boolean isSystemApp(ResolveInfo resolveInfo) {
         if (resolveInfo == null) return false;
@@ -104,7 +122,7 @@ public class AppInfoEngine {
 
             return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return false;
     }
@@ -144,8 +162,8 @@ public class AppInfoEngine {
             ApplicationInfo applicationInfo = getAppInfo(packageName);
             //系统引用不加入最近列表
             if(!isUserApp(applicationInfo))continue;
-            //自己也不需要加入最近列表
-            if (isSelf(packageName)) continue;
+            //如果系统设置了不显示自身 则自己也不需要加入最近列表
+            if (isShowSelf(packageName)) continue;
             AppEntity entity = warpAppEntity(applicationInfo);
             if (entity == null)continue;
             list.add (entity);

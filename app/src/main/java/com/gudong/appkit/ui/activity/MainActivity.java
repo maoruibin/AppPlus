@@ -32,6 +32,7 @@ import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.ChangelogDialog;
 import com.gudong.appkit.utils.Utils;
+import com.gudong.appkit.utils.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +86,9 @@ public class MainActivity extends BaseActivity {
         initSearchContent();
 
         versionCheck();
+
+        Logger.i("onCreate");
+        Logger.i("hhh","onCreate");
     }
 
 

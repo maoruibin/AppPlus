@@ -32,7 +32,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug{
-            signingConfig signingConfigs.release
+            //signingConfig signingConfigs.release
         }
     }
 }

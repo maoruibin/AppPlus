@@ -33,6 +33,7 @@ import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.ChangelogDialog;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
+import com.umeng.update.UmengUpdateAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,9 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //友盟检查更新
+        UmengUpdateAgent.update(this);
+
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
             checkPermission();
         }

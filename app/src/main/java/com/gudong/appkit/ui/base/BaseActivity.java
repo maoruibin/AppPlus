@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import com.gudong.appkit.R;
 import com.gudong.appkit.utils.ThemeUtils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
+import com.umeng.analytics.AnalyticsConfig;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by mao on 7/16/15.
@@ -28,6 +30,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         setTheme(mThemeUtils.getTheme(this));
         hasRecreate = true;
         super.onCreate(savedInstanceState);
+        /** 设置是否对日志信息进行加密, true 加密 */
+        AnalyticsConfig.enableEncrypt(true);
         // 设置布局
         setContentView(initLayout());
         // 初始化跟toolbar
@@ -112,6 +116,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         if (mThemeUtils.isChanged() && !hasRecreate) {
             reload();
         }
@@ -120,6 +125,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
         hasRecreate = false;
     }
     @Override

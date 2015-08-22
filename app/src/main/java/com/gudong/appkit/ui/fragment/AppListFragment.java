@@ -32,6 +32,7 @@ import com.gudong.appkit.ui.activity.AppDetailActivity;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.Utils;
+import com.gudong.appkit.utils.logger.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -157,15 +158,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     @Override
     public void onClickListItemContent(AppEntity entity) {
-
-        if(Utils.isDevelopMode(getActivity())){
-            showInstalledAppDetails(entity);
-//            Intent intent = new Intent(getActivity(), AppDetailActivity.class);
-//            intent.putExtra("detail",entity);
-//            startActivity(intent);
-        }else{
-            onTransferClick(entity);
-        }
+        onTransferClick(entity);
     }
 
     /**

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.ThemeSingleton;
@@ -32,7 +34,6 @@ import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.ChangelogDialog;
 import com.gudong.appkit.utils.Utils;
-import com.gudong.appkit.utils.logger.Logger;
 import com.umeng.update.UmengUpdateAgent;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class MainActivity extends BaseActivity {
     AppListFragment mSearchResultFragment;
     List<AppEntity>mListInstalled;
     AppPageListAdapter mFragmentAdapter;
+    RelativeLayout mLayoutMainRoot;
     private static int[]mTitles = new int[]{R.string.tab_recent,R.string.tab_installed};
 
     @Override
@@ -63,6 +65,8 @@ public class MainActivity extends BaseActivity {
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
             checkPermission();
         }
+
+        mLayoutMainRoot = (RelativeLayout) findViewById(R.id.layoutMainRoot);
 
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
 
@@ -90,9 +94,6 @@ public class MainActivity extends BaseActivity {
         initSearchContent();
 
         versionCheck();
-
-        Logger.i("onCreate");
-        Logger.i("hhh","onCreate");
     }
 
 
@@ -287,5 +288,15 @@ public class MainActivity extends BaseActivity {
             }
         }
         return resultList;
+    }
+    private long lastTime = 0;
+    @Override
+    public void onBackPressed() {
+        if(System.currentTimeMillis()-lastTime<2000){
+            super.onBackPressed();
+        }else {
+            lastTime = System.currentTimeMillis();
+            Snackbar.make(mLayoutMainRoot,"再按一次退出",Snackbar.LENGTH_SHORT).show();
+        }
     }
 }

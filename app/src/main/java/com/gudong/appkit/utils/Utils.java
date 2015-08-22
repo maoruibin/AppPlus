@@ -28,6 +28,7 @@ public class Utils {
      * @param context
      * @return
      */
+    @Deprecated
     public static boolean isDevelopMode(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean(context.getString(R.string.switch_preference_develop_key), false);

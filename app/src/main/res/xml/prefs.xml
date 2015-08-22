@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.jenzz.materialpreference.PreferenceCategory android:title="@string/category_advanced">
+        <com.jenzz.materialpreference.PreferenceCategory
+            android:title="@string/category_advanced"
+            android:key="@string/category_advanced_key">
         <com.jenzz.materialpreference.SwitchPreference
             android:title="@string/switch_preference_develop_title"
             android:key="@string/switch_preference_develop_key"

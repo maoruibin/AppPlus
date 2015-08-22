@@ -9,6 +9,7 @@ import com.gudong.appkit.R;
 import com.gudong.appkit.ui.base.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ThemeUtils;
+import com.jenzz.materialpreference.PreferenceCategory;
 
 
 public class SettingsFragment extends PreferenceFragment implements android.preference.Preference.OnPreferenceClickListener, ColorChooseDialog.IClickColorSelectCallback {
@@ -21,6 +22,10 @@ public class SettingsFragment extends PreferenceFragment implements android.pref
             findPreference(getString(R.string.preference_key_about)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.preference_key_score)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.preference_key_theme_primary)).setOnPreferenceClickListener(this);
+
+            //v0.2.2 不显示开发者选项
+            PreferenceCategory advancedCategory = (PreferenceCategory) findPreference(getString(R.string.category_advanced_key));
+            advancedCategory.removePreference(findPreference(getString(R.string.switch_preference_develop_key)));
         }
 
     @Override

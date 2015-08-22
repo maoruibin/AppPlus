@@ -41,6 +41,7 @@
     <string name="title_email_opinion">给App+的反馈</string>
 
     <string name="category_advanced">高级</string>
+    <string name="category_advanced_key">category_key</string>
 
     <string name="switch_preference_develop_title">开发者模式</string>
     <string name="switch_preference_develop_key">mode_develop</string>

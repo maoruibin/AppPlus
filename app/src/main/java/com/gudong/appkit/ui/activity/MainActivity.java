@@ -78,10 +78,11 @@ public class MainActivity extends BaseActivity {
         mAppBar = (AppBarLayout) findViewById(R.id.appbar);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
@@ -122,33 +123,10 @@ public class MainActivity extends BaseActivity {
 
         //0.2.1版本产生的主题问题 之前的版本可能因为已经设置了夜间模式 这里需要强制改为白天模式
         forceUpdateLightThemeForVersion021();
-
     }
 
     private void checkAutoUpdateByUmeng() {
         UmengUpdateAgent.update(this);
-    }
-
-    private void showUpdateDialog(final String path, String updateLog) {
-        new MaterialDialog.Builder(this)
-                .title("有新版本了")
-                .content(updateLog)
-                .positiveText("更新")
-                .negativeText("忽略")
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        super.onPositive(dialog);
-                        try {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                                    .parse(path)));
-                        } catch (Exception ex) {
-
-                        }
-                    }
-                })
-                .show();
-
     }
 
     private void forceUpdateLightThemeForVersion021() {
@@ -335,7 +313,7 @@ public class MainActivity extends BaseActivity {
             super.onBackPressed();
         }else {
             lastTime = System.currentTimeMillis();
-            Snackbar.make(mLayoutMainRoot,"再按一次退出",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mLayoutMainRoot,getString(R.string.exit_point),Snackbar.LENGTH_SHORT).show();
         }
     }
 }

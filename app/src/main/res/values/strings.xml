@@ -76,5 +76,7 @@
     <string name="search_app_hint">请输入应用关键字</string>
     <string name="color_chooser">选择颜色</string>
     <string name="current_version_info">当前版本：%1$s</string>
+    <string name="exit_point">再按一次退出</string>
+    <string name="dialog_button_send_email">发邮件</string>
 
 </resources>

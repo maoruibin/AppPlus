@@ -46,7 +46,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         if(key.equals(getString(R.string.preference_key_about))){
             new MaterialDialog.Builder(getActivity()).title(getString(R.string.app_name))
                     .content(R.string.app_about)
-                    .neutralText("发邮件")
+                    .neutralText(R.string.dialog_button_send_email)
                     .positiveText(R.string.dialog_know)
                     .callback(new MaterialDialog.ButtonCallback() {
                         @Override
@@ -92,6 +92,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         if(key.equals(getString(R.string.switch_preference_show_self_key))){
             MobclickAgent.onEvent(mContext, "setting_show_self");
         }
-        return false;
+        return true;
     }
 }

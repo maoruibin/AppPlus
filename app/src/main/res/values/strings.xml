@@ -9,6 +9,7 @@
 
     <string name="menu_pop_item_file">导出到本地</string>
     <string name="menu_pop_item_share">发送给好友</string>
+    <string name="menu_pop_item_detail">查看应用详情</string>
     <string name="menu_pop_item_open">启动此软件</string>
 
     <string name="menu_main_support">支持开发者</string>
@@ -57,13 +58,15 @@
     <string name="preference_summary_theme_primary">界面主色调，默认为Material蓝色</string>
 
     <string name="category_other">其他</string>
-    <string name="preference_title_about">关于</string>
+    <string name="preference_title_check_update">检查新版本</string>
+    <string name="preference_title_about">关于App+</string>
     <string name="preference_title_score">去市场评分</string>
 
     <string name="preference_summary_score">支持该应用</string>
 
     <string name="preference_key_about">about</string>
     <string name="preference_key_score">score</string>
+    <string name="preference_key_check_update">check_update</string>
     <string name="preference_key_theme_primary">theme_primary</string>
     <string name="app_about">App+目前主要的功能是传输软件安装包。\n当你有一个好的软件要分享给你的好友，你就可以打开App+，然后轻松传输安装包到对方手机，或通过蓝牙，或通过手机QQ。\n\n如果你有别的功能需要App+实现，请通过邮件的方式告诉我，我将会考虑在以后的版本中实现。\n\n微博：@大侠咕咚\n知乎：@AppPlus</string>
     <string name="change_log">更新日志</string>
@@ -72,5 +75,6 @@
     <string name="search_title">搜索</string>
     <string name="search_app_hint">请输入应用关键字</string>
     <string name="color_chooser">选择颜色</string>
+    <string name="current_version_info">当前版本：%1$s</string>
 
 </resources>

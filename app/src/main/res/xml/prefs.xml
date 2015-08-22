@@ -31,5 +31,8 @@
         <com.jenzz.materialpreference.Preference
             android:title="@string/preference_title_about"
             android:key="@string/preference_key_about"/>
+        <com.jenzz.materialpreference.Preference
+            android:title="@string/preference_title_check_update"
+            android:key="@string/preference_key_check_update"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 </PreferenceScreen>

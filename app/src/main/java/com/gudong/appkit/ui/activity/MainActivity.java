@@ -3,6 +3,7 @@ package com.gudong.appkit.ui.activity;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -34,7 +35,12 @@ import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.ChangelogDialog;
 import com.gudong.appkit.utils.Utils;
+import com.gudong.appkit.utils.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
+import com.umeng.update.UmengUpdateListener;
+import com.umeng.update.UpdateResponse;
+import com.umeng.update.UpdateStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +66,9 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //友盟检查更新
-        UmengUpdateAgent.update(this);
+        checkAutoUpdateByUmeng();
 
+        //如果是5.0以上设备 需要请求查看最近任务的权限 让用户同意
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
             checkPermission();
         }
@@ -105,14 +112,43 @@ public class MainActivity extends BaseActivity {
     }
 
     private void versionCheck() {
+        //本地版本检测 如果版本不一致 弹出版本更新日志信息框
         String currentVersion = Utils.getAppVersion(this);
         String localVersionName = Utils.getLocalVersion(this);
         if(!localVersionName.equals(currentVersion)){
             showVersionLogView();
             Utils.setCurrentVersion(this, currentVersion);
         }
+
         //0.2.1版本产生的主题问题 之前的版本可能因为已经设置了夜间模式 这里需要强制改为白天模式
         forceUpdateLightThemeForVersion021();
+
+    }
+
+    private void checkAutoUpdateByUmeng() {
+        UmengUpdateAgent.update(this);
+    }
+
+    private void showUpdateDialog(final String path, String updateLog) {
+        new MaterialDialog.Builder(this)
+                .title("有新版本了")
+                .content(updateLog)
+                .positiveText("更新")
+                .negativeText("忽略")
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                                    .parse(path)));
+                        } catch (Exception ex) {
+
+                        }
+                    }
+                })
+                .show();
+
     }
 
     private void forceUpdateLightThemeForVersion021() {
@@ -181,6 +217,7 @@ public class MainActivity extends BaseActivity {
                     //设置toolbar的scrollFlag 让他不响应RecycleView的滑动事件
                     AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) getToolbar().getLayoutParams();
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                    MobclickAgent.onEvent(MainActivity.this, "search");
                 } else {
                     mTabLayout.setVisibility(View.VISIBLE);
                     mViewPager.setVisibility(View.VISIBLE);
@@ -222,6 +259,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this,SettingsActivity.class));
+                MobclickAgent.onEvent(this, "setting_entry");
                 break;
         }
         return true;
@@ -241,6 +279,7 @@ public class MainActivity extends BaseActivity {
                                 break;
                             case R.id.menu_drawer_setting:
                                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                                MobclickAgent.onEvent(MainActivity.this, "setting_entry");
                                 break;
                             case R.id.menu_drawer_opinion:
                                 NavigationManager.gotoSendOpinion(MainActivity.this);

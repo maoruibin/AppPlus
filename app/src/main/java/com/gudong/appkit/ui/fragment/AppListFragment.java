@@ -33,6 +33,7 @@ import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.IOException;
@@ -144,10 +145,16 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     public void onClickMenuItem(int itemId, AppEntity entity) {
         switch (itemId){
             case R.id.pop_export:
+                MobclickAgent.onEvent(getActivity(), "pop_export");
                 onClickExport(entity);
                 break;
             case R.id.pop_share:
+                MobclickAgent.onEvent(getActivity(), "pop_share");
                 onTransferClick(entity);
+                break;
+            case R.id.pop_detail:
+                MobclickAgent.onEvent(getActivity(), "pop_detail");
+                showInstalledAppDetails(entity);
                 break;
             case R.id.pop_open:
                 onOpenClick(entity);

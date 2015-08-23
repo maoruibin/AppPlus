@@ -141,16 +141,16 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     public void onClickMenuItem(int itemId, AppEntity entity) {
         switch (itemId){
             case R.id.pop_export:
-                MobclickAgent.onEvent(getActivity(), "pop_export");
                 onClickExport(entity);
+                MobclickAgent.onEvent(getActivity(), "pop_export");
                 break;
             case R.id.pop_share:
-                MobclickAgent.onEvent(getActivity(), "pop_share");
                 onTransferClick(entity);
+                MobclickAgent.onEvent(getActivity(), "pop_share");
                 break;
             case R.id.pop_detail:
-                MobclickAgent.onEvent(getActivity(), "pop_detail");
                 showInstalledAppDetails(entity);
+                MobclickAgent.onEvent(getActivity(), "pop_detail");
                 break;
             case R.id.pop_open:
                 onOpenClick(entity);
@@ -162,6 +162,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onClickListItemContent(AppEntity entity) {
         onTransferClick(entity);
+        MobclickAgent.onEvent(getActivity(), "item_click_share");
     }
 
     /**

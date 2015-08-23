@@ -8,6 +8,7 @@
     <item
         android:title="@string/menu_pop_item_share"
         android:icon="?ic_menu_share"
+        android:visible="false"
         android:id="@+id/pop_share"/>
     <item
         android:title="@string/menu_pop_item_detail"

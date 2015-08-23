@@ -78,5 +78,8 @@
     <string name="current_version_info">当前版本：%1$s</string>
     <string name="exit_point">再按一次退出</string>
     <string name="dialog_button_send_email">发邮件</string>
+    <string name="update_point_no_update">当前版本已是最新版本</string>
+    <string name="update_point_no_wifi">没有wifi连接， 只在wifi下更新。</string>
+    <string name="update_point_time_out">网络连接超时，请稍后重试。</string>
 
 </resources>

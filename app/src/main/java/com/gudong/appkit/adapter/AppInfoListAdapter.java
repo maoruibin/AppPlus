@@ -1,7 +1,6 @@
 package com.gudong.appkit.adapter;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.support.v7.internal.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -57,9 +56,6 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         final AppEntity entity = listData.get(position);
         if(entity == null)return;
 
-
-       // ListItemBinding binding = DataBindingUtil.inflate(, R.layout.list_item, container, false);
-//
         holder.ivIcon.setImageBitmap(entity.getAppIcon());
         holder.tvName.setText(entity.getAppName());
         holder.tvPackName.setText(entity.getPackageName());
@@ -157,11 +153,6 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
             tvPackName = (TextView) view.findViewById(android.R.id.text2);
         }
     }
-
-
-
-
-
 
     public void setClickPopupMenuItem(IClickPopupMenuItem mClickPopupMenuItem) {
         this.mClickPopupMenuItem = mClickPopupMenuItem;

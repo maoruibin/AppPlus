@@ -21,8 +21,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.progress.CircularProgressDrawable;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppInfoEngine;
@@ -40,6 +44,12 @@ import java.util.List;
  * Created by mao on 15/7/8.
  */
 public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem {
+    /**最近列表**/
+    public static final int KEY_RECENT = 0;
+    /**所有app列表**/
+    public static final int KEY_ALL = 1;
+    /**搜索结果列表**/
+    public static final int KEY_SEARCH = -1;
     private static final String SCHEME = "package";
     private static final String APP_PKG_NAME_21 = "com.android.settings.ApplicationPkgName";
     private static final String APP_PKG_NAME_22 = "pkg";
@@ -49,21 +59,52 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     private AppInfoEngine mEngine;
     private Handler mHandler;
     private RecyclerView mRecyclerView;
+
+    private RelativeLayout mRlLoadLayout;
+    private ProgressBar mPbLoading;
+    private TextView mTvPoint;
     private AppInfoListAdapter mAdapter;
-    /**appInfo对应的list类型，小于0表示是搜索列表，大于等于0，则是正常的分页列表**/
-    private int mType = 0;
+    /**Fragment列表的类型变量，小于0表示是搜索结果对应的列表Fragment，大于等于0，则是正常的用于显示App的列表Fragment**/
+    private int mType = KEY_RECENT;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mEngine =  AppInfoEngine.getInstance(getActivity());
+        mType = getArguments().getInt("type");
         mHandler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                setData((List<AppEntity>) msg.obj);
+                List<AppEntity> result = (List<AppEntity>) msg.obj;
+                setData(result,msg.what);
             }
         };
-        mType = getArguments().getInt("type");
+    }
+
+    private String getErrorInfo(int type){
+        switch (type){
+            case KEY_RECENT:
+                return getString(R.string.app_list_error_recent);
+            case KEY_ALL:
+                return getString(R.string.app_list_error_recent);
+            case KEY_SEARCH:
+                return getString(R.string.app_list_error_all);
+            default:
+                return getString(R.string.app_list_error_recent);
+        }
+    }
+
+    private String getEmptyInfo(int type){
+        switch (type){
+            case KEY_RECENT:
+                return getString(R.string.app_list_empty_recent);
+            case KEY_ALL:
+                return getString(R.string.app_list_empty_all);
+            case KEY_SEARCH:
+                return getString(R.string.app_list_empty_search);
+            default:
+                return getString(R.string.app_list_empty_recent);
+        }
     }
 
     public  static AppListFragment getInstance(int type){
@@ -77,10 +118,47 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRecyclerView = (RecyclerView) inflater.inflate(
+        View rootView = inflater.inflate(
                 R.layout.fragment_app_list, container, false);
-        setupRecyclerView(mRecyclerView);
-        return mRecyclerView;
+        setupRecyclerView(rootView);
+        setupLoadLayout(rootView);
+        return rootView;
+    }
+
+    private void setupLoadLayout(View rootView){
+        mRlLoadLayout = (RelativeLayout) rootView.findViewById(R.id.rl_app_list_load);
+        mPbLoading = (ProgressBar) rootView.findViewById(R.id.pb_app_list_loading);
+        mTvPoint = (TextView) rootView.findViewById(R.id.tv_app_list_point);
+
+        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
+            mPbLoading.setIndeterminateDrawable(new CircularProgressDrawable(getResources().getColor(R.color.colorAccent), getResources().getDimension(R.dimen.loading_border_width)));
+        }
+        mRlLoadLayout.setVisibility(View.GONE);
+    }
+
+    private void loadingData(String loadingInfo){
+        mRecyclerView.setVisibility(View.GONE);
+        mRlLoadLayout.setVisibility(View.VISIBLE);
+        mTvPoint.setText(loadingInfo);
+    }
+
+    private void loadingDataEmpty(String emptyInfo){
+        mRecyclerView.setVisibility(View.GONE);
+        mRlLoadLayout.setVisibility(View.VISIBLE);
+        mTvPoint.setText(emptyInfo);
+        mPbLoading.setVisibility(View.GONE);
+    }
+
+    private void loadingDataError(String errorInfo){
+        mRecyclerView.setVisibility(View.GONE);
+        mRlLoadLayout.setVisibility(View.VISIBLE);
+        mTvPoint.setText(errorInfo);
+        mPbLoading.setVisibility(View.GONE);
+    }
+
+    private void loadingFinish(){
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mRlLoadLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -91,9 +169,10 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         }
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
+    private void setupRecyclerView(View rootView) {
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new AppInfoListAdapter(getActivity(),new ArrayList<AppEntity>());
         mAdapter.setClickPopupMenuItem(this);
         mAdapter.setClickListItem(this);
@@ -101,39 +180,48 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     }
 
     private synchronized void fillData(){
+        loadingData(getString(R.string.app_list_loading));
         new Thread(new Runnable() {
             @Override
             public void run() {
                 List<AppEntity>list = null;
                 switch (mType){
-                    case 0:
+                    case KEY_RECENT:
                         if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
                             list = mEngine.getRecentAppList();
                         }else{
                             list = mEngine.getRecentAppInfo();
                         }
                         break;
-                    case 1:
+                    case KEY_ALL:
                         list = mEngine.getInstalledAppList();
                         break;
                 }
-                mHandler.sendMessage(mHandler.obtainMessage(1,list));
+                mHandler.sendMessage(mHandler.obtainMessage(mType,list));
             }
         }).start();
     }
 
     /**
      * 为列表设置数据
-     * @param data
      */
-    public void setData(List<AppEntity>data){
-        mAdapter.update(data);
+    public void setData(List<AppEntity>result,int type){
+        if(result == null){
+            loadingDataError(getErrorInfo(type));
+            return;
+        }
+        if(result.isEmpty()){
+            loadingDataEmpty(getEmptyInfo(type));
+            return;
+        }
+        mAdapter.update(result);
+        loadingFinish();
     }
 
     /**
      * 清空列表数据
      */
-    public void cleatData(){
+    public void clearData(){
         mAdapter.update(new ArrayList<AppEntity>());
     }
 

@@ -87,7 +87,6 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         });
 
         makePopForceShowIcon(popupMenu);
-
         popupMenu.show();
     }
 

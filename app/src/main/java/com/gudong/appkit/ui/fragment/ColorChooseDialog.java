@@ -82,9 +82,9 @@ public class ColorChooseDialog extends DialogFragment implements View.OnClickLis
 
     private View getColorItemView(final Context context,int position,boolean isSelect){
         int color = mColors[position];
-        int widthImageCheckView = Utils.convertDiptoPix(context,24);
-        int widthColorView = Utils.convertDiptoPix(context, 56);
-        int widthMargin = Utils.convertDiptoPix(context, 4);
+        int widthImageCheckView = Utils.convertDensityPix(context, 24);
+        int widthColorView = Utils.convertDensityPix(context, 56);
+        int widthMargin = Utils.convertDensityPix(context, 4);
 
         ImageView imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.ic_check);

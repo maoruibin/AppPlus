@@ -3,7 +3,6 @@ package com.gudong.appkit.ui.activity;
 import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -38,9 +37,6 @@ import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
-import com.umeng.update.UmengUpdateListener;
-import com.umeng.update.UpdateResponse;
-import com.umeng.update.UpdateStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +103,7 @@ public class MainActivity extends BaseActivity {
 
     private void initSearchContent(){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mSearchResultFragment = AppListFragment.getInstance(-1);
+        mSearchResultFragment = AppListFragment.getInstance(AppListFragment.KEY_SEARCH);
         fragmentTransaction.add(R.id.fl_contain_search_result,mSearchResultFragment);
         fragmentTransaction.commit();
     }
@@ -200,10 +196,10 @@ public class MainActivity extends BaseActivity {
                     mTabLayout.setVisibility(View.VISIBLE);
                     mViewPager.setVisibility(View.VISIBLE);
                     mFlSearchResult.setVisibility(View.GONE);
-                    mSearchResultFragment.cleatData();
-
+                    mSearchResultFragment.clearData();
+                    Logger.i("hasFocus  失去焦点");
                     AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) getToolbar().getLayoutParams();
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                     //收起searchView  这里不要使用searchView
                     searchItem.collapseActionView();
                 }
@@ -218,10 +214,10 @@ public class MainActivity extends BaseActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (TextUtils.isEmpty(newText)) {
-                    mSearchResultFragment.cleatData();
+                    mSearchResultFragment.clearData();
                 } else {
                     List<AppEntity> result = searchApp(getAllInstalledApp(), newText);
-                    mSearchResultFragment.setData(result);
+                    mSearchResultFragment.setData(result,AppListFragment.KEY_SEARCH);
                 }
                 return false;
             }
@@ -238,6 +234,9 @@ public class MainActivity extends BaseActivity {
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this,SettingsActivity.class));
                 MobclickAgent.onEvent(this, "setting_entry");
+                break;
+            case R.id.action_option:
+                NavigationManager.gotoSendOpinion(MainActivity.this);
                 break;
         }
         return true;

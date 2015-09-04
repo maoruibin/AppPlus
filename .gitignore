@@ -21,8 +21,7 @@ local.properties
 .DS_Store
 
 #idea
-/.idea/workspace.xml
-/.idea/libraries
+.idea
 
 # iml Files
 appkit.iml

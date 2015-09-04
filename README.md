@@ -2,6 +2,11 @@
 
 App+是一个主要用于Android用户间传送Apk文件的工具软件。
 
+### 下载地址 ####
+
+[fir](http://fir.im/appplus)<br>
+[小米应用商店](http://app.mi.com/detail/104777)
+
 ### 截图 ###
 
 ![index](/art/index.png "")

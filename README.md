@@ -49,3 +49,11 @@ App+是一个主要用于Android用户间传送Apk文件的工具软件。
         修复: 修复Android5.0以上设备的StatusBar颜色异常问题
         修改: 联系方式(微博)
         移除: 切换夜间模式和白天模式
+
+### License ###
+
+         GNU GENERAL PUBLIC LICENSE  Version 3, 29 June 2007
+
+         Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+         Everyone is permitted to copy and distribute verbatim copies
+         of this license document, but changing it is not allowed.

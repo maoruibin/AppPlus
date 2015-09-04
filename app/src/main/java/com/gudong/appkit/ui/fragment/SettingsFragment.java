@@ -42,6 +42,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             //v0.2.2 不显示开发者选项
             PreferenceCategory advancedCategory = (PreferenceCategory) findPreference(getString(R.string.category_advanced_key));
             advancedCategory.removePreference(findPreference(getString(R.string.switch_preference_develop_key)));
+
+            Utils.removeKey(getActivity(),getString(R.string.switch_preference_develop_key));
         }
 
     @Override
@@ -83,11 +85,12 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public void onClickSelectCallback(int position, int color) {
-        boolean isDark = mContext.getThemeUtils().isDarkMode();
-        int positionArray = isDark?1:0;
-        mContext.getThemeUtils().setTheme(ThemeUtils.themeArr()[position][positionArray]);
+        //设置主题 并且让主题立即生效（通过方法 mContext.reload()）
+        mContext.getThemeUtils().setTheme(ThemeUtils.themeArr()[position][0]);
         mContext.getThemeUtils().setThemePosition(position);
+        mContext.getThemeUtils().setThemeChange(getActivity(),true);
         mContext.reload();
+
         //统计用户主题颜色的选取
         Map<String,String>map_value = new HashMap<>();
         map_value.put("theme_color","select");

@@ -10,34 +10,22 @@ import android.preference.PreferenceManager;
 import com.gudong.appkit.R;
 
 /**
+ * the util class for app
  * Created by mao on 7/21/15.
  */
 public class Utils {
     public static void setCurrentVersion(Context context,String version){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        sp.edit().putString("current_version", version).commit();
+        putStringPreference(context,"current_version",version);
     }
 
     public static String getLocalVersion(Context context){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        return sp.getString("current_version", "");
-    }
-
-    /**
-     * 是否是开发者模式
-     * @param context
-     * @return
-     */
-    @Deprecated
-    public static boolean isDevelopMode(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(context.getString(R.string.switch_preference_develop_key), false);
+        return getStringPreference(context, "current_version", "");
     }
 
     /**
      * 最近列表是否显示App+
-     * @param context
-     * @return
+     * @param context 上下文对象
+     * @return return true if recent listview need show app+
      */
     public static boolean isShowSelf(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -66,26 +54,25 @@ public class Utils {
         sb.append("ANDROID:" + androidv).append("\n");
         sb.append("BRAND:" + brand).append("\n");
         sb.append("DEVICE:" + device).append("\n");
+        sb.append("PRODUCT:" + product).append("\n");
         sb.append("HARDWARE:" + hardware).append("\n");
         sb.append("SDK:" + SDK).append("\n");
 
         return sb.toString();
     }
 
-
     /**
-     * 获得品牌名称
-     * @return
+     * get brand info
+     * @return brand info
      */
     public static String getBrand(){
         return android.os.Build.BRAND;
     }
 
-
     /**
-     * 获取当前App版本号
-     * @param context
-     * @return
+     * get app version info
+     * @param context context
+     * @return app version info if occur exception return unknow
      */
     public static String getAppVersion(Context context){
         try {
@@ -93,25 +80,39 @@ public class Utils {
             return info.versionName;
         } catch (Exception e) {
             e.printStackTrace();
+            return context.getString(R.string.unknow);
         }
-        return "";
     }
 
     public static float getDensity(Context context){
-        float scale = context.getResources().getDisplayMetrics().density;
-        return scale;
+        return context.getResources().getDisplayMetrics().density;
     }
 
-    public static int convertDiptoPix(Context context,int dip){
+    public static int convertDensityPix(Context context, int dip){
         float scale = getDensity(context);
         return (int) (dip * scale + 0.5f);
     }
 
-    // -------------------    SharePreference Util    -------------------  //
+    // -------------------    SharePreference Util Begin   -------------------  //
+
+    public static void removeKey(Context context,String key){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().remove(key).apply();
+    }
+
+    public static void putStringPreference(Context context,String key,String value){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        sp.edit().putString(key, value).apply();
+    }
+
+    public static String getStringPreference(Context context,String key,String def){
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getString(key, def);
+    }
 
     public static void putIntPreference(Context context,String key,int value){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        sp.edit().putInt(key, value).commit();
+        sp.edit().putInt(key, value).apply();
     }
 
     public static int getIntPreference(Context context,String key,int def){
@@ -121,7 +122,7 @@ public class Utils {
 
     public static void putBooleanPreference(Context context,String key,boolean value){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        sp.edit().putBoolean(key, value).commit();
+        sp.edit().putBoolean(key, value).apply();
     }
 
     public static boolean getBooleanPreference(Context context,String key){
@@ -129,15 +130,22 @@ public class Utils {
         return sp.getBoolean(key,false);
     }
 
+    // -------------------    SharePreference Util End   -------------------  //
+
     public static class Setting{
+
+        /**
+         * set preference for whether show sum bug point
+         * @param context context
+         */
         public static void setDoNotShowPointForSumBug(Context context){
             putBooleanPreference(context,"do_not_show_point",true);
         }
 
         /**
-         *
-         * @param context
-         * @return def retrun false
+         * get preference for whether show sum bug point
+         * @param context context
+         * @return return false if app need show bug point dialog
          */
         public static boolean isNotShowPointForSumBug(Context context){
             return getBooleanPreference(context,"do_not_show_point");

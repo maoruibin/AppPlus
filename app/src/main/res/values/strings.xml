@@ -38,7 +38,7 @@
     <string name="dialog_now_watch">不了，查看文件</string>
     <string name="dialog_cancel_watch">不</string>
     <string name="select_transfer_way">选择传输方式</string>
-    <string name="select_transfer_way_apk">发送%1$s安装包给好友</string>
+    <string name="select_transfer_way_apk">发送%s安装包给好友</string>
     <string name="title_email_opinion">给App+的反馈</string>
 
     <string name="category_advanced">高级</string>
@@ -88,4 +88,5 @@
     <string name="app_list_empty_recent">最近没有运行任何应用</string>
     <string name="app_list_empty_all">您还没有安装任何应用</string>
     <string name="app_list_empty_search">没有搜索到任何结果</string>
+    <string name="unknow">未知</string>
 </resources>

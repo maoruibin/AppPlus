@@ -3,15 +3,15 @@ package com.gudong.appkit.ui.base;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.MenuItem;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.utils.ThemeUtils;
+import com.gudong.appkit.utils.logger.Logger;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.umeng.analytics.AnalyticsConfig;
 import com.umeng.analytics.MobclickAgent;
@@ -22,15 +22,16 @@ import com.umeng.analytics.MobclickAgent;
 public abstract class BaseActivity extends AppCompatActivity {
     private ThemeUtils mThemeUtils;
     private Toolbar mToolbar;
+    // 防止reload方法递归调用
     private boolean hasRecreate = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mThemeUtils = new ThemeUtils(this);
-        // 设置当前主题 （白天模式或者夜间模式）
+        // 设置当前主题
         setTheme(mThemeUtils.getTheme(this));
         hasRecreate = true;
         super.onCreate(savedInstanceState);
-        /** 设置是否对日志信息进行加密, true 加密 */
+        // 设置是否对日志信息进行加密, true 加密
         AnalyticsConfig.enableEncrypt(true);
         // 设置布局
         setContentView(initLayout());
@@ -38,7 +39,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         initToolBar();
         // 对Android4.4已上设备设置沉浸效果
         setTintLayout();
-
     }
 
     private void initToolBar(){
@@ -63,14 +63,12 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public void setupToolBar(int title,boolean showHome){
         setTitle(getString(title));
-        setDisplayShowHomeEnabled(showHome);
-
+        setDisplayHomeEnable(showHome);
     }
 
-    private void setDisplayShowHomeEnabled(boolean showHome){
+    private void setDisplayHomeEnable(boolean showHome){
         getSupportActionBar().setDisplayShowHomeEnabled(showHome);
         getSupportActionBar().setDisplayHomeAsUpEnabled(showHome);
-
     }
 
     private void setTitle(String title){
@@ -82,24 +80,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 为Android 4.4以上设备使用沉浸时效果
      */
-    @TargetApi(19)
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setTintLayout() {
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(darkThemeColor());
-    }
-
-    /**
-     * 获取当前主题颜色
-     * @return
-     */
-    private int darkThemeColor(){
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = getTheme();
-        theme.resolveAttribute(R.attr.theme_color_dark, typedValue, true);
-
-        return typedValue.data;
+        tintManager.setTintColor(mThemeUtils.getThemePrimaryDarkColor(this));
     }
 
     /**
@@ -109,14 +95,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract int initLayout();
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+        //点击主题颜色切换 并且 是第一次进入这个界面 才需要执行 reload，如果不使用hasRecreate这个
+        //标志位控制的话 会导致reload方法循环执行 从而使得程序崩溃
         if (mThemeUtils.isChanged() && !hasRecreate) {
             reload();
         }
@@ -126,12 +109,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
-        hasRecreate = false;
-    }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        hasRecreate = false;
     }
 
     @Override
@@ -144,8 +121,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 重启Activity，重新执行一次Activity的生命周期
+     */
     public void reload() {
-
         Intent intent = getIntent();
         overridePendingTransition(0, 0);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -153,15 +132,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
         startActivity(intent);
 
-//        recreate();
-    }
-
-    @Override
-    protected void onApplyThemeResource(Resources.Theme theme, int resid, boolean first) {
-//        TypedValue typedValue = new TypedValue();
-//        typedValue.data = R.color.md_orange_500;
-//        theme.resolveAttribute(R.attr.theme_color_dark, typedValue, true);
-        super.onApplyThemeResource(theme, resid, first);
-
+//      recreate();
     }
 }

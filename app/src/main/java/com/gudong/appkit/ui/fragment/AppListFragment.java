@@ -18,6 +18,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +36,7 @@ import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.entity.AppEntity;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.FileUtil;
+import com.gudong.appkit.utils.ThemeUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -301,16 +305,32 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             }
         }
 
-        LabeledIntent[] extraIntents = intentList.toArray( new LabeledIntent[ intentList.size() ]);
-        Intent openInChooser = Intent.createChooser(intentList.remove(0), String.format(getString(R.string.select_transfer_way_apk,entity.getAppName())));
+        LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
+
+        Intent openInChooser = Intent.createChooser(intentList.remove(0), warpChooserTitle(entity.getAppName()));
         openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
         startActivity(openInChooser);
+    }
+
+    /**
+     * warp choose title and make app title accent
+     * @param appName app name
+     * @return warped chooser title
+     */
+    private SpannableStringBuilder warpChooserTitle(String appName){
+        String title = String.format(getString(R.string.select_transfer_way_apk, appName));
+        ForegroundColorSpan fontSpanRed = new ForegroundColorSpan(getResources().getColor(R.color.colorAccent));
+        int start = 2;
+        int end = start+appName.length()+3;
+        SpannableStringBuilder mSpannableBuilder = new SpannableStringBuilder(title);
+        mSpannableBuilder.setSpan(fontSpanRed,start,end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        return mSpannableBuilder;
     }
 
     private void onClickExport(AppEntity entity){
         //判断sd卡是否挂载
         if(!FileUtil.isSdCardOnMounted()){
-            DialogUtil.showSingleChoice(getActivity(), getString(R.string.title_point), getString(R.string.dialog_message_no_sdcard), getString(R.string.dialog_know));
+            DialogUtil.showSinglePointDialog(getActivity(), getString(R.string.dialog_message_no_sdcard));
             return;
         }
 
@@ -414,8 +434,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         }.execute(srcFile, exportFile);
     }
 
-
-
     /**
      * 浏览文件夹
      * @param file
@@ -436,15 +454,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         animationSet.playTogether(animatorRotation, scaleRotationY, scaleRotationX);
         animationSet.setDuration(500);
         animationSet.start();
-    }
-
-    /**
-     * 根据Adapter获取到adapter的数据
-     * @return
-     */
-    public List<AppEntity>getListEntity(){
-        if(mAdapter == null)return new ArrayList<>();
-        return mAdapter.getListData();
     }
 }
 

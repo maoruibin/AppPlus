@@ -6,18 +6,19 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.gudong.appkit.R;
 
 /**
+ * tool for dialog
  * Created by mao on 7/19/15.
  */
 public class DialogUtil {
     /**
-     * 只含有一个按钮的提示框
-     * @param context
+     * show a dialog which it contain one point message only
+     * @param context context
      */
-    public static void showSingleChoice(Context context,String title, String message, String positive){
+    public static void showSinglePointDialog(Context context, String message){
         new MaterialDialog.Builder(context)
-                .title(title)
+                .title(context.getString(R.string.title_point))
                 .content(message)
-                .positiveText(positive)
+                .positiveText(context.getString(R.string.dialog_know))
                 .show();
     }
 }

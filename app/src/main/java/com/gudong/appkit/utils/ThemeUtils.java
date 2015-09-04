@@ -14,7 +14,6 @@ import com.gudong.appkit.R;
  */
 public class ThemeUtils {
     private Context mContext;
-    private boolean darkMode;
 
     public ThemeUtils(Context context){
         this.mContext = context;
@@ -22,20 +21,27 @@ public class ThemeUtils {
 
     }
 
-    public boolean isChanged() {
-//        boolean darkTheme = isDarkMode(mContext);
-//        boolean isChange = darkTheme != darkMode;
-//        darkMode = darkTheme;
-//        return isChange;
-        return Utils.getBooleanPreference(mContext,"pref_theme_change");
+    /**
+     * 获取当前主题对应的暗色调
+     * @return
+     */
+    public int getThemePrimaryDarkColor(Context context){
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.theme_color_dark, typedValue, true);
+        return typedValue.data;
     }
 
-    public int getCurrent(){
-        if(darkMode){
-            return R.style.Theme_AppPlus_Dark;
-        }else{
-            return R.style.Theme_AppPlus;
-        }
+    /**
+     * 获取当前主题色对应色值
+     * @param context
+     * @return
+     */
+    public int getThemePrimaryColor(Context context){
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.theme_color, typedValue, true);
+        return typedValue.data;
     }
 
     public int getTheme(Context context){
@@ -43,10 +49,13 @@ public class ThemeUtils {
     }
 
     public void setTheme(int theme){
-        setThemeChange(mContext,true);
         Utils.putIntPreference(mContext, "theme", theme);
     }
 
+    /**
+     * 记住用户选择的主题颜色对应的position
+     * @param position 用户已选择position
+     */
     public void setThemePosition(int position){
         Utils.putIntPreference(mContext, "themePosition", position);
     }
@@ -55,8 +64,12 @@ public class ThemeUtils {
         return Utils.getIntPreference(mContext,"themePosition",4);
     }
 
-    public static void setThemeChange(Context context,boolean change){
+    public void setThemeChange(Context context,boolean change){
         Utils.putBooleanPreference(context, "pref_theme_change", change);
+    }
+
+    public boolean isChanged() {
+        return Utils.getBooleanPreference(mContext,"pref_theme_change");
     }
 
     /**
@@ -76,6 +89,11 @@ public class ThemeUtils {
         }
     }
 
+    /**
+     * 自定义的主题数组，每一种颜色对应了夜间模式和日间模式
+     * 目前夜间模式已经不做了，所以对应的主题在目前项目中是用不到的
+     * @return
+     */
     public static int[][]themeArr(){
         return new int[][]{
                 {R.style.LightRed,R.style.DarkRed},

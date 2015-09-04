@@ -1,9 +1,12 @@
 package com.gudong.appkit.utils;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.ThemeSingleton;
 import com.gudong.appkit.R;
+import com.gudong.appkit.ui.fragment.CustomWebViewDialog;
 
 /**
  * tool for dialog
@@ -20,5 +23,14 @@ public class DialogUtil {
                 .content(message)
                 .positiveText(context.getString(R.string.dialog_know))
                 .show();
+    }
+
+    public static void showVersionLogView(Context context, FragmentManager fragmentManager, String dialogTitle,String htmlFileName,String tag) {
+        int accentColor = ThemeSingleton.get().widgetColor;
+        if (accentColor == 0)
+            accentColor = context.getResources().getColor(R.color.colorAccent);
+
+        CustomWebViewDialog.create(dialogTitle, htmlFileName, accentColor)
+                .show(fragmentManager, tag);
     }
 }

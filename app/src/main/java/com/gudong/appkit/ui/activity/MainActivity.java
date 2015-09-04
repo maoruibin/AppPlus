@@ -32,7 +32,8 @@ import com.gudong.appkit.entity.AppEntity;
 import com.gudong.appkit.ui.base.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.fragment.AppListFragment;
-import com.gudong.appkit.ui.fragment.ChangelogDialog;
+import com.gudong.appkit.ui.fragment.CustomWebViewDialog;
+import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
@@ -113,7 +114,7 @@ public class MainActivity extends BaseActivity {
         String currentVersion = Utils.getAppVersion(this);
         String localVersionName = Utils.getLocalVersion(this);
         if(!localVersionName.equals(currentVersion)){
-            showVersionLogView();
+            DialogUtil.showVersionLogView(this, getSupportFragmentManager(), getString(R.string.change_log), "changelog.html", "changelog");
             Utils.setCurrentVersion(this, currentVersion);
         }
 
@@ -267,15 +268,6 @@ public class MainActivity extends BaseActivity {
                         return true;
                     }
                 });
-    }
-
-    private void showVersionLogView() {
-        int accentColor = ThemeSingleton.get().widgetColor;
-        if (accentColor == 0)
-            accentColor = getResources().getColor(R.color.colorAccent);
-
-        ChangelogDialog.create(false, accentColor)
-                .show(getSupportFragmentManager(), "changelog");
     }
 
     private List<AppEntity>getAllInstalledApp(){

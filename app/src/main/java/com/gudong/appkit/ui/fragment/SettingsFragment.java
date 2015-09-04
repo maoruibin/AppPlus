@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.base.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
+import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.ThemeUtils;
 import com.gudong.appkit.utils.Utils;
 import com.jenzz.materialpreference.PreferenceCategory;
@@ -51,22 +52,11 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         String key = preference.getKey();
         //用if判断 效率不会很好 待改善
         if(key.equals(getString(R.string.preference_key_about))){
-            new MaterialDialog.Builder(getActivity()).title(getString(R.string.app_name))
-                    .content(R.string.app_about)
-                    .neutralText(R.string.dialog_button_send_email)
-                    .positiveText(R.string.dialog_know)
-                    .callback(new MaterialDialog.ButtonCallback() {
-                        @Override
-                        public void onNeutral(MaterialDialog dialog) {
-                            super.onNeutral(dialog);
-                            NavigationManager.gotoSendOpinion(getActivity());
-                        }
-                    })
-                    .show();
+            DialogUtil.showVersionLogView(mContext,mContext.getSupportFragmentManager() , getString(R.string.preference_title_about), "about.html", "about");
             MobclickAgent.onEvent(mContext, "setting_about");
         }
         if(key.equals(getString(R.string.preference_key_score))){
-            NavigationManager.gotoScore(getActivity());
+            NavigationManager.gotoScore(mContext);
             MobclickAgent.onEvent(mContext, "setting_market");
         }
         if(key.equals(getString(R.string.preference_key_theme_primary))){

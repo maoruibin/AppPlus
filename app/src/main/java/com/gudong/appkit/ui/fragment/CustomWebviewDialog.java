@@ -13,21 +13,30 @@ import android.webkit.WebView;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.Theme;
 import com.gudong.appkit.R;
+import com.gudong.appkit.utils.logger.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
- * @author Aidan Follestad (afollestad)
+ * @author mao
  */
-public class ChangelogDialog extends DialogFragment {
+public class CustomWebViewDialog extends DialogFragment {
 
-    public static ChangelogDialog create(boolean darkTheme, int accentColor) {
-        ChangelogDialog dialog = new ChangelogDialog();
+    /**
+     * create a custom dialog use web view load layout by html file
+     * @param dialogTitle dialog title
+     * @param htmlFileName html file name
+     * @param accentColor accent color
+     * @return a instance of CustomWebViewDialog
+     */
+    public static CustomWebViewDialog create(String dialogTitle,String htmlFileName, int accentColor) {
+        CustomWebViewDialog dialog = new CustomWebViewDialog();
         Bundle args = new Bundle();
-        args.putBoolean("dark_theme", darkTheme);
-        args.putInt("accent_color", accentColor);
+        args.putString("dialogTitle", dialogTitle);
+        args.putString("htmlFileName", htmlFileName);
+        args.putInt("accentColor", accentColor);
         dialog.setArguments(args);
         return dialog;
     }
@@ -41,9 +50,12 @@ public class ChangelogDialog extends DialogFragment {
         } catch (InflateException e) {
             throw new IllegalStateException("This device does not support Web Views.");
         }
+
+        String dialogTitle = getArguments().getString("dialogTitle");
+
         MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .theme(getArguments().getBoolean("dark_theme") ? Theme.DARK : Theme.LIGHT)
-                .title(R.string.change_log)
+                .theme(Theme.LIGHT)
+                .title(dialogTitle)
                 .customView(customView, false)
                 .positiveText(android.R.string.ok)
                 .build();
@@ -51,26 +63,22 @@ public class ChangelogDialog extends DialogFragment {
         final WebView webView = (WebView) customView.findViewById(R.id.webview);
         webView.getSettings().setDefaultTextEncodingName("utf-8");
         try {
-            // Load from changelog.html in the assets folder
+            String htmlFileName = getArguments().getString("htmlFileName");
+            Logger.i("htmlFileName name "+htmlFileName);
             StringBuilder buf = new StringBuilder();
-            InputStream json = getActivity().getAssets().open("changelog.html");
+            InputStream json = getActivity().getAssets().open(htmlFileName);
             BufferedReader in = new BufferedReader(new InputStreamReader(json, "UTF-8"));
             String str;
             while ((str = in.readLine()) != null)
                 buf.append(str);
             in.close();
 
-            // Inject color values for WebView body background and links
-            final int accentColor = getArguments().getInt("accent_color");
-//            loadDataWithBaseURL(null, detail, "text/html", "UTF-8", null);
+            final int accentColor = getArguments().getInt("accentColor");
             String formatLodString = buf.toString()
-                    .replace("{style-placeholder}", getArguments().getBoolean("dark_theme") ?
-                            "body { background-color: #444444; color: #fff; }" :
-                            "body { background-color: #EDEDED; color: #000; }")
+                    .replace("{style-placeholder}","body { background-color: #EDEDED; color: #000; }")
                     .replace("{link-color}", colorToHex(shiftColor(accentColor, true)))
                     .replace("{link-color-active}", colorToHex(accentColor));
             webView.loadDataWithBaseURL(null, formatLodString, "text/html", "UTF-8", null);
-//            webView.loadData("", "text/html", "UTF-8");
         } catch (Throwable e) {
             webView.loadData("<h1>Unable to load</h1><p>" + e.getLocalizedMessage() + "</p>", "text/html", "UTF-8");
         }

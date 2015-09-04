@@ -1,46 +1,46 @@
-# README #
+# App+ #
 
-App+是一个手机软件管理软件，恩，这是目前的定义，以后还不一定，现在就是做着玩玩啦。
+App+是一个主要用于Android用户间传送Apk文件的工具软件。
 
-### What is this repository for? ###
+### 截图 ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+![index](/art/index.png "")
+![send](/art/send.jpg "")<br>
+![setting](/art/setting.png "")
+![theme](/art/theme.png "")
 
-### How do I get set up? ###
+### 知识点 ###
+* 主题切换
+* Logger管理
+* 友盟统计 包括事件统计以及自动更新
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### 更新日志 ###
 
-### Contribution guidelines ###
+* 0.2.3
 
-* Writing tests
-* Code review
-* Other guidelines
+        新增：引入Square的leakcanary，用于检测内存泄露(09-04)
+        新增: 加载动画以及空信息提示(09-03)
+        新增: 主页右上角增加意见反馈入口(09-03)
+        更新: 改变应用启动图标(09-03)
+        修复: 完成搜索后，滑动效果bug(09-03)
 
-### Who do I talk to? ###
+* 0.2.2.1
 
-* Repo owner or admin
-* Other community or team contact
-### ChangeLog ###
-v0.2.2
-<ol>
-    <li><b>新增:</b> 软件自动更新(08-21)</li>
-    <li><b>新增:</b> 再按一次退出机制(08-22)</li>
-    <li><b>移除:</b> 主页右上角设置入口(08-22)</li>
-    <li><b>移除:</b> 开发者选项设置(08-22)</li>
-    <li><b>移除:</b> 侧滑菜单交互(08-22)</li>
-</ol>
-v0.2.2.1
-<ol>
-    <b>0.2.2.1</b>
-    <li><b>优化:</b> 手动更新时没有提示的Bug(08-23)</li>
-    <li><b>移除:</b> Overflow菜单中的分享给好友(08-23)</li>
-</ol>
-添加主题设置的统计事件
-手动更新给出提示信息
+        优化: 手动更新时给出更新结果提示(08-23)
+        移除: Overflow菜单中的分享好友选项(08-23)
+
+* 0.2.2
+
+        新增：友盟统计（事件统计，软件自动更新）(08-22)
+        新增: 再按一次退出机制(08-22)
+        移除: 主页右上角设置入口(08-22)
+        移除: 开发者选项设置(08-22)
+        移除: 侧滑菜单交互(08-22)
+
+* 0.2.1
+
+        新增: 主题颜色设置（可以为应用设置你喜欢的主题颜色啦）
+        新增: 最近打开列表是否显示App+的设置选项
+        修复: 修复Android5.0以上设备的StatusBar颜色异常问题
+        修改: 联系方式(微博)
+        移除: 切换夜间模式和白天模式

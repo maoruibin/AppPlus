@@ -3,6 +3,7 @@ package com.gudong.appkit.ui.fragment;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
@@ -73,7 +74,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEngine =  AppInfoEngine.getInstance(getActivity());
+        mEngine =  AppInfoEngine.getInstance(getActivity().getApplicationContext());
         mType = getArguments().getInt("type");
         mHandler = new Handler(){
             @Override

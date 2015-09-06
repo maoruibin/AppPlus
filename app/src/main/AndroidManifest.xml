@@ -51,7 +51,7 @@
 
         </activity>
         <activity
-            android:name=".ui.activity.SettingsActivity" >
+            android:name=".ui.activity.SimpleContainerActivity" >
         </activity>
     </application>
 

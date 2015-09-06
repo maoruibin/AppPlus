@@ -71,7 +71,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(showHome);
     }
 
-    private void setTitle(String title){
+    private void setToolbarTitle(String title){
         if(mToolbar!=null){
             mToolbar.setTitle(title);
         }

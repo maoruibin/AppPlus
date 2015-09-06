@@ -21,11 +21,11 @@ public class DialogUtil {
         new MaterialDialog.Builder(context)
                 .title(context.getString(R.string.title_point))
                 .content(message)
-                .positiveText(context.getString(R.string.dialog_know))
+                .positiveText(context.getString(R.string.dialog_confirm))
                 .show();
     }
 
-    public static void showVersionLogView(Context context, FragmentManager fragmentManager, String dialogTitle,String htmlFileName,String tag) {
+    public static void showCusotomDialogFillInWebView(Context context, FragmentManager fragmentManager, String dialogTitle, String htmlFileName, String tag) {
         int accentColor = ThemeSingleton.get().widgetColor;
         if (accentColor == 0)
             accentColor = context.getResources().getColor(R.color.colorAccent);

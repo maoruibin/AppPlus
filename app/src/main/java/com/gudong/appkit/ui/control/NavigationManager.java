@@ -18,7 +18,6 @@ public class NavigationManager {
      * @param context
      */
     public static void gotoSendOpinion(Activity context){
-        MobclickAgent.onEvent(context, "send_email");
         Intent localIntent = new Intent("android.intent.action.SENDTO", Uri.parse("mailto:1252768410@qq.com"));
         localIntent.putExtra("android.intent.extra.SUBJECT", context.getString(R.string.title_email_opinion));
         localIntent.putExtra("android.intent.extra.TEXT", Utils.getLog(context));

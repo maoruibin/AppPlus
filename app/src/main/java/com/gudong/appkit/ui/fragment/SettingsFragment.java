@@ -24,56 +24,29 @@ import java.util.Map;
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, ColorChooseDialog.IClickColorSelectCallback, Preference.OnPreferenceChangeListener {
     private BaseActivity mContext;
-        @Override public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            mContext = (BaseActivity) getActivity();
-            addPreferencesFromResource(R.xml.prefs);
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = (BaseActivity) getActivity();
+        addPreferencesFromResource(R.xml.prefs_setting);
 
-            //设置点击监听
-            findPreference(getString(R.string.preference_key_check_update)).setOnPreferenceClickListener(this);
-            findPreference(getString(R.string.preference_key_about)).setOnPreferenceClickListener(this);
-            findPreference(getString(R.string.preference_key_score)).setOnPreferenceClickListener(this);
-            findPreference(getString(R.string.preference_key_theme_primary)).setOnPreferenceClickListener(this);
-            findPreference(getString(R.string.preference_key_license)).setOnPreferenceClickListener(this);
+        //设置点击监听
+        findPreference(getString(R.string.preference_key_theme_primary)).setOnPreferenceClickListener(this);
+        findPreference(getString(R.string.switch_preference_show_self_key)).setOnPreferenceChangeListener(this);
 
-            //动态设置显示内容
-            findPreference(getString(R.string.preference_key_about)).setSummary(String.format(mContext.getString(R.string.current_version_info), Utils.getAppVersion(getActivity())));
-
-            findPreference(getString(R.string.switch_preference_show_self_key)).setOnPreferenceChangeListener(this);
-
-            //v0.2.2 不显示开发者选项
-            PreferenceCategory advancedCategory = (PreferenceCategory) findPreference(getString(R.string.category_advanced_key));
-            advancedCategory.removePreference(findPreference(getString(R.string.switch_preference_develop_key)));
-
-            Utils.removeKey(getActivity(),getString(R.string.switch_preference_develop_key));
-        }
+        //v0.2.2 不显示开发者选项 做一些版本差异处理工作
+        PreferenceCategory advancedCategory = (PreferenceCategory) findPreference(getString(R.string.category_advanced_key));
+        advancedCategory.removePreference(findPreference(getString(R.string.switch_preference_develop_key)));
+        Utils.removeKey(getActivity(),getString(R.string.switch_preference_develop_key));
+    }
 
     @Override
     public boolean onPreferenceClick(android.preference.Preference preference) {
         String key = preference.getKey();
-        //用if判断 效率不会很好 待改善
-        if(key.equals(getString(R.string.preference_key_about))){
-            DialogUtil.showVersionLogView(mContext,mContext.getSupportFragmentManager() , getString(R.string.preference_title_about), "about.html", "about");
-            MobclickAgent.onEvent(mContext, "setting_about");
-        }
-        if(key.equals(getString(R.string.preference_key_score))){
-            NavigationManager.gotoScore(mContext);
-            MobclickAgent.onEvent(mContext, "setting_market");
-        }
         if(key.equals(getString(R.string.preference_key_theme_primary))){
             ColorChooseDialog dialog = new ColorChooseDialog();
             dialog.setColorSelectCallback(this);
             dialog.show(mContext, mContext.getThemeUtils().getThemePosition());
             MobclickAgent.onEvent(mContext, "setting_theme_color");
-        }
-        if(key.equals(getString(R.string.preference_key_check_update))){
-            UmengUpdateAgent.setUpdateListener(new CheckUmengUpdateListener());
-            UmengUpdateAgent.forceUpdate(mContext);
-            MobclickAgent.onEvent(mContext, "setting_check_update");
-        }
-        if(key.equals(getString(R.string.preference_key_license))){
-            DialogUtil.showVersionLogView(mContext,mContext.getSupportFragmentManager() , getString(R.string.preference_title_license), "license.html", "license");
-            MobclickAgent.onEvent(mContext, "setting_license");
         }
         return false;
     }
@@ -107,33 +80,5 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         }
 
         return true;
-    }
-
-    private class CheckUmengUpdateListener implements UmengUpdateListener {
-        @Override
-        public void onUpdateReturned(int updateStatus, UpdateResponse updateInfo) {
-            switch (updateStatus) {
-                case UpdateStatus.Yes: // has update
-                    UmengUpdateAgent.showUpdateDialog(mContext, updateInfo);
-                    break;
-                case UpdateStatus.No: // has no update
-                    showTipDialog(mContext.getString(R.string.update_point_no_update));
-                    break;
-                case UpdateStatus.NoneWifi: // none wifi
-                    showTipDialog(mContext.getString(R.string.update_point_no_wifi));
-                    break;
-                case UpdateStatus.Timeout: // time out
-                    showTipDialog(mContext.getString(R.string.update_point_time_out));
-                    break;
-            }
-        }
-    }
-
-    private void showTipDialog(String tip){
-        new MaterialDialog.Builder(getActivity())
-                .title(R.string.title_point)
-                .content(tip)
-                .positiveText(R.string.dialog_confirm)
-                .show();
     }
 }

@@ -24,7 +24,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.ThemeSingleton;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppPageListAdapter;
 import com.gudong.appkit.dao.AppInfoEngine;
@@ -32,7 +31,6 @@ import com.gudong.appkit.entity.AppEntity;
 import com.gudong.appkit.ui.base.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.fragment.AppListFragment;
-import com.gudong.appkit.ui.fragment.CustomWebViewDialog;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
@@ -52,6 +50,8 @@ public class MainActivity extends BaseActivity {
     List<AppEntity>mListInstalled;
     AppPageListAdapter mFragmentAdapter;
     RelativeLayout mLayoutMainRoot;
+    //获取AppInfo的引擎
+    AppInfoEngine mEngine;
     private static int[]mTitles = new int[]{R.string.tab_recent,R.string.tab_installed};
 
     @Override
@@ -62,6 +62,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mEngine = new AppInfoEngine(getApplicationContext());
         //友盟检查更新
         checkAutoUpdateByUmeng();
 
@@ -114,7 +115,7 @@ public class MainActivity extends BaseActivity {
         String currentVersion = Utils.getAppVersion(this);
         String localVersionName = Utils.getLocalVersion(this);
         if(!localVersionName.equals(currentVersion)){
-            DialogUtil.showVersionLogView(this, getSupportFragmentManager(), getString(R.string.change_log), "changelog.html", "changelog");
+            DialogUtil.showCusotomDialogFillInWebView(this, getSupportFragmentManager(), getString(R.string.change_log), "changelog.html", "changelog");
             Utils.setCurrentVersion(this, currentVersion);
         }
 
@@ -138,8 +139,7 @@ public class MainActivity extends BaseActivity {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void checkPermission(){
-        AppInfoEngine engine = AppInfoEngine.getInstance(this);
-        if (engine.getUsageStatsList().isEmpty()){
+        if (mEngine.getUsageStatsList().isEmpty()){
             if(Utils.Setting.isNotShowPointForSumBug(getBaseContext()))return;
             if(Utils.getBrand().contains("sam") || Utils.getBrand().contains("lg")){
                 new MaterialDialog.Builder(this)
@@ -233,11 +233,16 @@ public class MainActivity extends BaseActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(MainActivity.this,SettingsActivity.class));
+                Intent intentSetting = new Intent(MainActivity.this, SimpleContainerActivity.class);
+                intentSetting.putExtra(SimpleContainerActivity.KEY_TYPE,SimpleContainerActivity.FragmentType.SETTING);
+                startActivity(intentSetting);
                 MobclickAgent.onEvent(this, "setting_entry");
                 break;
-            case R.id.action_option:
-                NavigationManager.gotoSendOpinion(MainActivity.this);
+            case R.id.action_about:
+                Intent intentAbout = new Intent(MainActivity.this, SimpleContainerActivity.class);
+                intentAbout.putExtra(SimpleContainerActivity.KEY_TYPE,SimpleContainerActivity.FragmentType.ABOUT);
+                startActivity(intentAbout);
+                MobclickAgent.onEvent(this, "setting_about");
                 break;
         }
         return true;
@@ -256,7 +261,9 @@ public class MainActivity extends BaseActivity {
                                 reload();
                                 break;
                             case R.id.menu_drawer_setting:
-                                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                                Intent intent = new Intent(MainActivity.this, SimpleContainerActivity.class);
+                                intent.putExtra(SimpleContainerActivity.KEY_TYPE,SimpleContainerActivity.FragmentType.SETTING);
+                                startActivity(intent);
                                 MobclickAgent.onEvent(MainActivity.this, "setting_entry");
                                 break;
                             case R.id.menu_drawer_opinion:
@@ -272,7 +279,6 @@ public class MainActivity extends BaseActivity {
 
     private List<AppEntity>getAllInstalledApp(){
         if(mListInstalled == null){
-            AppInfoEngine mEngine = AppInfoEngine.getInstance(this);
             mListInstalled = mEngine.getInstalledAppList();
         }
         return mListInstalled;

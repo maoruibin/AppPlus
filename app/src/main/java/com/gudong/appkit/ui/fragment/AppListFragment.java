@@ -74,7 +74,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEngine =  AppInfoEngine.getInstance(getActivity().getApplicationContext());
+        mEngine =  new AppInfoEngine(getActivity().getApplicationContext());
         mType = getArguments().getInt("type");
         mHandler = new Handler(){
             @Override

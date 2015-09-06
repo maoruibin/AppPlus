@@ -3,13 +3,13 @@
         <com.jenzz.materialpreference.PreferenceCategory
             android:title="@string/category_advanced"
             android:key="@string/category_advanced_key">
-        <com.jenzz.materialpreference.SwitchPreference
+        <com.jenzz.materialpreference.CheckBoxPreference
             android:title="@string/switch_preference_develop_title"
             android:key="@string/switch_preference_develop_key"
             android:summaryOn="@string/switch_preference_develop_on"
             android:summaryOff="@string/switch_preference_develop_off"/>
 
-        <com.jenzz.materialpreference.SwitchPreference
+        <com.jenzz.materialpreference.CheckBoxPreference
             android:title="@string/switch_preference_show_self_title"
             android:key="@string/switch_preference_show_self_key"
             android:summaryOn="@string/switch_preference_show_self_on"
@@ -20,22 +20,5 @@
             android:summary="@string/preference_summary_theme_primary"
             android:key="@string/preference_key_theme_primary"/>
 
-    </com.jenzz.materialpreference.PreferenceCategory>
-
-    <com.jenzz.materialpreference.PreferenceCategory
-        android:title="@string/category_other">
-        <com.jenzz.materialpreference.Preference
-            android:title="@string/preference_title_score"
-            android:summary="@string/preference_summary_score"
-            android:key="@string/preference_key_score"/>
-        <com.jenzz.materialpreference.Preference
-            android:title="@string/preference_title_about"
-            android:key="@string/preference_key_about"/>
-        <com.jenzz.materialpreference.Preference
-            android:title="@string/preference_title_check_update"
-            android:key="@string/preference_key_check_update"/>
-        <com.jenzz.materialpreference.Preference
-            android:title="@string/preference_title_license"
-            android:key="@string/preference_key_license"/>
     </com.jenzz.materialpreference.PreferenceCategory>
 </PreferenceScreen>

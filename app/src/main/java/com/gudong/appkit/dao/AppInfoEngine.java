@@ -34,19 +34,19 @@ import java.util.List;
 public class AppInfoEngine {
     private Context mContext;
     private PackageManager mPackageManager;
-    private static AppInfoEngine mInstance;
-    private AppInfoEngine(Context context) {
+//    private static AppInfoEngine mInstance;
+    public AppInfoEngine(Context context) {
         this.mContext = context;
         mPackageManager = mContext.getApplicationContext().getPackageManager();
         Log.i("----","new mPackageManager");
     }
 
-    public synchronized static AppInfoEngine getInstance(Context context){
-        if(mInstance == null){
-            mInstance = new AppInfoEngine(context);
-        }
-        return mInstance;
-    }
+//    public synchronized static AppInfoEngine getInstance(Context context){
+//        if(mInstance == null){
+//            mInstance = new AppInfoEngine(context);
+//        }
+//        return mInstance;
+//    }
 
     /**
      * 获取已安装的App信息list

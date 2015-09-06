@@ -9,10 +9,10 @@
     <item
         android:id="@+id/menu_drawer_opinion"
         android:icon="?ic_nav_menu_opinion"
-        android:title="@string/menu_main_opinion" />
+        android:title="@string/empty" />
 
     <item
         android:id="@+id/menu_drawer_setting"
         android:icon="?ic_nav_menu_setting"
-        android:title="@string/menu_main_setting" />
+        android:title="@string/empty" />
 </menu>

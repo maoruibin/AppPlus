@@ -34,6 +34,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             findPreference(getString(R.string.preference_key_about)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.preference_key_score)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.preference_key_theme_primary)).setOnPreferenceClickListener(this);
+            findPreference(getString(R.string.preference_key_license)).setOnPreferenceClickListener(this);
 
             //动态设置显示内容
             findPreference(getString(R.string.preference_key_about)).setSummary(String.format(mContext.getString(R.string.current_version_info), Utils.getAppVersion(getActivity())));
@@ -69,6 +70,10 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             UmengUpdateAgent.setUpdateListener(new CheckUmengUpdateListener());
             UmengUpdateAgent.forceUpdate(mContext);
             MobclickAgent.onEvent(mContext, "setting_check_update");
+        }
+        if(key.equals(getString(R.string.preference_key_license))){
+            DialogUtil.showVersionLogView(mContext,mContext.getSupportFragmentManager() , getString(R.string.preference_title_license), "license.html", "license");
+            MobclickAgent.onEvent(mContext, "setting_license");
         }
         return false;
     }

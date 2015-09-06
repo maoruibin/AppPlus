@@ -27,8 +27,15 @@ App+是一个可以用于传送Apk文件，提取APK文件等的工具软件。<
 
 ### 知识点 ###
 * 主题切换
-* Logger管理
+* Log管理
 * 友盟统计 包括事件统计以及自动更新
+
+### 依赖库 ###
+* [material-dialogs](https://github.com/afollestad/material-dialogs) -- 材料样式的对话框
+* [materialpreference](https://github.com/jenzz/Android-MaterialPreference) -- 材料样式的设置界面
+* [systembartint](https://github.com/jgilfelt/SystemBarTint) -- 沉浸式效果
+* umeng.analytics -- 友盟统计
+* [leakcanary](https://github.com/square/leakcanary) -- 内存泄露检测
 
 ### 更新日志 ###
 
@@ -63,8 +70,24 @@ App+是一个可以用于传送Apk文件，提取APK文件等的工具软件。<
 
 ### License ###
 
-         GNU GENERAL PUBLIC LICENSE  Version 3, 29 June 2007
+   The MIT License (MIT)
 
-         Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
-         Everyone is permitted to copy and distribute verbatim copies
-         of this license document, but changing it is not allowed.
+    Copyright (c) 2015 Maoruibin
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.

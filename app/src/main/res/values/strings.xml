@@ -58,12 +58,14 @@
     <string name="preference_summary_theme_primary">界面主色调，默认为Material蓝色</string>
 
     <string name="category_other">其他</string>
+    <string name="preference_title_license">开源许可证</string>
     <string name="preference_title_check_update">检查新版本</string>
     <string name="preference_title_about">关于App+</string>
     <string name="preference_title_score">去市场评分</string>
 
     <string name="preference_summary_score">支持该应用</string>
 
+    <string name="preference_key_license">license</string>
     <string name="preference_key_about">about</string>
     <string name="preference_key_score">score</string>
     <string name="preference_key_check_update">check_update</string>

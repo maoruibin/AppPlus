@@ -39,6 +39,9 @@ App+是一个可以用于传送Apk文件，提取APK文件等的工具软件。<
 * [leakcanary](https://github.com/square/leakcanary) -- 内存泄露检测
 
 ### 更新日志 ###
+* 0.2.3.1
+
+        更新: 关于文案小改动(09-07)
 
 * 0.2.3
 

@@ -88,8 +88,10 @@ App+是一个可以用于传送Apk文件，提取APK文件等的工具软件。<
         移除: 切换夜间模式和白天模式
 
 ### 关于我 ###
-[微博](http://weibo.com/u/1874136301)
-&nbsp;&nbsp;&nbsp;[个人博客](https://maoruibin.github.io/)
+Android开发者，爱折腾，爱篮球
+<br>QQ:1252768410
+<br>[个人博客](https://maoruibin.github.io/)
+<br>[微博](http://weibo.com/u/1874136301)
 
 ### License ###
 

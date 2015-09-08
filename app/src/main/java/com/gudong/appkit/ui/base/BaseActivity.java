@@ -22,14 +22,12 @@ import com.umeng.analytics.MobclickAgent;
 public abstract class BaseActivity extends AppCompatActivity {
     private ThemeUtils mThemeUtils;
     private Toolbar mToolbar;
-    // 防止reload方法递归调用
-    private boolean hasRecreate = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mThemeUtils = new ThemeUtils(this);
         // 设置当前主题
         setTheme(mThemeUtils.getTheme(this));
-        hasRecreate = true;
+//        hasRecreate = true;
         super.onCreate(savedInstanceState);
         // 设置是否对日志信息进行加密, true 加密
         AnalyticsConfig.enableEncrypt(true);
@@ -98,9 +96,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        //点击主题颜色切换 并且 是第一次进入这个界面 才需要执行 reload，如果不使用hasRecreate这个
-        //标志位控制的话 会导致reload方法循环执行 从而使得程序崩溃
-        if (mThemeUtils.isChanged() && !hasRecreate) {
+        if (mThemeUtils.isChanged()) {
             reload();
         }
     }
@@ -109,7 +105,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
-        hasRecreate = false;
     }
 
     @Override

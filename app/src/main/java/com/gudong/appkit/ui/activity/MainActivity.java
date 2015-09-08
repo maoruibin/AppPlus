@@ -50,7 +50,6 @@ public class MainActivity extends BaseActivity {
     List<AppEntity>mListInstalled;
     AppPageListAdapter mFragmentAdapter;
     RelativeLayout mLayoutMainRoot;
-    //获取AppInfo的引擎
     AppInfoEngine mEngine;
     private static int[]mTitles = new int[]{R.string.tab_recent,R.string.tab_installed};
 
@@ -297,7 +296,7 @@ public class MainActivity extends BaseActivity {
         List<AppEntity>resultList = new ArrayList<>();
         for(AppEntity entity:list){
             String appName = entity.getAppName();
-            if(!TextUtils.isEmpty(appName) && appName.contains(key.toLowerCase())){
+            if(!TextUtils.isEmpty(appName) && (appName.contains(key) || appName.contains(key.toUpperCase()) || appName.contains(key.toLowerCase()))){
                 resultList.add(entity);
             }
         }

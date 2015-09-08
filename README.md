@@ -2,7 +2,7 @@
 ![icon](/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png "")
 ### 介绍 ###
 App+是一个可以用于传送Apk文件，提取APK文件等的工具软件。<br>
-目前已开源，涉及到了一些知识点，如Material主题切换、design包使用。欢迎学习交流。
+目前已开源，涉及到了一些[知识点](#jump)。欢迎学习交流。
 
 ### 下载 ###
 
@@ -26,10 +26,13 @@ App+是一个可以用于传送Apk文件，提取APK文件等的工具软件。<
 ![setting](/art/setting.png "")
 ![theme](/art/theme.png "")
 
-### 知识点 ###
-* 主题切换
-* Log管理
-* 友盟统计 包括事件统计以及自动更新
+### <a name="jump">知识点</a> ###
+* 官方support design库的使用
+* PackageManager的使用，以及在获取最近运行任务时，对Android5.0的适配
+* 主题颜色切换(主要原理是通过切换事先定义好的Theme，然后重新启动Activity)
+* 友盟统计(包括事件统计以及自动更新)
+* 多渠道打包
+* Log管理(动态设置在debug模式下输出log，在release下屏蔽所有log)
 
 ### 依赖库 ###
 * [material-dialogs](https://github.com/afollestad/material-dialogs) -- 材料样式的对话框
@@ -39,6 +42,11 @@ App+是一个可以用于传送Apk文件，提取APK文件等的工具软件。<
 * [leakcanary](https://github.com/square/leakcanary) -- 内存泄露检测
 
 ### 更新日志 ###
+* 0.2.3.2
+
+        修复: 一些情况下的奔溃问题(09-08)
+        优化: 搜索逻辑(09-08)
+
 * 0.2.3.1
 
         更新: 关于文案小改动(09-07)

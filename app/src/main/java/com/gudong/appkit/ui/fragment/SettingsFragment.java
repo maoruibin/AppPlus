@@ -56,7 +56,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         //设置主题 并且让主题立即生效（通过方法 mContext.reload()）
         mContext.getThemeUtils().setTheme(ThemeUtils.themeArr()[position][0]);
         mContext.getThemeUtils().setThemePosition(position);
-        mContext.getThemeUtils().setThemeChange(getActivity(),true);
         mContext.reload();
 
         //统计用户主题颜色的选取

@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.util.TypedValue;
 
 import com.gudong.appkit.R;
+import com.gudong.appkit.utils.logger.Logger;
 
 /**
  * 主题相关的工具类
@@ -14,7 +15,7 @@ import com.gudong.appkit.R;
  */
 public class ThemeUtils {
     private Context mContext;
-
+    private int mCurrentTheme;
     public ThemeUtils(Context context){
         this.mContext = context;
         isChanged(); // invalidate stored booleans
@@ -64,12 +65,12 @@ public class ThemeUtils {
         return Utils.getIntPreference(mContext,"themePosition",4);
     }
 
-    public void setThemeChange(Context context,boolean change){
-        Utils.putBooleanPreference(context, "pref_theme_change", change);
-    }
-
     public boolean isChanged() {
-        return Utils.getBooleanPreference(mContext,"pref_theme_change");
+        int currentTheme = getTheme(mContext);
+        boolean isChange = mCurrentTheme != currentTheme;
+        Logger.i(isChange?"主题改变了":" 主题未改变");
+        mCurrentTheme = currentTheme;
+        return isChange;
     }
 
     /**

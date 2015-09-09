@@ -20,7 +20,14 @@
     </style>
     <!-- 正常主题-->
     <style name="Theme_AppPlus" parent="@style/ThemeLightAppPlus"/>
-    <!-- 夜间模式-->
+    <!-- 夜间模式 目前已被放弃使用 -->
     <style name="Theme_AppPlus_Dark" parent="@style/ThemeDarkAppPlus"/>
+
+    <style name="MaterialButton">
+        <item name="android:layout_height">@dimen/material_button_height</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/material_button_text_size</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
 
 </resources>

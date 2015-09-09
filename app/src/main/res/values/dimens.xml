@@ -5,4 +5,7 @@
     <dimen name="list_item_icon_size">60dp</dimen>
     <dimen name="loading_border_width">4dp</dimen>
     <dimen name="view_normal_distance">6dp</dimen>
+
+    <dimen name="material_button_height">34dp</dimen>
+    <dimen name="material_button_text_size">13dp</dimen>
 </resources>

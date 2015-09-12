@@ -3,6 +3,7 @@
     <color name="window_background">#FFF5F5F5</color>
     <color name="window_background_dark">#de252525</color>
     <color name="grey">#FFcccccc</color>
+    <color name="white">#FFFFFF</color>
 
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#3F51B5</color>

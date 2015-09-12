@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.view.Gravity;
@@ -21,7 +22,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.gudong.appkit.R;
 import com.gudong.appkit.utils.Utils;
 
@@ -29,8 +29,9 @@ import com.gudong.appkit.utils.Utils;
  * Created by mao on 8/8/15.
  */
 public class ColorChooseDialog extends DialogFragment implements View.OnClickListener {
-    int[]mColors;
+    int[] mColors;
     IClickColorSelectCallback mCallback;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -40,23 +41,19 @@ public class ColorChooseDialog extends DialogFragment implements View.OnClickLis
 
         GridLayout gridLayout = (GridLayout) view.findViewById(R.id.grid);
 
-
-
-        for(int i =0;i<mColors.length;i++){
-//            llLayout.addView(getColorItemView(mColors[i]),params);
-            gridLayout.addView(getColorItemView(getActivity(),i,i==preselect));
+        for (int i = 0; i < mColors.length; i++) {
+            gridLayout.addView(getColorItemView(getActivity(), i, i == preselect));
         }
-        MaterialDialog dialog = new MaterialDialog.Builder(getActivity())
-                .title(R.string.color_chooser)
-                .autoDismiss(false)
-                .customView(view, false)
-                .build();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.color_chooser)
+                .setView(view)
+                .show();
         return dialog;
     }
 
     private int[] initColors() {
         final TypedArray ta = getActivity().getResources().obtainTypedArray(R.array.material_designer_colors);
-        int[]mColors = new int[ta.length()];
+        int[] mColors = new int[ta.length()];
         for (int i = 0; i < ta.length(); i++)
             mColors[i] = ta.getColor(i, 0);
         ta.recycle();
@@ -80,7 +77,7 @@ public class ColorChooseDialog extends DialogFragment implements View.OnClickLis
         }
     }
 
-    private View getColorItemView(final Context context,int position,boolean isSelect){
+    private View getColorItemView(final Context context, int position, boolean isSelect) {
         int color = mColors[position];
         int widthImageCheckView = Utils.convertDensityPix(context, 24);
         int widthColorView = Utils.convertDensityPix(context, 56);
@@ -89,13 +86,13 @@ public class ColorChooseDialog extends DialogFragment implements View.OnClickLis
         ImageView imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.ic_check);
 
-        FrameLayout.LayoutParams ivParams = new FrameLayout.LayoutParams(widthImageCheckView,widthImageCheckView);
+        FrameLayout.LayoutParams ivParams = new FrameLayout.LayoutParams(widthImageCheckView, widthImageCheckView);
         ivParams.gravity = Gravity.CENTER;
         imageView.setLayoutParams(ivParams);
-        imageView.setVisibility(isSelect?View.VISIBLE:View.INVISIBLE);
+        imageView.setVisibility(isSelect ? View.VISIBLE : View.INVISIBLE);
 
         FrameLayout frameLayout = new FrameLayout(context);
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams(new FrameLayout.LayoutParams(widthColorView,widthColorView));
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams(new FrameLayout.LayoutParams(widthColorView, widthColorView));
         params.setGravity(Gravity.CENTER);
         params.setMargins(widthMargin, widthMargin, widthMargin, widthMargin);
         frameLayout.setLayoutParams(params);
@@ -110,10 +107,11 @@ public class ColorChooseDialog extends DialogFragment implements View.OnClickLis
 
     /**
      * 给View设置背景色
+     *
      * @param view
      * @param color
      */
-    private void setBackgroundSelector(View view, int color){
+    private void setBackgroundSelector(View view, int color) {
         Drawable selector = createSelector(color);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int[][] states = new int[][]{
@@ -155,8 +153,8 @@ public class ColorChooseDialog extends DialogFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         int position = (int) v.getTag();
-        if(mCallback!=null){
-            mCallback.onClickSelectCallback(position,mColors[position]);
+        if (mCallback != null) {
+            mCallback.onClickSelectCallback(position, mColors[position]);
             dismiss();
         }
 
@@ -166,7 +164,7 @@ public class ColorChooseDialog extends DialogFragment implements View.OnClickLis
         mCallback = callback;
     }
 
-    public interface IClickColorSelectCallback{
-        void onClickSelectCallback(int position,int color);
+    public interface IClickColorSelectCallback {
+        void onClickSelectCallback(int position, int color);
     }
 }

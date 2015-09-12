@@ -4,15 +4,7 @@
         <item name="theme_color">@color/md_red_500</item>
         <item name="theme_color_dark">@color/md_red_700</item>
     </style>
-    <style name="DarkRed" parent="Theme_AppPlus_Dark">
-        <item name="theme_color">@color/md_red_500</item>
-        <item name="theme_color_dark">@color/md_red_700</item>
-    </style>
     <style name="LightPink" parent="Theme_AppPlus">
-        <item name="theme_color">@color/md_pink_500</item>
-        <item name="theme_color_dark">@color/md_pink_700</item>
-    </style>
-    <style name="DarkPink" parent="Theme_AppPlus_Dark">
         <item name="theme_color">@color/md_pink_500</item>
         <item name="theme_color_dark">@color/md_pink_700</item>
     </style>
@@ -20,15 +12,7 @@
         <item name="theme_color">@color/md_purple_500</item>
         <item name="theme_color_dark">@color/md_purple_700</item>
     </style>
-    <style name="DarkPurple" parent="Theme_AppPlus_Dark">
-        <item name="theme_color">@color/md_purple_500</item>
-        <item name="theme_color_dark">@color/md_purple_700</item>
-    </style>
     <style name="LightDeepPurple" parent="Theme_AppPlus">
-        <item name="theme_color">@color/md_deep_purple_500</item>
-        <item name="theme_color_dark">@color/md_deep_purple_700</item>
-    </style>
-    <style name="DarkDeepPurple"  parent="Theme_AppPlus_Dark">
         <item name="theme_color">@color/md_deep_purple_500</item>
         <item name="theme_color_dark">@color/md_deep_purple_700</item>
     </style>
@@ -36,16 +20,7 @@
         <item name="theme_color">@color/md_indigo_500</item>
         <item name="theme_color_dark">@color/md_indigo_700</item>
     </style>
-    <style name="DarkIndigo" parent="Theme_AppPlus_Dark">
-        <item name="theme_color">@color/md_indigo_500</item>
-        <item name="theme_color_dark">@color/md_indigo_700</item>
-    </style>
-
     <style name="LightBlue" parent="Theme_AppPlus">
-        <item name="theme_color">@color/md_blue_500</item>
-        <item name="theme_color_dark">@color/md_blue_700</item>
-    </style>
-    <style name="DarkBlue"  parent="Theme_AppPlus_Dark">
         <item name="theme_color">@color/md_blue_500</item>
         <item name="theme_color_dark">@color/md_blue_700</item>
     </style>
@@ -53,15 +28,7 @@
         <item name="theme_color">@color/md_light_blue_500</item>
         <item name="theme_color_dark">@color/md_light_blue_700</item>
     </style>
-    <style name="DarkLightBlue"  parent="Theme_AppPlus_Dark">
-        <item name="theme_color">@color/md_light_blue_500</item>
-        <item name="theme_color_dark">@color/md_light_blue_700</item>
-    </style>
     <style name="LightCyan" parent="Theme_AppPlus">
-        <item name="theme_color">@color/md_cyan_500</item>
-        <item name="theme_color_dark">@color/md_cyan_700</item>
-    </style>
-    <style name="DarkCyan"  parent="Theme_AppPlus_Dark">
         <item name="theme_color">@color/md_cyan_500</item>
         <item name="theme_color_dark">@color/md_cyan_700</item>
     </style>
@@ -69,25 +36,11 @@
         <item name="theme_color">@color/md_teal_500</item>
         <item name="theme_color_dark">@color/md_teal_700</item>
     </style>
-    <style name="DarkTeal"  parent="Theme_AppPlus_Dark">
-        <item name="theme_color">@color/md_teal_500</item>
-        <item name="theme_color_dark">@color/md_teal_700</item>
-    </style>
-
     <style name="LightGreen" parent="Theme_AppPlus">
         <item name="theme_color">@color/md_green_500</item>
         <item name="theme_color_dark">@color/md_green_700</item>
     </style>
-    <style name="DarkGreen" parent="Theme_AppPlus_Dark">
-        <item name="theme_color" parent="Theme_AppPlus_Dark">@color/md_green_500</item>
-        <item name="theme_color_dark">@color/md_green_700</item>
-    </style>
-
     <style name="LightLightGreen" parent="Theme_AppPlus">
-        <item name="theme_color">@color/md_light_green_500</item>
-        <item name="theme_color_dark">@color/md_light_green_700</item>
-    </style>
-    <style name="DarkLightGreen" parent="Theme_AppPlus_Dark">
         <item name="theme_color">@color/md_light_green_500</item>
         <item name="theme_color_dark">@color/md_light_green_700</item>
     </style>
@@ -95,15 +48,7 @@
         <item name="theme_color">@color/md_lime_500</item>
         <item name="theme_color_dark">@color/md_lime_700</item>
     </style>
-    <style name="DarkLime" parent="Theme_AppPlus_Dark">
-        <item name="theme_color">@color/md_lime_500</item>
-        <item name="theme_color_dark">@color/md_lime_700</item>
-    </style>
     <style name="LightYellow" parent="Theme_AppPlus">
-        <item name="theme_color">@color/md_yellow_500</item>
-        <item name="theme_color_dark">@color/md_yellow_700</item>
-    </style>
-    <style name="DarkYellow" parent="Theme_AppPlus_Dark">
         <item name="theme_color">@color/md_yellow_500</item>
         <item name="theme_color_dark">@color/md_yellow_700</item>
     </style>
@@ -111,15 +56,7 @@
         <item name="theme_color">@color/md_amber_500</item>
         <item name="theme_color_dark">@color/md_amber_700</item>
     </style>
-     <style name="DarkAmber" parent="Theme_AppPlus_Dark">
-        <item name="theme_color">@color/md_amber_500</item>
-        <item name="theme_color_dark">@color/md_amber_700</item>
-    </style>
     <style name="LightOrange" parent="Theme_AppPlus">
-        <item name="theme_color">@color/md_orange_500</item>
-        <item name="theme_color_dark">@color/md_orange_700</item>
-    </style>
-    <style name="DarkOrange" parent="Theme_AppPlus_Dark">
         <item name="theme_color">@color/md_orange_500</item>
         <item name="theme_color_dark">@color/md_orange_700</item>
     </style>
@@ -127,15 +64,7 @@
         <item name="theme_color">@color/md_deep_orange_500</item>
         <item name="theme_color_dark">@color/md_deep_orange_700</item>
     </style>
-    <style name="DarkDeepOrange" parent="Theme_AppPlus_Dark">
-        <item name="theme_color">@color/md_deep_orange_500</item>
-        <item name="theme_color_dark">@color/md_deep_orange_700</item>
-    </style>
     <style name="LightBrown" parent="Theme_AppPlus">
-        <item name="theme_color">@color/md_brown_500</item>
-        <item name="theme_color_dark">@color/md_brown_700</item>
-    </style>
-    <style name="DarkBrown" parent="Theme_AppPlus_Dark">
         <item name="theme_color">@color/md_brown_500</item>
         <item name="theme_color_dark">@color/md_brown_700</item>
     </style>
@@ -143,15 +72,7 @@
         <item name="theme_color">@color/md_grey_500</item>
         <item name="theme_color_dark">@color/md_grey_700</item>
     </style>
-    <style name="DarkGrey" parent="Theme_AppPlus_Dark">
-        <item name="theme_color">@color/md_grey_500</item>
-        <item name="theme_color_dark">@color/md_grey_700</item>
-    </style>
     <style name="LightBlueGrey" parent="Theme_AppPlus">
-        <item name="theme_color">@color/md_blue_grey_500</item>
-        <item name="theme_color_dark">@color/md_blue_grey_700</item>
-    </style>
-    <style name="DarkBlueGrey" parent="Theme_AppPlus_Dark">
         <item name="theme_color">@color/md_blue_grey_500</item>
         <item name="theme_color_dark">@color/md_blue_grey_700</item>
     </style>

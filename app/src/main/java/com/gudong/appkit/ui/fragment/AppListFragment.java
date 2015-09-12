@@ -2,8 +2,9 @@ package com.gudong.appkit.ui.fragment;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -29,15 +31,14 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.progress.CircularProgressDrawable;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.entity.AppEntity;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.FileUtil;
-import com.gudong.appkit.utils.ThemeUtils;
+import com.gudong.appkit.utils.Utils;
+import com.gudong.appkit.view.CircularProgressDrawable;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -49,11 +50,17 @@ import java.util.List;
  * Created by mao on 15/7/8.
  */
 public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem {
-    /**最近列表**/
+    /**
+     * 最近列表
+     **/
     public static final int KEY_RECENT = 0;
-    /**所有app列表**/
+    /**
+     * 所有app列表
+     **/
     public static final int KEY_ALL = 1;
-    /**搜索结果列表**/
+    /**
+     * 搜索结果列表
+     **/
     public static final int KEY_SEARCH = -1;
     private static final String SCHEME = "package";
     private static final String APP_PKG_NAME_21 = "com.android.settings.ApplicationPkgName";
@@ -69,25 +76,31 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     private ProgressBar mPbLoading;
     private TextView mTvPoint;
     private AppInfoListAdapter mAdapter;
-    /**Fragment列表的类型变量，小于0表示是搜索结果对应的列表Fragment，大于等于0，则是正常的用于显示App的列表Fragment**/
+    /**
+     * Fragment列表的类型变量，小于0表示是搜索结果对应的列表Fragment，大于等于0，则是正常的用于显示App的列表Fragment
+     **/
     private int mType = KEY_RECENT;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEngine =  new AppInfoEngine(getActivity().getApplicationContext());
+        mEngine = new AppInfoEngine(getActivity().getApplicationContext());
         mType = getArguments().getInt("type");
-        mHandler = new Handler(){
+        mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                List<AppEntity> result = (List<AppEntity>) msg.obj;
-                setData(result,msg.what);
+                List<AppEntity> result = new ArrayList<>();
+                if(msg.obj != null && msg.obj instanceof List){
+                    result = (List<AppEntity>) msg.obj;
+                }
+                setData(result, msg.what);
             }
         };
     }
 
-    private String getErrorInfo(int type){
-        switch (type){
+    private String getErrorInfo(int type) {
+        switch (type) {
             case KEY_RECENT:
                 return getString(R.string.app_list_error_recent);
             case KEY_ALL:
@@ -99,8 +112,8 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         }
     }
 
-    private String getEmptyInfo(int type){
-        switch (type){
+    private String getEmptyInfo(int type) {
+        switch (type) {
             case KEY_RECENT:
                 return getString(R.string.app_list_empty_recent);
             case KEY_ALL:
@@ -112,10 +125,10 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         }
     }
 
-    public  static AppListFragment getInstance(int type){
+    public static AppListFragment getInstance(int type) {
         AppListFragment fragment = new AppListFragment();
         Bundle bundle = new Bundle(1);
-        bundle.putInt("type",type);
+        bundle.putInt("type", type);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -130,38 +143,38 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         return rootView;
     }
 
-    private void setupLoadLayout(View rootView){
+    private void setupLoadLayout(View rootView) {
         mRlLoadLayout = (RelativeLayout) rootView.findViewById(R.id.rl_app_list_load);
         mPbLoading = (ProgressBar) rootView.findViewById(R.id.pb_app_list_loading);
         mTvPoint = (TextView) rootView.findViewById(R.id.tv_app_list_point);
 
-        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
-            mPbLoading.setIndeterminateDrawable(new CircularProgressDrawable(getResources().getColor(R.color.colorAccent), getResources().getDimension(R.dimen.loading_border_width)));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            mPbLoading.setIndeterminateDrawable(new CircularProgressDrawable(Utils.getColorWarp(getActivity(), R.color.colorAccent), getResources().getDimension(R.dimen.loading_border_width)));
         }
         mRlLoadLayout.setVisibility(View.GONE);
     }
 
-    private void loadingData(String loadingInfo){
+    private void loadingData(String loadingInfo) {
         mRecyclerView.setVisibility(View.GONE);
         mRlLoadLayout.setVisibility(View.VISIBLE);
         mTvPoint.setText(loadingInfo);
     }
 
-    private void loadingDataEmpty(String emptyInfo){
+    private void loadingDataEmpty(String emptyInfo) {
         mRecyclerView.setVisibility(View.GONE);
         mRlLoadLayout.setVisibility(View.VISIBLE);
         mTvPoint.setText(emptyInfo);
         mPbLoading.setVisibility(View.GONE);
     }
 
-    private void loadingDataError(String errorInfo){
+    private void loadingDataError(String errorInfo) {
         mRecyclerView.setVisibility(View.GONE);
         mRlLoadLayout.setVisibility(View.VISIBLE);
         mTvPoint.setText(errorInfo);
         mPbLoading.setVisibility(View.GONE);
     }
 
-    private void loadingFinish(){
+    private void loadingFinish() {
         mRecyclerView.setVisibility(View.VISIBLE);
         mRlLoadLayout.setVisibility(View.GONE);
     }
@@ -169,7 +182,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onResume() {
         super.onResume();
-        if(mType>=0){
+        if (mType >= 0) {
             fillData();
         }
     }
@@ -178,23 +191,23 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new AppInfoListAdapter(getActivity(),new ArrayList<AppEntity>());
+        mAdapter = new AppInfoListAdapter(getActivity(), new ArrayList<AppEntity>());
         mAdapter.setClickPopupMenuItem(this);
         mAdapter.setClickListItem(this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private synchronized void fillData(){
+    private synchronized void fillData() {
         loadingData(getString(R.string.app_list_loading));
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<AppEntity>list = null;
-                switch (mType){
+                List<AppEntity> list = null;
+                switch (mType) {
                     case KEY_RECENT:
-                        if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                             list = mEngine.getRecentAppList();
-                        }else{
+                        } else {
                             list = mEngine.getRecentAppInfo();
                         }
                         break;
@@ -202,7 +215,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                         list = mEngine.getInstalledAppList();
                         break;
                 }
-                mHandler.sendMessage(mHandler.obtainMessage(mType,list));
+                mHandler.sendMessage(mHandler.obtainMessage(mType, list));
             }
         }).start();
     }
@@ -210,12 +223,12 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     /**
      * 为列表设置数据
      */
-    public void setData(List<AppEntity>result,int type){
-        if(result == null){
+    public void setData(List<AppEntity> result, int type) {
+        if (result == null) {
             loadingDataError(getErrorInfo(type));
             return;
         }
-        if(result.isEmpty()){
+        if (result.isEmpty()) {
             loadingDataEmpty(getEmptyInfo(type));
             return;
         }
@@ -226,27 +239,20 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     /**
      * 清空列表数据
      */
-    public void clearData(){
+    public void clearData() {
         mAdapter.update(new ArrayList<AppEntity>());
     }
 
     @Override
     public void onClickMenuItem(int itemId, AppEntity entity) {
-        switch (itemId){
+        switch (itemId) {
             case R.id.pop_export:
                 onClickExport(entity);
                 MobclickAgent.onEvent(getActivity(), "pop_export");
                 break;
-            case R.id.pop_share:
-                onTransferClick(entity);
-                MobclickAgent.onEvent(getActivity(), "pop_share");
-                break;
             case R.id.pop_detail:
                 showInstalledAppDetails(entity);
                 MobclickAgent.onEvent(getActivity(), "pop_detail");
-                break;
-            case R.id.pop_open:
-                onOpenClick(entity);
                 break;
         }
     }
@@ -260,6 +266,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     /**
      * 打开App详情界面
+     *
      * @param appEntity
      */
     private void showInstalledAppDetails(AppEntity appEntity) {
@@ -285,6 +292,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     /**
      * 传送安装包
+     *
      * @param entity
      */
     private void onTransferClick(AppEntity entity) {
@@ -296,7 +304,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         for (int i = 0; i < resInfo.size(); i++) {
             ResolveInfo ri = resInfo.get(i);
             String packageName = ri.activityInfo.packageName;
-            if(packageName.contains("tencent") || packageName.contains("blue")) {
+            if (packageName.contains("tencent") || packageName.contains("blue")) {
                 Intent intent = new Intent();
                 intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
                 intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(entity.getSrcPath())));
@@ -315,83 +323,73 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     /**
      * warp choose title and make app title accent
+     *
      * @param appName app name
      * @return warped chooser title
      */
-    private SpannableStringBuilder warpChooserTitle(String appName){
-        String title = String.format(getString(R.string.select_transfer_way_apk, appName));
-        ForegroundColorSpan fontSpanRed = new ForegroundColorSpan(getResources().getColor(R.color.colorAccent));
+    private SpannableStringBuilder warpChooserTitle(String appName) {
+        @SuppressLint("StringFormatMatches") String title = String.format(getString(R.string.select_transfer_way_apk, appName));
+        ForegroundColorSpan fontSpanRed = new ForegroundColorSpan(Utils.getColorWarp(getActivity(),R.color.colorAccent));
         int start = 2;
-        int end = start+appName.length()+3;
+        int end = start + appName.length() + 3;
         SpannableStringBuilder mSpannableBuilder = new SpannableStringBuilder(title);
-        mSpannableBuilder.setSpan(fontSpanRed,start,end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        mSpannableBuilder.setSpan(fontSpanRed, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         return mSpannableBuilder;
     }
 
-    private void onClickExport(AppEntity entity){
+    private void onClickExport(AppEntity entity) {
         //判断sd卡是否挂载
-        if(!FileUtil.isSdCardOnMounted()){
+        if (!FileUtil.isSdCardOnMounted()) {
             DialogUtil.showSinglePointDialog(getActivity(), getString(R.string.dialog_message_no_sdcard));
             return;
         }
 
         final File srcFile = new File(entity.getSrcPath());
-        File exportParentFile = new File(FileUtil.getSDPath(),"App+导出目录");
-        if(!exportParentFile.exists()){
+        File exportParentFile = new File(FileUtil.getSDPath(), "App+导出目录");
+        if (!exportParentFile.exists()) {
             exportParentFile.mkdir();
         }
 
-        String exportFileName = entity.getAppName()+".apk";
-        final File exportFile = new File(exportParentFile,exportFileName);
+        String exportFileName = entity.getAppName() + ".apk";
+        final File exportFile = new File(exportParentFile, exportFileName);
         String contentInfo = String.format(getString(R.string.dialog_message_file_exist), exportFileName, exportFile.getParentFile().getAbsolutePath());
-        if(exportFile.exists()){
-            new MaterialDialog.Builder(getActivity())
-                    .title(R.string.title_export)
-                    .content(contentInfo)
-                    .positiveText(R.string.dialog_confirm_yes)
-                    .negativeText(R.string.dialog_now_watch)
-                    .callback(new MaterialDialog.ButtonCallback() {
+        if (exportFile.exists()) {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle(R.string.title_export)
+                    .setMessage(contentInfo)
+                    .setPositiveButton(R.string.dialog_confirm_yes, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onPositive(MaterialDialog dialog) {
-                            super.onPositive(dialog);
+                        public void onClick(DialogInterface dialogInterface, int i) {
                             copyFile(srcFile, exportFile);
                         }
-
+                    })
+                    .setNegativeButton(R.string.dialog_now_watch, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onNegative(MaterialDialog dialog) {
-                            super.onNegative(dialog);
+                        public void onClick(DialogInterface dialogInterface, int i) {
                             browseFile(exportFile.getParentFile());
                         }
                     })
                     .show();
-        }else{
+        } else {
             copyFile(srcFile, exportFile);
         }
     }
 
-
-    private void onOpenClick(AppEntity entity) {
-//        Intent intent = new Intent();
-//        intent.setClassName("package.name", entity.getPackageName());
-//        startActivity(intent);
-
-//        Intent startApp = new Intent();
-//        ComponentName component = new ComponentName(
-//                entity.getPackageName(),
-//                rowClicked.getClassName());
-//        startApp.setComponent(component);
-//        startApp.setAction(Intent.ACTION_MAIN);
-//
-//        startActivity(startApp);
-    }
-
     private void copyFile(File srcFile, final File exportFile) {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_progress, null);
+        ProgressBar progressBar = (ProgressBar) view.findViewById(android.R.id.progress);
+        TextView textView = (TextView) view.findViewById(R.id.content);
 
-        final MaterialDialog progressDialog = new MaterialDialog.Builder(getActivity())
-                .title(R.string.title_export)
-                .content(R.string.please_wait)
-                .progress(true, 0).build();
+        //改变Progress的背景为MaterialDesigner规范的样式
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            progressBar.setIndeterminateDrawable(new CircularProgressDrawable(Utils.getColorWarp(getActivity(), R.color.colorAccent), getResources().getDimension(R.dimen.loading_border_width)));
+        }
 
+        final AlertDialog progressDialog = new AlertDialog.Builder(getActivity())
+                .setTitle(R.string.title_export)
+                .setView(view).create();
+        //设置显示文字
+        textView.setText(R.string.please_wait);
 
         new AsyncTask<File, Void, Boolean>() {
             @Override
@@ -404,24 +402,28 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             protected void onPostExecute(Boolean aBoolean) {
                 super.onPostExecute(aBoolean);
                 progressDialog.dismiss();
-                String contentInfo = String.format(getString(R.string.dialog_message_export_finish),exportFile.getName(),exportFile.getParentFile().getAbsolutePath());
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.title_export_finish)
-                        .content(contentInfo)
-                        .positiveText(R.string.dialog_confirm_watch)
-                        .negativeText(R.string.dialog_cancel_watch)
-                        .callback(new MaterialDialog.ButtonCallback() {
+                String contentInfo = String.format(getString(R.string.dialog_message_export_finish), exportFile.getName(), exportFile.getParentFile().getAbsolutePath());
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(R.string.title_export_finish)
+                        .setMessage(contentInfo)
+                        .setPositiveButton(R.string.dialog_confirm_watch, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                super.onPositive(dialog);
+                            public void onClick(DialogInterface dialogInterface, int i) {
                                 browseFile(exportFile.getParentFile());
                             }
                         })
+                        .setNegativeButton(R.string.dialog_cancel_watch, null)
                         .show();
             }
 
             @Override
             protected Boolean doInBackground(File... params) {
+                //导出速度太快了 给人工降个速 可以让用户看到有一个导出的进度条，这样更舒服点
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 File srcFile = params[0];
                 File exportFile = params[1];
                 try {
@@ -437,6 +439,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     /**
      * 浏览文件夹
+     *
      * @param file
      */
     void browseFile(File file) {
@@ -448,9 +451,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     @Override
     public void onClickListItemIcon(View iconView, AppEntity entity) {
-        ObjectAnimator animatorRotation = ObjectAnimator.ofFloat(iconView,"rotation",0,360);
-        ObjectAnimator scaleRotationX = ObjectAnimator.ofFloat(iconView,"scaleX",0,1F);
-        ObjectAnimator scaleRotationY = ObjectAnimator.ofFloat(iconView,"scaleY",0,1F);
+        ObjectAnimator animatorRotation = ObjectAnimator.ofFloat(iconView, "rotation", 0, 360);
+        ObjectAnimator scaleRotationX = ObjectAnimator.ofFloat(iconView, "scaleX", 0, 1F);
+        ObjectAnimator scaleRotationY = ObjectAnimator.ofFloat(iconView, "scaleY", 0, 1F);
         AnimatorSet animationSet = new AnimatorSet();
         animationSet.playTogether(animatorRotation, scaleRotationY, scaleRotationX);
         animationSet.setDuration(500);

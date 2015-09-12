@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="?attr/fits_windows">
 
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <include layout="@layout/include_list_viewpager"/>
 
-        <include layout="@layout/include_list_viewpager"/>
-
-        <android.support.design.widget.NavigationView
-            android:fitsSystemWindows="?attr/fits_windows"
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:menu="@menu/navigation_items"/>
-    </android.support.v4.widget.DrawerLayout>
 </RelativeLayout>

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#99232323">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99232323">
 
         <LinearLayout
             android:id="@+id/umeng_update_frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_centerInParent="true"
             android:background="@drawable/umeng_update_dialog_bg"
             android:orientation="vertical"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
             android:paddingTop="30dp"
-            android:paddingBottom="24dp">
+            android:paddingBottom="16dp">
 
             <!-- Title -->
 
@@ -39,10 +39,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="@string/UMUpdateTitle"
-                    android:textStyle="bold"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textAppearance="?android:attr/textAppearanceLargePopupMenu"
+                    android:textSize="@dimen/alert_title_size"
                     android:textColor="@color/black"/>
-
                 <Button
                     android:id="@+id/umeng_update_id_close"
                     android:layout_width="wrap_content"
@@ -81,6 +80,7 @@
             <!-- Ignore CheckBox -->
 
             <CheckBox
+                android:visibility="gone"
                 android:id="@+id/umeng_update_id_check"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -96,46 +96,41 @@
                 android:layout_marginTop="8dp">
                 <Button
                     android:id="@+id/umeng_update_id_cancel"
+                    style="@style/MaterialButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:background="@drawable/umeng_update_button_cancel_bg_selector"
                     android:focusable="true"
-                    android:gravity="center"
                     android:padding="6dp"
-                    android:layout_gravity="left"
-                    android:textStyle="bold"
-                    android:layout_alignParentLeft="true"
+                    android:layout_toLeftOf="@+id/umeng_update_id_ok"
                     android:text="@string/UMNotNow"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="#AAABAF"/>
 
                 <Button
                     android:id="@+id/umeng_update_id_ignore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
+                    android:layout_gravity="left"
                     android:background="@drawable/umeng_update_button_cancel_bg_selector"
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="6dp"
-                    android:layout_toLeftOf="@+id/umeng_update_id_ok"
+                    android:layout_alignParentLeft="true"
                     android:text="@string/UMIgnore"
                     android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"
+                    android:textColor="#AAABAF"
                     android:visibility="gone"/>
                 <Button
                     android:id="@+id/umeng_update_id_ok"
+                    style="@style/MaterialButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="8dp"
-                    android:background="@drawable/umeng_update_button_ok_bg_selector"
+                    android:background="@drawable/umeng_update_button_cancel_bg_selector"
                     android:focusable="true"
-                    android:gravity="center"
                     android:padding="6dp"
-                    android:textStyle="bold"
                     android:text="@string/UMUpdateNow"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/colorAccent"/>
             </RelativeLayout>
         </LinearLayout>
 </RelativeLayout>

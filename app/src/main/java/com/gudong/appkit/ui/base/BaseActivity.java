@@ -2,7 +2,6 @@ package com.gudong.appkit.ui.base;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.utils.ThemeUtils;
-import com.gudong.appkit.utils.logger.Logger;
+import com.gudong.appkit.ui.control.ThemeControl;
+import com.gudong.appkit.utils.Utils;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
 import com.umeng.analytics.AnalyticsConfig;
 import com.umeng.analytics.MobclickAgent;
@@ -20,11 +19,11 @@ import com.umeng.analytics.MobclickAgent;
  * Created by mao on 7/16/15.
  */
 public abstract class BaseActivity extends AppCompatActivity {
-    private ThemeUtils mThemeUtils;
+    private ThemeControl mThemeUtils;
     private Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mThemeUtils = new ThemeUtils(this);
+        mThemeUtils = new ThemeControl(this);
         // 设置当前主题
         setTheme(mThemeUtils.getTheme(this));
 //        hasRecreate = true;
@@ -50,7 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return mToolbar;
     }
 
-    public ThemeUtils getThemeUtils() {
+    public ThemeControl getThemeUtils() {
         return mThemeUtils;
     }
 
@@ -83,7 +82,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         SystemBarTintManager tintManager = new SystemBarTintManager(this);
         tintManager.setStatusBarTintEnabled(true);
         tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(mThemeUtils.getThemePrimaryDarkColor(this));
+        tintManager.setTintColor(Utils.getThemePrimaryDarkColor(this));
     }
 
     /**

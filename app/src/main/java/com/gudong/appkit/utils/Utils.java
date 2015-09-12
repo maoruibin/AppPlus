@@ -5,9 +5,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.support.annotation.ColorRes;
+import android.support.annotation.StringRes;
+import android.util.TypedValue;
 
 import com.gudong.appkit.R;
+import com.gudong.appkit.ui.control.ThemeControl;
 
 /**
  * the util class for app
@@ -20,6 +25,61 @@ public class Utils {
 
     public static String getLocalVersion(Context context){
         return getStringPreference(context, "current_version", "");
+    }
+    /**
+     * 获取主题强调色
+     * @param context
+     * @return
+     */
+    public static int getAccentColor(Context context){
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.theme_accent_color, typedValue, true);
+        return typedValue.data;
+    }
+
+    /**
+     * 获取当前主题对应的暗色调
+     * @return
+     */
+    public static int getThemePrimaryDarkColor(Context context){
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.theme_color_dark, typedValue, true);
+        return typedValue.data;
+    }
+
+    /**
+     * 获取当前主题色对应色值
+     * @param context
+     * @return
+     */
+    public static int getThemePrimaryColor(Context context){
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(R.attr.theme_color, typedValue, true);
+        return typedValue.data;
+    }
+
+    /**
+     * 获取当前设置的主题
+     * @param context
+     * @return
+     */
+    public static int getCurrentTheme(Context context){
+        int position =  Utils.getIntPreference(context,"themePosition",4);
+        return ThemeControl.themeArr()[position];
+    }
+
+    /**
+     * 获取color对应的int值
+     * @param context Activity
+     * @param color 资源颜色id
+     * @return 对应的int value
+     */
+    public static int getColorWarp(Activity context,@ColorRes int color){
+        return context.getResources().getColor(color);
+//        return context.getResources().getColor(color,context.getTheme());
     }
 
     /**

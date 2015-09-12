@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="preference_values">
-        <item>Twitter</item>
-        <item>Google</item>
-        <item>Instagram</item>
-        <item>Facebook</item>
-    </string-array>
-
     <array name="material_designer_colors">
         <item>#f44336</item>
         <item>#e91e63</item>

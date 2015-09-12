@@ -21,6 +21,16 @@
    public <init>(org.json.JSONObject);
 }
 
+-dontwarn org.apache.http.**
+
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+-keep public class com.gudong.appkit.R$*{
+    public static final int *;
+}
+
 -keepclassmembers class * implements java.io.Serializable {
     static final long serialVersionUID;
     private static final java.io.ObjectStreamField[] serialPersistentFields;
@@ -30,4 +40,16 @@
     java.lang.Object readResolve();
 }
 
+-dontwarn android.support.v7.**
 -keep class android.support.**{*;}
+-keep interface android.support.v7.** { *; }
+
+# Remove logging calls
+-assumenosideeffects class android.util.Log {
+    public static boolean isLoggable(java.lang.String, int);
+    public static int v(...);
+    public static int i(...);
+    public static int w(...);
+    public static int d(...);
+    public static int e(...);
+}

@@ -5,4 +5,13 @@
     <dimen name="list_item_icon_size">60dp</dimen>
     <dimen name="loading_border_width">4dp</dimen>
     <dimen name="view_normal_distance">6dp</dimen>
+
+    <dimen name="material_button_height">34dp</dimen>
+    <dimen name="material_button_text_size">14sp</dimen>
+
+    <!-- Margin around the dialog, excluding the button bar -->
+    <dimen name="md_dialog_frame_margin">24dp</dimen>
+    <dimen name="md_content_padding_top">8dp</dimen>
+
+    <dimen name="alert_title_size">20sp</dimen>
 </resources>

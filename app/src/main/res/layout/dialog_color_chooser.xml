@@ -15,6 +15,8 @@
         app:columnCount="4"
         app:orientation="vertical"
         app:rowCount="5"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/md_dialog_frame_margin"
         tools:ignore="UselessParent">
     </android.support.v7.widget.GridLayout>
 

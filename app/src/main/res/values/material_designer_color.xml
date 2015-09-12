@@ -280,9 +280,8 @@
     <color name="md_grey_700">#616161</color>
     <color name="md_grey_800">#424242</color>
     <color name="md_grey_900">#212121</color>
-    <!-- <color name="md_grey_1000">#000000</color> -->
+    
     <color name="md_black">#000000</color>
-    <!-- <color name="md_grey_1000">#ffffff</color> -->
     <color name="md_white">#ffffff</color>
 
     <!-- blue_grey -->

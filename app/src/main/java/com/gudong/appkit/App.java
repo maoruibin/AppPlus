@@ -1,9 +1,6 @@
 package com.gudong.appkit;
 
 import android.app.Application;
-
-import com.gudong.appkit.utils.logger.LogLevel;
-import com.gudong.appkit.utils.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -15,6 +12,5 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         LeakCanary.install(this);
-        Logger.init("AppPlusLog").setLogLevel(BuildConfig.LOG_DEBUG?LogLevel.FULL:LogLevel.NONE);
     }
 }

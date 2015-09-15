@@ -8,17 +8,27 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorRes;
-import android.support.annotation.StringRes;
 import android.util.TypedValue;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.control.ThemeControl;
+import com.gudong.appkit.utils.logger.LogLevel;
+import com.gudong.appkit.utils.logger.Logger;
 
 /**
  * the util class for app
  * Created by mao on 7/21/15.
  */
 public class Utils {
+    /**
+     * setting for debug mode or not
+     * @param context context
+     * @param isDebug is true set application is run in debug mode
+     */
+    public static void isSetDebugMode(Context context,boolean isDebug){
+        Logger.init("AppPlusLog").setLogLevel(isDebug?LogLevel.FULL:LogLevel.NONE);
+        setShowSelf(context,isDebug);
+    }
     public static void setCurrentVersion(Context context,String version){
         putStringPreference(context,"current_version",version);
     }
@@ -67,7 +77,7 @@ public class Utils {
      * @return
      */
     public static int getCurrentTheme(Context context){
-        int position =  Utils.getIntPreference(context,"themePosition",4);
+        int position =  Utils.getIntPreference(context, "themePosition", 4);
         return ThemeControl.themeArr()[position];
     }
 
@@ -90,6 +100,15 @@ public class Utils {
     public static boolean isShowSelf(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean(context.getString(R.string.switch_preference_show_self_key), false);
+    }
+
+    /**
+     * set app is show self in recent list
+     * @param context
+     * @param isShow
+     */
+    public static void setShowSelf(Context context,boolean isShow){
+        putBooleanPreference(context,context.getString(R.string.switch_preference_show_self_key),isShow);
     }
     /**
      * 发送邮件的头信息

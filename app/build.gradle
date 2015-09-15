@@ -17,8 +17,6 @@ android {
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode Integer.parseInt(project.VERSION_CODE)
         versionName project.VERSION_NAME
-        // 默认是debug的渠道
-        manifestPlaceholders = [UMENG_CHANNEL_VALUE: "DEBUG"]
     }
 
     lintOptions {
@@ -36,7 +34,7 @@ android {
 
     buildTypes {
         release {
-            //是否输出LOG信息
+            //是否输出LOG信息  暂时用不到
             buildConfigField "boolean", "LOG_DEBUG", "false"
             //设置是否混淆
             minifyEnabled true
@@ -46,6 +44,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
+            //指定签名包得输入文件名称
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     def outputFile = output.outputFile
@@ -58,25 +57,26 @@ android {
             }
         }
         debug {
-            //是否输出LOG信息
+            //是否输出LOG信息  暂时用不到
             buildConfigField "boolean", "LOG_DEBUG", "true"
+            //为debug模式下的apk，指定一个另外的application id ,这样debug和release包就可以同时安装在手机上了
+            applicationIdSuffix ".debug"
         }
     }
 
-    //多渠道打包
     productFlavors {
-        xiaomi {}
-        m360 {}
-        wandoujia {}
-        baidu {}
-        m91 {}
-        anzhuo {}
-        fir {}
-        umeng {}
-    }
-
-    productFlavors.all {
-        flavor -> flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        xiaomi {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
+        }
+        m360 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"m360"]
+        }
+        wandoujia {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
+        }
+        fir {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "fir"]
+        }
     }
 }
 

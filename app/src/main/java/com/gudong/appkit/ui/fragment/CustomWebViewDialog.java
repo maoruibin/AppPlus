@@ -12,8 +12,6 @@ import android.view.View;
 import android.webkit.WebView;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.utils.Utils;
-import com.gudong.appkit.utils.logger.Logger;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -63,7 +61,6 @@ public class CustomWebViewDialog extends DialogFragment {
         webView.getSettings().setDefaultTextEncodingName("utf-8");
         try {
             String htmlFileName = getArguments().getString("htmlFileName");
-            Logger.i("htmlFileName name " + htmlFileName);
             StringBuilder buf = new StringBuilder();
             InputStream json = getActivity().getAssets().open(htmlFileName);
             BufferedReader in = new BufferedReader(new InputStreamReader(json, "UTF-8"));

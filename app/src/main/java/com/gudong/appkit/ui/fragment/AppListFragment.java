@@ -235,6 +235,17 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 showInstalledAppDetails(entity);
                 MobclickAgent.onEvent(getActivity(), "pop_detail");
                 break;
+            case R.id.pop_open:
+                try {
+                    Intent intent = getActivity().getPackageManager().getLaunchIntentForPackage(entity.getPackageName());
+                    startActivity(intent);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Snackbar.make(mRecyclerView,String.format(getString(R.string.app_list_error_all))"打开"+entity.getAppName()+"失败",Snackbar.LENGTH_LONG).show();
+                }
+
+                MobclickAgent.onEvent(getActivity(), "pop_open");
+                break;
         }
     }
 

@@ -8,4 +8,9 @@
         android:title="@string/menu_pop_item_detail"
         android:icon="?ic_menu_detail"
         android:id="@+id/pop_detail"/>
+
+    <item
+        android:title="@string/menu_pop_item_open"
+        android:icon="?ic_menu_open"
+        android:id="@+id/pop_open"/>
 </menu>

@@ -1,7 +1,8 @@
-<resources >
+<resources>
     <string name="app_name">App+</string>
 
     <string name="action_settings">设置</string>
+    <string name="action_retry">重试</string>
     <string name="action_about">关于</string>
     <string name="empty"></string>
 
@@ -93,8 +94,8 @@
     <string name="app_list_error_recent">加载失败</string>
     <string name="app_list_error_all">加载失败</string>
     <string name="app_list_error_search">加载失败</string>
-    <string name="app_list_empty_recent">最近没有运行任何应用</string>
-    <string name="app_list_empty_all">您还没有安装任何应用</string>
+    <string name="app_list_empty_recent">最近运行列表为空，请点击重试</string>
+    <string name="app_list_empty_all">已安装列表为空，请点击重试</string>
     <string name="app_list_empty_search">没有搜索到任何结果</string>
     <string name="unknow">未知</string>
 </resources>

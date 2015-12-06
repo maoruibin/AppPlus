@@ -60,7 +60,7 @@ android {
             //是否输出LOG信息  暂时用不到
             buildConfigField "boolean", "LOG_DEBUG", "true"
             //为debug模式下的apk，指定一个另外的application id ,这样debug和release包就可以同时安装在手机上了
-            applicationIdSuffix ".debug"
+            //applicationIdSuffix ".debug"
         }
     }
 
@@ -82,9 +82,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:22.2.0'
-    compile 'com.android.support:design:22.2.0'
+    compile 'com.android.support:design:23.1.1'
     compile 'com.jenzz:materialpreference:1.3'
     compile 'com.readystatesoftware.systembartint:systembartint:1.0.3'
     compile 'com.android.support:gridlayout-v7:22.2.0'

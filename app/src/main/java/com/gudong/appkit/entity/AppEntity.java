@@ -1,21 +1,27 @@
 package com.gudong.appkit.entity;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.litesuits.orm.db.annotation.Column;
+import com.litesuits.orm.db.annotation.PrimaryKey;
+import com.litesuits.orm.db.annotation.Table;
 
 /**
  * app信息实体
  * Created by mao on 15/7/8.
  */
-public class AppEntity implements Parcelable{
-    private String appName="";
-    private String packageName="";
-    private String versionName="";
-    private int versionCode=0;
-    private Bitmap appIcon=null;
-    private String srcPath;
+@Table("app_entity") public class AppEntity  implements Parcelable{
+    @PrimaryKey(PrimaryKey.AssignType.AUTO_INCREMENT)
+    @Column("_id")
+    protected long id;
+
+    @Column("appName") private String appName="";
+    @Column("packageName") private String packageName="";
+    @Column("versionName") private String versionName="";
+    @Column("versionCode") private int versionCode=0;
+    @Column("appIconData") private byte[] appIconData=null;
+    @Column("srcPath") private String srcPath;
 
 
     public String getAppName() {
@@ -50,14 +56,6 @@ public class AppEntity implements Parcelable{
         this.versionCode = versionCode;
     }
 
-    public Bitmap getAppIcon() {
-        return appIcon;
-    }
-
-    public void setAppIcon(Bitmap appIcon) {
-        this.appIcon = appIcon;
-    }
-
     public String getSrcPath() {
         return srcPath;
     }
@@ -66,6 +64,13 @@ public class AppEntity implements Parcelable{
         this.srcPath = srcPath;
     }
 
+    public byte[] getAppIconData() {
+        return appIconData;
+    }
+
+    public void setAppIconData(byte[] appIconData) {
+        this.appIconData = appIconData;
+    }
 
     @Override
     public int describeContents() {
@@ -78,7 +83,7 @@ public class AppEntity implements Parcelable{
         dest.writeString(this.packageName);
         dest.writeString(this.versionName);
         dest.writeInt(this.versionCode);
-        dest.writeParcelable(this.appIcon, flags);
+        dest.writeByteArray(this.appIconData);
         dest.writeString(this.srcPath);
     }
 
@@ -90,7 +95,6 @@ public class AppEntity implements Parcelable{
         this.packageName = in.readString();
         this.versionName = in.readString();
         this.versionCode = in.readInt();
-        this.appIcon = in.readParcelable(Drawable.class.getClassLoader());
         this.srcPath = in.readString();
     }
 

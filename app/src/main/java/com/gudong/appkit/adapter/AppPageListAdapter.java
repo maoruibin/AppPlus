@@ -6,11 +6,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.gudong.appkit.ui.fragment.AppListFragment;
+import com.gudong.appkit.ui.fragment.EListType;
 
 public class AppPageListAdapter extends FragmentPagerAdapter {
-        int[]mTitles;
+        EListType[]mTitles;
         Context mContext;
-        public AppPageListAdapter(FragmentManager fm, Context context, int[] titles) {
+        public AppPageListAdapter(FragmentManager fm, Context context, EListType[] titles) {
             super(fm);
             this.mTitles = titles;
             this.mContext = context;
@@ -19,7 +20,7 @@ public class AppPageListAdapter extends FragmentPagerAdapter {
 
         @Override
         public Fragment getItem(int position) {
-            return AppListFragment.getInstance(position);
+            return AppListFragment.getInstance(mTitles[position]);
         }
 
         @Override
@@ -29,6 +30,6 @@ public class AppPageListAdapter extends FragmentPagerAdapter {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mContext.getString(mTitles[position]).toString();
+            return mTitles[position].getTitle();
         }
     }

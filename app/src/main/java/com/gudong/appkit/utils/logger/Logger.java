@@ -26,8 +26,16 @@ public class Logger {
         log(Log.INFO, setting.getDefTag(), message);
     }
 
+    public static void e(String message){
+        log(Log.ERROR, setting.getDefTag(), message);
+    }
+
     public static void i(String tag,String message){
         log(Log.INFO,tag, message);
+    }
+
+    public static void e(String tag,String message){
+        log(Log.ERROR,tag, message);
     }
 
     private static synchronized void log(int logType, String tag,String msg) {

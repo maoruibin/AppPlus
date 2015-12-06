@@ -1,7 +1,9 @@
 package com.gudong.appkit.adapter;
 
 import android.content.Context;
-import android.support.v7.internal.view.menu.MenuPopupHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -56,14 +58,15 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         final AppEntity entity = listData.get(position);
         if(entity == null)return;
 
-        holder.ivIcon.setImageBitmap(entity.getAppIcon());
+        Bitmap bitmap = BitmapFactory.decodeByteArray(entity.getAppIconData(),0,entity.getAppIconData().length);
+        holder.ivIcon.setImageBitmap(bitmap);
         holder.tvName.setText(entity.getAppName());
         holder.tvPackName.setText(entity.getPackageName());
 
         holder.ivIcon.setOnClickListener(this);
         holder.ivIcon.setTag(entity);
-        holder.llAppInfo.setOnClickListener(this);
-        holder.llAppInfo.setTag(entity);
+        holder.view.setOnClickListener(this);
+        holder.view.setTag(entity);
         holder.ivOverFlow.setOnClickListener(this);
         holder.ivOverFlow.setTag(entity);
     }
@@ -110,7 +113,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
                 if (mClickListItem == null) return;
                 mClickListItem.onClickListItemIcon(v,entity);
                 break;
-            case R.id.ll_app_info:
+            case R.id.rl_item:
                 if (mClickListItem == null) return;
                 mClickListItem.onClickListItemContent(entity);
                 break;

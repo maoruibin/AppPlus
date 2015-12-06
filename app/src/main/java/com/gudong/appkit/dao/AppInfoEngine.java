@@ -12,17 +12,17 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 
-import com.gudong.appkit.R;
 import com.gudong.appkit.entity.AppEntity;
 import com.gudong.appkit.utils.Utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -86,7 +86,8 @@ public class AppInfoEngine {
 
             if (isShowSelf(activityInfo.packageName)) continue;
             AppEntity entity = new AppEntity();
-            entity.setAppIcon(drawableToBitmap(resolveInfo.loadIcon(mPackageManager)));
+            Bitmap bitmap = drawableToBitmap(resolveInfo.loadIcon(mPackageManager));
+            entity.setAppIconData(formatBitmapToBytes(bitmap));
             entity.setAppName(resolveInfo.loadLabel(mPackageManager).toString());
             entity.setPackageName(activityInfo.packageName);
 
@@ -99,6 +100,17 @@ public class AppInfoEngine {
             list.add(entity);
         }
         return list;
+    }
+
+    private byte[] formatBitmapToBytes(Bitmap bitmap){
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,bos);
+        try {
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bos.toByteArray();
     }
 
     /**
@@ -183,7 +195,8 @@ public class AppInfoEngine {
         AppEntity entity = new AppEntity();
         entity.setAppName(appInfo.loadLabel(mPackageManager).toString());
         entity.setPackageName(appInfo.packageName);
-        entity.setAppIcon(drawableToBitmap(appInfo.loadIcon(mPackageManager)));
+        Bitmap iconBitmap = drawableToBitmap(appInfo.loadIcon(mPackageManager));
+        entity.setAppIconData(formatBitmapToBytes(iconBitmap));
         entity.setSrcPath(appInfo.sourceDir);
         return entity;
     }

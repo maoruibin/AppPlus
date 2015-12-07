@@ -34,9 +34,17 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 List<AppEntity> list = mEngine.getInstalledAppList();
+                //insert installed app entity to local db
                 for (AppEntity entity : list) {
                     if (!isThisPackageExist(entity.getPackageName())) {
                         App.sDb.insert(entity);
+                    }
+                }
+                List<AppEntity>listDB = App.sDb.query(AppEntity.class);
+                //
+                for(AppEntity entity : listDB){
+                    if(!list.contains(entity)){
+                        App.sDb.delete(entity);
                     }
                 }
             }

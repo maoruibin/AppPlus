@@ -101,5 +101,7 @@
     <string name="app_list_empty_all">已安装列表为空，请点击重试</string>
     <string name="app_list_empty_search">没有搜索到任何结果</string>
     <string name="unknow">未知</string>
-    <string name="fail_open_app">打开%1$s失败</string>
+    <string name="fail_open_app">打开 %1$s 失败,请检查应用是否存在。</string>
+    <string name="fail_export_app">导出 %1$s 安装包失败,请检查应用是否存在。</string>
+    <string name="fail_share_app">分享 %1$s 安装包失败,请检查应用是否存在。</string>
 </resources>

@@ -110,4 +110,20 @@ import com.litesuits.orm.db.annotation.Table;
             return new AppEntity[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AppEntity appEntity = (AppEntity) o;
+
+        return !(packageName != null ? !packageName.equals(appEntity.packageName) : appEntity.packageName != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return packageName != null ? packageName.hashCode() : 0;
+    }
 }

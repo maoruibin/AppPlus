@@ -134,7 +134,7 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
             NavigationManager.openApp(AppActivity.this,mAppEntity.getPackageName());
         } catch (Exception e) {
             e.printStackTrace();
-            Snackbar.make(mTvShare,String.format(getString(R.string.app_list_error_all),mAppEntity.getAppName()),Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mTvShare,String.format(getString(R.string.fail_open_app),mAppEntity.getAppName()),Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -143,10 +143,11 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == NavigationManager.UNINSTALL_REQUEST_CODE){
             if(resultCode == RESULT_OK){
+                //TODO Use EventBus 及时更新列表
                 Intent intent = new Intent(this,MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                finish();
                 startActivity(intent);
+                finish();
             }else if(resultCode == RESULT_CANCELED){
                 Logger.i("cancel");
             }

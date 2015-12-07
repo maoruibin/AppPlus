@@ -10,6 +10,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,11 @@ public class ActionUtil {
      * @param entity
      */
     public static void shareApk(Activity activity, AppEntity entity) {
+        final File srcFile = new File(entity.getSrcPath());
+        if(!srcFile.exists()){
+            Snackbar.make(activity.getWindow().getDecorView(),String.format(activity.getString(R.string.fail_share_app),entity.getAppName()),Snackbar.LENGTH_LONG).show();
+            return;
+        }
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
         intent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(new File(entity.getSrcPath())));
@@ -90,6 +96,10 @@ public class ActionUtil {
         }
 
         final File srcFile = new File(entity.getSrcPath());
+        if(!srcFile.exists()){
+            Snackbar.make(activity.getWindow().getDecorView(),String.format(activity.getString(R.string.fail_export_app),entity.getAppName()),Snackbar.LENGTH_LONG).show();
+            return;
+        }
         File exportParentFile = FileUtil.createDir(FileUtil.getSDPath(),FileUtil.KEY_EXPORT_DIR);
 
         String exportFileName = entity.getAppName() + ".apk";

@@ -172,6 +172,10 @@ public class Utils {
         return (int) (dip * scale + 0.5f);
     }
 
+    public static boolean isOwnApp(Activity activity,String packageName){
+        return activity.getPackageName().equals(packageName);
+    }
+
     // -------------------    SharePreference Util Begin   -------------------  //
 
     public static void removeKey(Context context,String key){

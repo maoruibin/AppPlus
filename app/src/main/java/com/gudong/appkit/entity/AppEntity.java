@@ -79,6 +79,7 @@ import com.litesuits.orm.db.annotation.Table;
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
         dest.writeString(this.appName);
         dest.writeString(this.packageName);
         dest.writeString(this.versionName);
@@ -91,10 +92,12 @@ import com.litesuits.orm.db.annotation.Table;
     }
 
     private AppEntity(Parcel in) {
+        this.id = in.readLong();
         this.appName = in.readString();
         this.packageName = in.readString();
         this.versionName = in.readString();
         this.versionCode = in.readInt();
+        this.appIconData = in.createByteArray();
         this.srcPath = in.readString();
     }
 

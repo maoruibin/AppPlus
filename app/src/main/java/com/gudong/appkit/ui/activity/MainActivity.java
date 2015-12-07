@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppPageListAdapter;
 import com.gudong.appkit.dao.AppInfoEngine;
-import com.gudong.appkit.ui.base.BaseActivity;
 import com.gudong.appkit.ui.fragment.EListType;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
@@ -108,7 +107,7 @@ public class MainActivity extends BaseActivity {
         String currentVersion = Utils.getAppVersion(this);
         String localVersionName = Utils.getLocalVersion(this);
         if (!localVersionName.equals(currentVersion)) {
-            DialogUtil.showCusotomDialogFillInWebView(this, getSupportFragmentManager(), getString(R.string.change_log), "changelog.html", "changelog");
+            DialogUtil.showCustomDialogFillInWebView(this, getSupportFragmentManager(), getString(R.string.change_log), "changelog.html", "changelog");
             Utils.setCurrentVersion(this, currentVersion);
         }
     }

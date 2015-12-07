@@ -13,8 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.entity.AppEntity;
-import com.gudong.appkit.ui.base.BaseActivity;
+import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ActionUtil;
 import com.gudong.appkit.utils.Utils;

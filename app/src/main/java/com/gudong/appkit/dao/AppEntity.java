@@ -1,4 +1,4 @@
-package com.gudong.appkit.entity;
+package com.gudong.appkit.dao;
 
 import android.os.Parcel;
 import android.os.Parcelable;

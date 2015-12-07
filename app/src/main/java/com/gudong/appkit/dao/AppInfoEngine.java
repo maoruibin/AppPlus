@@ -18,7 +18,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 
-import com.gudong.appkit.entity.AppEntity;
 import com.gudong.appkit.utils.Utils;
 
 import java.io.ByteArrayOutputStream;

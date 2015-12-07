@@ -5,7 +5,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.ui.base.BaseActivity;
 import com.gudong.appkit.ui.fragment.AboutFragment;
 import com.gudong.appkit.ui.fragment.SettingsFragment;
 

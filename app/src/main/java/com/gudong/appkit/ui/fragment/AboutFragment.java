@@ -5,7 +5,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.ui.base.BaseActivity;
+import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
@@ -41,7 +41,7 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
         String key = preference.getKey();
         //用if判断 效率不会很好 待改善
         if(key.equals(getString(R.string.preference_key_about))){
-            DialogUtil.showCusotomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_about), "about.html", "about");
+            DialogUtil.showCustomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_about), "about.html", "about");
             MobclickAgent.onEvent(mContext, "setting_about");
         }
         if(key.equals(getString(R.string.preference_key_score))){
@@ -58,7 +58,7 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
             MobclickAgent.onEvent(mContext, "setting_check_update");
         }
         if(key.equals(getString(R.string.preference_key_license))){
-            DialogUtil.showCusotomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_license), "license.html", "license");
+            DialogUtil.showCustomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_license), "license.html", "license");
             MobclickAgent.onEvent(mContext, "setting_license");
         }
         return false;

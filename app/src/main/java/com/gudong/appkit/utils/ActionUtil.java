@@ -17,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.entity.AppEntity;
+import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.view.CircularProgressDrawable;
 
@@ -32,12 +32,26 @@ import java.util.List;
  * Contact with 1252768410@qq.com.
  */
 public class ActionUtil {
-
     /**
      * 传送安装包
      * @param entity
      */
     public static void shareApk(Activity activity, AppEntity entity) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(new File(entity.getSrcPath())));
+        intent.setType("application/vnd.android.package-archive");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        activity.startActivity(Intent.createChooser(intent, FormatUtil.warpChooserTitle(activity,entity.getAppName())));
+
+    }
+
+    /**
+     * the first version for share apk
+     * @param activity
+     * @param entity
+     */
+    public static void shareApk_V1(Activity activity, AppEntity entity){
         PackageManager pm = activity.getPackageManager();
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
         sendIntent.setType("text/plain");
@@ -75,13 +89,8 @@ public class ActionUtil {
             return;
         }
 
-
-
         final File srcFile = new File(entity.getSrcPath());
-        File exportParentFile = new File(FileUtil.getSDPath(), "App+导出目录");
-        if (!exportParentFile.exists()) {
-            exportParentFile.mkdir();
-        }
+        File exportParentFile = FileUtil.createDir(FileUtil.getSDPath(),FileUtil.KEY_EXPORT_DIR);
 
         String exportFileName = entity.getAppName() + ".apk";
         final File exportFile = new File(exportParentFile, exportFileName);
@@ -104,9 +113,10 @@ public class ActionUtil {
                     })
                     .show();
         } else {
+            String pointInfo = String.format(activity.getString(R.string.dialog_message_export),entity.getAppName(),exportFile.getParentFile().getAbsolutePath());
             new AlertDialog.Builder(activity)
                     .setTitle(R.string.title_point)
-                    .setMessage("确定要将 "+entity.getAppName()+" 的安装包导出到本地目录 "+exportFile.getParentFile().getAbsolutePath()+" 下吗")
+                    .setMessage(pointInfo)
                     .setPositiveButton(R.string.dialog_confirm_export, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

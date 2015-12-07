@@ -26,7 +26,7 @@ public class DialogUtil {
 
 
 
-    public static void showCusotomDialogFillInWebView(Context context, FragmentManager fragmentManager, String dialogTitle, String htmlFileName, String tag) {
+    public static void showCustomDialogFillInWebView(Context context, FragmentManager fragmentManager, String dialogTitle, String htmlFileName, String tag) {
         int accentColor = Utils.getAccentColor(context);
         CustomWebViewDialog.create(dialogTitle, htmlFileName, accentColor)
                 .show(fragmentManager, tag);

@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.entity.AppEntity;
+import com.gudong.appkit.dao.AppEntity;
 
 import java.lang.reflect.Field;
 import java.util.List;

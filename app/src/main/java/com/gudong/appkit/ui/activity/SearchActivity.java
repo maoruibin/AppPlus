@@ -12,8 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.gudong.appkit.App;
 import com.gudong.appkit.R;
-import com.gudong.appkit.entity.AppEntity;
-import com.gudong.appkit.ui.base.BaseActivity;
+import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.ui.fragment.EListType;
 import com.gudong.appkit.utils.logger.Logger;

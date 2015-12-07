@@ -20,7 +20,7 @@ import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppInfoEngine;
-import com.gudong.appkit.entity.AppEntity;
+import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.ui.activity.AppActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ActionUtil;

@@ -1,4 +1,4 @@
-package com.gudong.appkit.ui.base;
+package com.gudong.appkit.ui.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;

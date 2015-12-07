@@ -5,10 +5,9 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.ui.base.BaseActivity;
+import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.ThemeControl;
 import com.gudong.appkit.utils.Utils;
-import com.jenzz.materialpreference.PreferenceCategory;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;

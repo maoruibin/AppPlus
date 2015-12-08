@@ -19,11 +19,16 @@ import android.view.ViewGroup;
 import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
-import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.dao.AppEntity;
+import com.gudong.appkit.dao.AppInfoEngine;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.event.Subscribe;
 import com.gudong.appkit.ui.activity.AppActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ActionUtil;
+import com.gudong.appkit.utils.Utils;
+import com.gudong.appkit.utils.logger.Logger;
 import com.gudong.appkit.view.DividerItemDecoration;
 import com.umeng.analytics.MobclickAgent;
 
@@ -33,7 +38,7 @@ import java.util.List;
 /**
  * Created by mao on 15/7/8.
  */
-public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem {
+public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem, Subscribe {
 
     public static final String KEY_TYPE = "type";
 
@@ -62,6 +67,19 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         super.onCreate(savedInstanceState);
         mEngine = new AppInfoEngine(getActivity().getApplicationContext());
         mType = (EListType) getArguments().getSerializable(KEY_TYPE);
+        EventCenter.getInstance().registerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,this);
+        EventCenter.getInstance().registerEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,this);
+        EventCenter.getInstance().registerEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,this);
+        EventCenter.getInstance().registerEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventCenter.getInstance().unregisterEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,this);
+        EventCenter.getInstance().unregisterEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,this);
+        EventCenter.getInstance().unregisterEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,this);
+        EventCenter.getInstance().unregisterEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,this);
     }
 
     protected int initLayout(){
@@ -254,11 +272,67 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     private String getEmptyInfo(int type) {
         if(type == EListType.TYPE_RECENT.ordinal()){
             return getString(R.string.app_list_empty_recent);
-        }else if(type == EListType.TYPE_RECENT.ordinal()){
+        }else if(type == EListType.TYPE_ALL.ordinal()){
             return getString(R.string.app_list_empty_all);
         }else{
             return getString(R.string.app_list_empty_search);
         }
+    }
+
+    @Override
+    public void update(EEvent event,Bundle data) {
+        List<AppEntity>list = mAdapter.getListData();
+        switch (event){
+            case RECENT_LIST_IS_SHOW_SELF_CHANGE:
+                if(mType == EListType.TYPE_RECENT){
+                    boolean isShowSelf = !Utils.isShowSelf(getActivity());
+                    Logger.i("RECENT_LIST_IS_SHOW_SELF_CHANGE  now the show self flag is "+String.valueOf(isShowSelf));
+                    AppEntity appPlus = data.getParcelable("entity");
+                    if(isShowSelf){
+                        list.add(0,appPlus);
+                    }else{
+                        list.remove(appPlus);
+                    }
+                    mAdapter.update(list);
+                }
+                break;
+            case UNINSTALL_APPLICATION_FROM_SYSTEM:
+                AppEntity uninstalledEntity = data.getParcelable("entity");
+                Logger.i("now we found the "+uninstalledEntity.getPackageName()+" has uninstalled by user ");
+                if(list.contains(uninstalledEntity)){
+                    Logger.i("list find "+uninstalledEntity.getPackageName()+" exist list ,now need remove it and update lsit");
+                    list.remove(uninstalledEntity);
+                    mAdapter.update(list);
+                }else{
+                    Logger.i("list not contain "+uninstalledEntity.getPackageName()+" so do nothing" );
+                }
+                break;
+            case INSTALL_APPLICATION_FROM_SYSTEM:
+                AppEntity installedEntity = data.getParcelable("entity");
+                if(mType == EListType.TYPE_ALL && !list.contains(installedEntity)){
+                    list.add(installedEntity);
+                    mAdapter.update(list);
+                    Logger.i("this is all type and list not contain "+installedEntity.getAppName()+"now add it" );
+                }
+                break;
+            case PREPARE_FOR_ALL_INSTALLED_APP_FINISH:
+                if(viewIsEmpty()){
+                    Logger.i(mType.getTitle()+" is empty and fill data");
+                    mRecyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            fillData();
+                        }
+                    });
+                }else{
+                    Logger.i(mType.getTitle()+" has data");
+                }
+                break;
+        }
+    }
+
+    private boolean viewIsEmpty(){
+        return mAdapter.getListData().isEmpty();
     }
 }
 

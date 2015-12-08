@@ -16,7 +16,7 @@
         <RelativeLayout
             android:id="@+id/headerView"
             android:layout_width="match_parent"
-            android:background="@color/colorPrimary"
+            android:background="?attr/colorPrimary"
             app:layout_heightPercent="60%">
 
             <include layout="@layout/module_toolbar"/>
@@ -68,6 +68,10 @@
                     style="@style/ActionButton"
                     android:drawableTop="?attr/ic_menu_share"
                     android:text="@string/menu_pop_item_share"/>
+                <View
+                    android:layout_width="@dimen/dp_1"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider"/>
                 <TextView
                     android:id="@+id/tv_export"
                     style="@style/ActionButton"
@@ -75,16 +79,23 @@
                     android:text="@string/menu_pop_item_file"/>
 
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:background="?android:attr/listDivider"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
-
                 <TextView
                     android:id="@+id/tv_detail"
                     style="@style/ActionButton"
                     android:drawableTop="?attr/ic_menu_detail"
                     android:text="@string/menu_pop_item_detail"/>
+                <View
+                    android:layout_width="@dimen/dp_1"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider"/>
                 <TextView
                     android:id="@+id/tv_more"
                     style="@style/ActionButton"

@@ -1,36 +1,49 @@
 package com.gudong.appkit.dao;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+
+import com.gudong.appkit.App;
+import com.litesuits.orm.db.assit.QueryBuilder;
+
+import java.util.List;
 
 /**
- * Created by GuDong on 12/5/15 16:09.
+ * Created by GuDong on 12/8/15 12:11.
  * Contact with 1252768410@qq.com.
  */
-public class DBHelper extends SQLiteOpenHelper{
-    private static final String KEY_DB_NAME = "appplus.db";
-    private static final int KEY_DB_VERSION = 1;
-    public DBHelper(Context context) {
-        super(context, KEY_DB_NAME, null, KEY_DB_VERSION);
+public class DBHelper {
+    /**
+     * check installed package has existed in local or not
+     * @param packageName installed app's packageName
+     * @return return true if the installed package has existed in local db else return false
+     */
+    public static boolean installedAppIsExistInLocalDB(String packageName) {
+        AppEntity entity = getAppByPackageName(packageName);
+        return entity != null;
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String sql = "create table tb_apps("
-        + "id integer primary key autoincrement,"
-        + "appName text ,"
-        + "packageName text ,"
-        + "versionName text ,"
-        + "versionCode integer ,"
-        + "appIcon blob ,"
-        + "srcPath text"
-        + ");";
-        db.execSQL(sql);
+    /**
+     * query App info by local db
+     * @param packageName Application's package name
+     * @return return AppEntity if this package name is not exist db will return null
+     */
+    public static AppEntity getAppByPackageName(String packageName){
+        QueryBuilder queryBuilder = new QueryBuilder(AppEntity.class);
+        queryBuilder = queryBuilder.whereEquals("packageName ", packageName);
+        List<AppEntity>result = App.sDb.query(queryBuilder);
+        try {
+            return result.get(0);
+        }catch (IndexOutOfBoundsException e){
+            return null;
+        }
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+    /**
+     * get AppEntity for Application of AppPlus
+     * @param context
+     * @return AppEntity
+     */
+    public static AppEntity getAppPlusEntity(Context context){
+        return getAppByPackageName(context.getPackageName());
     }
 }

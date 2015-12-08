@@ -16,7 +16,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.util.Log;
 
 import com.gudong.appkit.utils.Utils;
 
@@ -33,31 +32,22 @@ import java.util.List;
 public class AppInfoEngine {
     private Context mContext;
     private PackageManager mPackageManager;
-//    private static AppInfoEngine mInstance;
+
     public AppInfoEngine(Context context) {
         this.mContext = context;
         mPackageManager = mContext.getApplicationContext().getPackageManager();
-        Log.i("----","new mPackageManager");
     }
 
-//    public synchronized static AppInfoEngine getInstance(Context context){
-//        if(mInstance == null){
-//            mInstance = new AppInfoEngine(context);
-//        }
-//        return mInstance;
-//    }
-
     /**
-     * 获取已安装的App信息list
-     * @return
+     * get all app info list which is installed by user
+     * @return all installed app info list
      */
     public List<AppEntity> getInstalledAppList() {
         List<AppEntity> list = new ArrayList<>();
-        List<ApplicationInfo> installedApplications = null;
-        installedApplications = mPackageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-        for (ApplicationInfo appInfo : installedApplications) {
-            if(!isUserApp(appInfo))continue;
-            AppEntity entity = warpAppEntity(appInfo);
+        List<PackageInfo>packageInfos = mPackageManager.getInstalledPackages(PackageManager.GET_META_DATA);
+        for (PackageInfo info:packageInfos){
+            if(!isUserApp(info))continue;
+            AppEntity entity = warpAppEntity(info);
             if (entity == null)continue;;
             list.add(entity);
         }
@@ -65,51 +55,41 @@ public class AppInfoEngine {
     }
 
     /**
-     * 获取最近运行的程序
-     * @return
+     * get installed AppEntity by packageName
+     * @param packageName Application's package name
+     * @return installed app if not found package name will return null
+     */
+    public AppEntity getAppByPackageName(String packageName){
+        List<PackageInfo>packageInfos = mPackageManager.getInstalledPackages(PackageManager.GET_META_DATA);
+        for (PackageInfo packageInfo : packageInfos) {
+            if(!isUserApp(packageInfo))continue;
+            if(packageName.equals(packageInfo.packageName)){
+                return warpAppEntity(packageInfo);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * get recent running app list
+     * @return recent running app list
      */
     public List<AppEntity> getRecentAppList() {
         List<AppEntity> list = new ArrayList<>();
         ActivityManager mActivityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RecentTaskInfo> recentTasks = mActivityManager.getRecentTasks(10, 0);
         for (ActivityManager.RecentTaskInfo taskInfo : recentTasks) {
-
             Intent intent = taskInfo.baseIntent;
             ResolveInfo resolveInfo = mPackageManager.resolveActivity(intent, 0);
             if (resolveInfo == null)continue;
-
-            if (isSystemApp(resolveInfo)) continue;
-
-            ActivityInfo activityInfo = resolveInfo.activityInfo;
-            if(activityInfo==null)continue;
-
-            if (isShowSelf(activityInfo.packageName)) continue;
-            AppEntity entity = new AppEntity();
-            Bitmap bitmap = drawableToBitmap(resolveInfo.loadIcon(mPackageManager));
-            entity.setAppIconData(formatBitmapToBytes(bitmap));
-            entity.setAppName(resolveInfo.loadLabel(mPackageManager).toString());
-            entity.setPackageName(activityInfo.packageName);
-
-            ApplicationInfo applicationInfo = activityInfo.applicationInfo;
-            if (applicationInfo == null)continue;
-
-            if(applicationInfo.publicSourceDir!= null){
-                entity.setSrcPath(applicationInfo.publicSourceDir);
-            }
-            list.add(entity);
+            String packageName = resolveInfo.activityInfo.packageName;
+            if (isSystemApp(packageName)) continue;
+            if (isShowSelf(packageName)) continue;
+            AppEntity appEntity = DBHelper.getAppByPackageName(packageName);
+            if (appEntity == null)continue;
+            list.add (appEntity);
         }
         return list;
-    }
-
-    private byte[] formatBitmapToBytes(Bitmap bitmap){
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,bos);
-        try {
-            bos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bos.toByteArray();
     }
 
     /**
@@ -121,35 +101,31 @@ public class AppInfoEngine {
         return !Utils.isShowSelf(mContext) && isSelf(packagename);
     }
 
-    public boolean isSystemApp(ResolveInfo resolveInfo) {
-        if (resolveInfo == null) return false;
+    /**
+     * check package is system app or not
+     * @param packageName
+     * @return if package is system app return true else return false
+     */
+    private boolean isSystemApp(String packageName){
         try {
-            ActivityInfo activityInfo = resolveInfo.activityInfo;
-            if (activityInfo == null) return false;
-
-            PackageInfo packageInfo = mPackageManager.getPackageInfo(activityInfo.packageName, PackageManager.GET_ACTIVITIES);
+            PackageInfo packageInfo = mPackageManager.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
             ApplicationInfo applicationInfo = packageInfo.applicationInfo;
             if(applicationInfo == null)return false;
-
             return ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
         } catch (PackageManager.NameNotFoundException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
-    boolean isUserApp(ApplicationInfo ai) {
-        if(ai == null)return false;
+    boolean isUserApp(PackageInfo packageInfo) {
+        if(packageInfo == null)return false;
         int mask = ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-        return (ai.flags & mask) == 0;
+        return (packageInfo.applicationInfo.flags & mask) == 0;
     }
 
     private boolean isSelf(String packageName) {
-        return packageName.equals(getPackName());
-    }
-
-    private String getPackName() {
-        return mContext.getPackageName();
+        return packageName.equals(mContext.getPackageName());
     }
 
     //////////////////////// Android L ///////////////////////////////////
@@ -171,11 +147,10 @@ public class AppInfoEngine {
         for (UsageStats u : usageStatsList){
             String packageName = u.getPackageName();
             ApplicationInfo applicationInfo = getAppInfo(packageName);
-            //系统引用不加入最近列表
-            if(!isUserApp(applicationInfo))continue;
-            //如果系统设置了不显示自身 则自己也不需要加入最近列表
+            //system app will not appear recent list
+            if(isSystemApp(packageName))continue;
             if (isShowSelf(packageName)) continue;
-            AppEntity entity = warpAppEntity(applicationInfo);
+            AppEntity entity = DBHelper.getAppByPackageName(packageName);
             if (entity == null)continue;
             list.add (entity);
         }
@@ -188,15 +163,21 @@ public class AppInfoEngine {
         return usm;
     }
 
-    // 将ApplicationInfo转化为AppEntity
-    private AppEntity warpAppEntity(ApplicationInfo appInfo){
-        if (appInfo == null)return  null;
+    /**
+     * make PackageInfo warp to AppEntity
+     * @param packageInfo PackageInfo
+     * @return AppEntity
+     */
+    private AppEntity warpAppEntity(PackageInfo packageInfo){
+        if (packageInfo == null)return  null;
         AppEntity entity = new AppEntity();
-        entity.setAppName(appInfo.loadLabel(mPackageManager).toString());
-        entity.setPackageName(appInfo.packageName);
-        Bitmap iconBitmap = drawableToBitmap(appInfo.loadIcon(mPackageManager));
+        entity.setAppName(mPackageManager.getApplicationLabel(packageInfo.applicationInfo).toString());
+        entity.setPackageName(packageInfo.packageName);
+        Bitmap iconBitmap = drawableToBitmap(mPackageManager.getApplicationIcon(packageInfo.applicationInfo));
         entity.setAppIconData(formatBitmapToBytes(iconBitmap));
-        entity.setSrcPath(appInfo.sourceDir);
+        entity.setSrcPath(packageInfo.applicationInfo.sourceDir);
+        entity.setVersionName(packageInfo.versionName);
+        entity.setVersionCode(packageInfo.versionCode);
         return entity;
     }
 
@@ -237,5 +218,60 @@ public class AppInfoEngine {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    public List<AppEntity> getRecentAppListV1() {
+        List<AppEntity> list = new ArrayList<>();
+        ActivityManager mActivityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RecentTaskInfo> recentTasks = mActivityManager.getRecentTasks(10, 0);
+        for (ActivityManager.RecentTaskInfo taskInfo : recentTasks) {
+            Intent intent = taskInfo.baseIntent;
+            ResolveInfo resolveInfo = mPackageManager.resolveActivity(intent, 0);
+            if (resolveInfo == null)continue;
+
+            if (isSystemApp(resolveInfo.resolvePackageName)) continue;
+
+            ActivityInfo activityInfo = resolveInfo.activityInfo;
+            if(activityInfo==null)continue;
+
+            if (isShowSelf(activityInfo.packageName)) continue;
+            AppEntity entity = new AppEntity();
+            Bitmap bitmap = drawableToBitmap(resolveInfo.loadIcon(mPackageManager));
+            entity.setAppIconData(formatBitmapToBytes(bitmap));
+            entity.setAppName(resolveInfo.loadLabel(mPackageManager).toString());
+            entity.setPackageName(activityInfo.packageName);
+            ApplicationInfo applicationInfo = activityInfo.applicationInfo;
+            if (applicationInfo == null)continue;
+
+            if(applicationInfo.publicSourceDir!= null){
+                entity.setSrcPath(applicationInfo.publicSourceDir);
+            }
+            list.add(entity);
+        }
+        return list;
+    }
+
+//    public List<AppEntity>getInstalledAppListV1(){
+//        List<AppEntity> list = new ArrayList<>();
+//        List<ApplicationInfo> installedApplications = null;
+//        installedApplications = mPackageManager.getInstalledApplications(PackageManager.GET_META_DATA);
+//        for (ApplicationInfo appInfo : installedApplications) {
+//            if(!isUserApp(mPackageManager.))continue;
+//            AppEntity entity = warpAppEntity(appInfo);
+//            if (entity == null)continue;;
+//            list.add(entity);
+//        }
+//        return list;
+//    }
+
+    private byte[] formatBitmapToBytes(Bitmap bitmap){
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,bos);
+        try {
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bos.toByteArray();
     }
 }

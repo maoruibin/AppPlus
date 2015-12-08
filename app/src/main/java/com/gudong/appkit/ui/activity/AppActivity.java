@@ -58,7 +58,7 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
         Bitmap bitmap = BitmapFactory.decodeByteArray(mAppEntity.getAppIconData(), 0, mAppEntity.getAppIconData().length);
         mImageView.setImageBitmap(bitmap);
         mTvAppName.setText(mAppEntity.getAppName());
-        mTvAppVersion.setText(mAppEntity.getPackageName());
+        mTvAppVersion.setText(mAppEntity.getVersionName());
     }
 
     private void setupView() {
@@ -125,7 +125,6 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
     private void installApp() {
         if(Utils.isOwnApp(this,mAppEntity.getPackageName()))return;
         NavigationManager.uninstallApp(AppActivity.this,mAppEntity.getPackageName());
-
     }
 
     private void openApp() {
@@ -143,11 +142,7 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == NavigationManager.UNINSTALL_REQUEST_CODE){
             if(resultCode == RESULT_OK){
-                //TODO Use EventBus 及时更新列表
-                Intent intent = new Intent(this,MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                onBackPressed();
             }else if(resultCode == RESULT_CANCELED){
                 Logger.i("cancel");
             }

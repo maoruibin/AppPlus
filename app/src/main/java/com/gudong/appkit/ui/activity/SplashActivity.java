@@ -7,9 +7,11 @@ import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.AppInfoEngine;
+import com.gudong.appkit.dao.DBHelper;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.logger.Logger;
-import com.litesuits.orm.db.assit.QueryBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,10 +36,11 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 List<AppEntity> list = mEngine.getInstalledAppList();
-                //insert installed app entity to local db
                 for (AppEntity entity : list) {
-                    if (!isThisPackageExist(entity.getPackageName())) {
+                    if (!DBHelper.installedAppIsExistInLocalDB(entity.getPackageName())) {
+                        //insert installed app entity to local db
                         App.sDb.insert(entity);
+                        Logger.i(entity.getAppName()+" version name is "+entity.getVersionName());
                     }
                 }
                 List<AppEntity>listDB = App.sDb.query(AppEntity.class);
@@ -47,10 +50,14 @@ public class SplashActivity extends BaseActivity {
                         App.sDb.delete(entity);
                     }
                 }
+                Logger.i("prepare all installed data finish now notify AppListFragment ");
+                EventCenter.getInstance().triggerEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,null);
             }
         }).start();
 
         checkExportDirectoryIsChange();
+
+        setStatusBarColorRes(R.color.colorPrimary);
     }
 
     /**
@@ -92,18 +99,6 @@ public class SplashActivity extends BaseActivity {
             }
         }).start();
 
-    }
-
-    /**
-     * check packname has exist in db
-     *
-     * @param packname
-     * @return if exist return true else return false
-     */
-    private boolean isThisPackageExist(String packname) {
-        QueryBuilder queryBuilder = new QueryBuilder(AppEntity.class);
-        queryBuilder = queryBuilder.whereEquals("packageName ", packname);
-        return App.sDb.query(queryBuilder).size() > 0;
     }
 
     @Override

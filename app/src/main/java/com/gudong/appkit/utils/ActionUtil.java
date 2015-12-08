@@ -102,22 +102,28 @@ public class ActionUtil {
         }
         File exportParentFile = FileUtil.createDir(FileUtil.getSDPath(),FileUtil.KEY_EXPORT_DIR);
 
-        String exportFileName = entity.getAppName() + ".apk";
+        String exportFileName = entity.getAppName().concat("_").concat(entity.getVersionName()).concat(".apk");
         final File exportFile = new File(exportParentFile, exportFileName);
         String contentInfo = String.format(activity.getString(R.string.dialog_message_file_exist), exportFileName, exportFile.getParentFile().getAbsolutePath());
         if (exportFile.exists()) {
             new AlertDialog.Builder(activity)
-                    .setTitle(R.string.title_export)
+                    .setTitle(R.string.title_point)
                     .setMessage(contentInfo)
-                    .setPositiveButton(R.string.dialog_confirm_yes, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.dialog_action_exist_not_override, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
+                    .setNegativeButton(R.string.dialog_action_exist_override, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             copyFile(activity,srcFile, exportFile);
                         }
                     })
-                    .setNegativeButton(R.string.dialog_now_watch, new DialogInterface.OnClickListener() {
+                    .setNeutralButton(R.string.dialog_action_exist_watch_now, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+                        public void onClick(DialogInterface dialog, int which) {
                             NavigationManager.browseFile(activity,exportFile.getParentFile());
                         }
                     })

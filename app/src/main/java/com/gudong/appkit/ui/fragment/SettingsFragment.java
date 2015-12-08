@@ -5,6 +5,9 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.gudong.appkit.R;
+import com.gudong.appkit.dao.DBHelper;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.ThemeControl;
 import com.gudong.appkit.utils.Utils;
@@ -59,12 +62,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         if (key.equals(getString(R.string.switch_preference_show_self_key))) {
             //用户的点击计数
             MobclickAgent.onEvent(mContext, "setting_show_self");
-
             //判断用户的选择行为
             Map<String, String> map_value = new HashMap<>();
             map_value.put("is_show_self", "yes_or_not");
             int flag = Utils.isShowSelf(getActivity()) ? 1 : 0;
             MobclickAgent.onEventValue(getActivity(), "show_self_or_no", map_value, flag);
+            Bundle data = new Bundle();
+            data.putParcelable("entity", DBHelper.getAppPlusEntity(getActivity()));
+            EventCenter.getInstance().triggerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,data);
         }
 
         return true;

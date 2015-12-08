@@ -21,6 +21,7 @@ import com.umeng.analytics.MobclickAgent;
 public abstract class BaseActivity extends AppCompatActivity {
     private ThemeControl mThemeUtils;
     private Toolbar mToolbar;
+    private SystemBarTintManager mBarTintManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mThemeUtils = new ThemeControl(this);
@@ -79,10 +80,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setTintLayout() {
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(Utils.getThemePrimaryColor(this));
+        mBarTintManager = new SystemBarTintManager(this);
+        mBarTintManager.setStatusBarTintEnabled(true);
+        mBarTintManager.setNavigationBarTintEnabled(true);
+        mBarTintManager.setTintColor(Utils.getThemePrimaryColor(this));
+    }
+
+    protected void setStatusBarColorRes(int res) {
+        if (mBarTintManager != null)
+            mBarTintManager.setStatusBarTintResource(res);
     }
 
     /**

@@ -22,7 +22,7 @@
     <string name="title_point">提示</string>
     <string name="title_export">导出中...</string>
     <string name="dialog_message_no_sdcard">你的设备尚未挂载SD卡，请检查后重试。</string>
-    <string name="dialog_message_file_exist">安装包 %1$s 已存在于%2$s文件夹，是否覆盖？</string>
+    <string name="dialog_message_file_exist">安装包 %1$s 已存在于文件夹 %2$s 下，是否覆盖？</string>
     <string name="dialog_message_export">"确定要将 %1$s 的安装包导出到本地目录 %2$s 下吗?</string>
     <string name="dialog_message_sam_usage">检测到你的手机是三星或者LG,请到安全设置界面，找到访问限制相关的设置选项，勾选App+，使App+可以获取手机最近状态信息，否则最新打开列表将无法显示最近运行的程序信息。\n三星：安全->访问应用程序使用量数据设置\nLG：位置位置，请自行查找</string>
 
@@ -38,7 +38,9 @@
     <string name="dialog_confirm_watch">是，查看</string>
     <string name="dialog_confirm_yes">是</string>
     <string name="dialog_confirm_export">确定导出</string>
-    <string name="dialog_now_watch">不了，查看文件</string>
+    <string name="dialog_action_exist_not_override">不覆盖</string>
+    <string name="dialog_action_exist_override">覆盖</string>
+    <string name="dialog_action_exist_watch_now">查看文件</string>
     <string name="dialog_cancel_watch">不</string>
     <string name="select_transfer_way">选择传输方式</string>
     <string name="select_transfer_way_apk">发送%s安装包给好友</string>

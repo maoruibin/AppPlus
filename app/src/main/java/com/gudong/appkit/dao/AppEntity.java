@@ -23,6 +23,12 @@ import com.litesuits.orm.db.annotation.Table;
     @Column("appIconData") private byte[] appIconData=null;
     @Column("srcPath") private String srcPath;
 
+    public AppEntity() {
+    }
+
+    public AppEntity(String packageName) {
+        this.packageName = packageName;
+    }
 
     public String getAppName() {
         return appName;
@@ -86,9 +92,6 @@ import com.litesuits.orm.db.annotation.Table;
         dest.writeInt(this.versionCode);
         dest.writeByteArray(this.appIconData);
         dest.writeString(this.srcPath);
-    }
-
-    public AppEntity() {
     }
 
     private AppEntity(Parcel in) {

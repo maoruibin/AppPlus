@@ -1,12 +1,12 @@
 package com.gudong.appkit.ui.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,7 +22,14 @@ import com.umeng.analytics.MobclickAgent;
 
 
 public class AppActivity extends BaseActivity implements View.OnClickListener {
-    private static final String EXTRA_APP_ENTITY = "APP_ENTITY";
+    // View name of the header image. Used for activity scene transitions
+    public static final String VIEW_NAME_HEADER_IMAGE = "detail:header:image";
+
+    // View name of the header title. Used for activity scene transitions
+    public static final String VIEW_NAME_HEADER_TITLE = "detail:header:title";
+
+    public static final String EXTRA_APP_ENTITY = "APP_ENTITY";
+
     private ImageView mImageView;
     private TextView mTvAppName;
     private TextView mTvAppVersion;
@@ -33,11 +40,6 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
 
     private AppEntity mAppEntity;
 
-    public static void gotoThisActivity(Context context, AppEntity entity) {
-        Intent intent = new Intent(context, AppActivity.class);
-        intent.putExtra(EXTRA_APP_ENTITY, entity);
-        context.startActivity(intent);
-    }
 
     @Override
     protected int initLayout() {
@@ -69,6 +71,8 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
         mTvExport = (TextView) findViewById(R.id.tv_export);
         mTvDetail = (TextView) findViewById(R.id.tv_detail);
         mTvShare = (TextView) findViewById(R.id.tv_share);
+
+        ViewCompat.setTransitionName(mImageView, VIEW_NAME_HEADER_IMAGE);
     }
 
     private void addListener() {

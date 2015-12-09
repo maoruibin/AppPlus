@@ -33,8 +33,7 @@ public class BootReceiver extends BroadcastReceiver {
             EventCenter.getInstance().triggerEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,data);
         // receive install action , now we need add installed app to list
         }else if(Intent.ACTION_PACKAGE_ADDED.equals(intent.getAction())){
-            AppInfoEngine appInfoEngine = new AppInfoEngine(context);
-            AppEntity installedEntity = appInfoEngine.getAppByPackageName(packageName);
+            AppEntity installedEntity = AppInfoEngine.getInstance(context.getApplicationContext()).getAppByPackageName(packageName);
             App.sDb.delete(installedEntity);
             App.sDb.insert(installedEntity);
             Bundle data = new Bundle();

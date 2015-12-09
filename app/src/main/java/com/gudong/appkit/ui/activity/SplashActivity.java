@@ -18,8 +18,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class SplashActivity extends BaseActivity {
-    private AppInfoEngine mEngine;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,12 +28,11 @@ public class SplashActivity extends BaseActivity {
                 finish();
             }
         }, 2000);
-        mEngine = new AppInfoEngine(this);
         //TODO use RxJava
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<AppEntity> list = mEngine.getInstalledAppList();
+                List<AppEntity> list = AppInfoEngine.getInstance(getApplicationContext()).getInstalledAppList();
                 for (AppEntity entity : list) {
                     if (!DBHelper.installedAppIsExistInLocalDB(entity.getPackageName())) {
                         //insert installed app entity to local db

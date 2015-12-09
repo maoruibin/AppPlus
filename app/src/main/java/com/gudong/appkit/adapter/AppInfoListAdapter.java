@@ -115,7 +115,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
                 break;
             case R.id.rl_item:
                 if (mClickListItem == null) return;
-                mClickListItem.onClickListItemContent(entity);
+                mClickListItem.onClickListItemContent(v,entity);
                 break;
             case R.id.iv_over_flow:
                 showPopMenu(entity, v);
@@ -128,7 +128,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     }
 
     public interface IClickListItem{
-        void onClickListItemContent(AppEntity entity);
+        void onClickListItemContent(View view,AppEntity entity);
         void onClickListItemIcon(View iconView,AppEntity entity);
     }
 

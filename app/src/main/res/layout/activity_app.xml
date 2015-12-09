@@ -30,11 +30,11 @@
 
             <TextView
                 android:id="@android:id/text1"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@id/iv_icon"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:gravity="center"
                 android:singleLine="true"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textColor="?title_text_light"
@@ -42,10 +42,10 @@
 
             <TextView
                 android:id="@android:id/text2"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@android:id/text1"
-                android:gravity="center"
+                android:layout_centerHorizontal="true"
                 android:singleLine="true"
                 android:textAppearance="?attr/textAppearanceListItemSmall"
                 android:textColor="?body_text_light"

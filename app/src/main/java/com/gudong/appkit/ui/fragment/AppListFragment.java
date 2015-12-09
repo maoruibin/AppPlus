@@ -2,13 +2,17 @@ package com.gudong.appkit.ui.fragment;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -65,7 +69,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEngine = new AppInfoEngine(getActivity().getApplicationContext());
+        mEngine = AppInfoEngine.getInstance(getActivity().getApplicationContext());
         mType = (EListType) getArguments().getSerializable(KEY_TYPE);
         EventCenter.getInstance().registerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,this);
         EventCenter.getInstance().registerEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,this);
@@ -240,8 +244,16 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
 
     @Override
-    public void onClickListItemContent(AppEntity entity) {
-        AppActivity.gotoThisActivity(getActivity(),entity);
+    public void onClickListItemContent(View view,AppEntity entity) {
+        Intent intent = new Intent(getContext(), AppActivity.class);
+        intent.putExtra(AppActivity.EXTRA_APP_ENTITY, entity);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                getActivity(),
+                new Pair<View, String>(view.findViewById(R.id.iv_icon),
+                        AppActivity.VIEW_NAME_HEADER_IMAGE));
+
+        // Now we can start the Activity, providing the activity options as a bundle
+        ActivityCompat.startActivity(getActivity(), intent, activityOptions.toBundle());
     }
 
 

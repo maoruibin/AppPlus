@@ -29,7 +29,6 @@ public class MainActivity extends BaseActivity {
     ViewPager mViewPager;
     AppPageListAdapter mFragmentAdapter;
     RelativeLayout mLayoutMainRoot;
-    AppInfoEngine mEngine;
     private long lastTime = 0;
 
 
@@ -41,7 +40,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEngine = new AppInfoEngine(getApplicationContext());
         //友盟检查更新
         checkAutoUpdateByUmeng();
 
@@ -122,7 +120,7 @@ public class MainActivity extends BaseActivity {
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void checkPermission() {
-        if (mEngine.getUsageStatsList().isEmpty()) {
+        if (AppInfoEngine.getInstance(getApplicationContext()).getUsageStatsList().isEmpty()) {
             if (Utils.Setting.isNotShowPointForSumBug(getBaseContext())) return;
             if (Utils.getBrand().contains("sam") || Utils.getBrand().contains("lg")) {
                 new AlertDialog.Builder(this)

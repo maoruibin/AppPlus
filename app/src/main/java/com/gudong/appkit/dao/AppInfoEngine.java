@@ -33,7 +33,16 @@ public class AppInfoEngine {
     private Context mContext;
     private PackageManager mPackageManager;
 
-    public AppInfoEngine(Context context) {
+    private static AppInfoEngine mInstance;
+
+    public static AppInfoEngine getInstance(Context context){
+        if(mInstance == null){
+            mInstance = new AppInfoEngine(context);
+        }
+        return mInstance;
+    }
+
+    private AppInfoEngine(Context context) {
         this.mContext = context;
         mPackageManager = mContext.getApplicationContext().getPackageManager();
     }
@@ -148,7 +157,7 @@ public class AppInfoEngine {
             String packageName = u.getPackageName();
             ApplicationInfo applicationInfo = getAppInfo(packageName);
             //system app will not appear recent list
-            if(isSystemApp(packageName))continue;
+            //if(isSystemApp(packageName))continue;
             if (isShowSelf(packageName)) continue;
             AppEntity entity = DBHelper.getAppByPackageName(packageName);
             if (entity == null)continue;

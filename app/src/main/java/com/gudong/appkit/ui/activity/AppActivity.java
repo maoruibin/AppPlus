@@ -16,6 +16,7 @@ import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ActionUtil;
+import com.gudong.appkit.utils.FormatUtil;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
@@ -33,6 +34,7 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
     private ImageView mImageView;
     private TextView mTvAppName;
     private TextView mTvAppVersion;
+    private TextView mTvAppPackageName;
     private TextView mTvOpen;
     private TextView mTvShare;
     private TextView mTvExport;
@@ -60,13 +62,15 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
         Bitmap bitmap = BitmapFactory.decodeByteArray(mAppEntity.getAppIconData(), 0, mAppEntity.getAppIconData().length);
         mImageView.setImageBitmap(bitmap);
         mTvAppName.setText(mAppEntity.getAppName());
-        mTvAppVersion.setText(mAppEntity.getVersionName());
+        mTvAppVersion.setText(FormatUtil.formatVersionName(mAppEntity.getVersionName()));
+        mTvAppPackageName.setText(mAppEntity.getPackageName());
     }
 
     private void setupView() {
         mImageView = (ImageView) findViewById(R.id.iv_icon);
         mTvAppName = (TextView) findViewById(android.R.id.text1);
-        mTvAppVersion = (TextView) findViewById(android.R.id.text2);
+        mTvAppVersion = (TextView) findViewById(R.id.tv_version);
+        mTvAppPackageName = (TextView) findViewById(android.R.id.text2);
         mTvOpen = (TextView) findViewById(R.id.tv_more);
         mTvExport = (TextView) findViewById(R.id.tv_export);
         mTvDetail = (TextView) findViewById(R.id.tv_detail);

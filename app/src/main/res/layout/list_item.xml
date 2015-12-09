@@ -26,23 +26,40 @@
         android:layout_toRightOf="@+id/iv_icon"
         android:layout_toLeftOf="@+id/iv_over_flow"
         android:orientation="vertical">
-        <TextView
-            android:id="@android:id/text1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?title_text"
-            tools:text="App+"
-            android:singleLine="true"
-            android:textAppearance="?attr/textAppearanceListItem"/>
-
+            android:orientation="horizontal">
+            <TextView
+                android:id="@android:id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_item_title"
+                android:maxLength="12"
+                android:ellipsize="end"
+                tools:text="App+"
+                android:singleLine="true"
+                style="@style/TextAppearance.AppCompat.Body1"/>
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_6"
+                android:textSize="@dimen/text_size_item_body"
+                tools:text="(1.2.5)"
+                android:ellipsize="end"
+                android:singleLine="true"
+                style="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle"/>
+        </LinearLayout>
         <TextView
             android:id="@android:id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?body_text"
+            android:ellipsize="end"
             tools:text="com.gudong.appplus"
             android:singleLine="true"
-            android:textAppearance="?attr/textAppearanceListItemSmall"/>
+            android:textSize="@dimen/text_size_item_body"
+            style="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle"/>
 
     </LinearLayout>
     <ImageView

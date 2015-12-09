@@ -16,6 +16,8 @@
     <dimen name="dp_1">1dp</dimen>
     <dimen name="dp_6">6dp</dimen>
 
-    <dimen name="alert_title_size">20sp</dimen>
+    <dimen name="text_size_alert_title">20sp</dimen>
+    <dimen name="text_size_item_title">16sp</dimen>
+    <dimen name="text_size_item_body">14sp</dimen>
 
 </resources>

@@ -15,7 +15,6 @@ import com.gudong.appkit.R;
 public class FormatUtil {
     /**
      * warp choose title and make app title accent
-     *
      * @param appName app name
      * @return warped chooser title
      */
@@ -27,5 +26,21 @@ public class FormatUtil {
         SpannableStringBuilder mSpannableBuilder = new SpannableStringBuilder(title);
         mSpannableBuilder.setSpan(fontSpanRed, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
         return mSpannableBuilder;
+    }
+
+    /**
+     * some application's version name is too long,like WeChat etc,
+     * now if version name include more than two point,we only keep two point like this
+     * WeChat 6.3.7.51_dafdaa12 after format(keep two point) 6.3.7
+     * @param versionName app's version name
+     * @return formated version name
+     */
+    public static String formatVersionName(String versionName){
+        return "(".concat(versionName).concat(")");
+//        String[]array = versionName.split(".");
+//        if(array.length<=3){
+//            return versionName;
+//        }
+//        return array[0].concat(".").concat(array[1]).concat(".").concat(array[2]);
     }
 }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
+import com.gudong.appkit.utils.FormatUtil;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -61,6 +62,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         Bitmap bitmap = BitmapFactory.decodeByteArray(entity.getAppIconData(),0,entity.getAppIconData().length);
         holder.ivIcon.setImageBitmap(bitmap);
         holder.tvName.setText(entity.getAppName());
+        holder.tvVersion.setText(FormatUtil.formatVersionName(entity.getVersionName()));
         holder.tvPackName.setText(entity.getPackageName());
 
         holder.ivIcon.setOnClickListener(this);
@@ -144,6 +146,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         public LinearLayout llAppInfo;
         public ImageView ivOverFlow;
         private TextView tvName;
+        private TextView tvVersion;
         private TextView tvPackName;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -152,6 +155,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
             llAppInfo = (LinearLayout) view.findViewById(R.id.ll_app_info);
             ivOverFlow = (ImageView) view.findViewById(R.id.iv_over_flow);
             tvName = (TextView) view.findViewById(android.R.id.text1);
+            tvVersion = (TextView) view.findViewById(R.id.tv_version);
             tvPackName = (TextView) view.findViewById(android.R.id.text2);
         }
     }

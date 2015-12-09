@@ -3,6 +3,7 @@
         <item name="themeOverFlowDrawable">@drawable/ic_more_vert_black_24dp</item>
         <item name="title_text">@android:color/black</item>
         <item name="body_text">#303030</item>
+        <!--<item name="body_text">#303030</item>-->
         <item name="title_text_light">@android:color/white</item>
         <item name="body_text_light">#cccccc</item>
         <item name="colorPrimary">?attr/theme_color</item>

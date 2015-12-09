@@ -20,6 +20,7 @@ import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.utils.FormatUtil;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ import java.util.List;
  */
 public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.ViewHolder> implements View.OnClickListener {
 
-    private List<AppEntity>listData;
+    private List<AppEntity> mListData;
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
     private Context mContext;
@@ -37,16 +38,41 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     private IClickListItem mClickListItem;
 
     public AppInfoListAdapter(Context context,List<AppEntity> listData,boolean isBrief) {
+        this(context,isBrief);
+        this.mListData = listData;
+    }
+
+    public AppInfoListAdapter(Context context,boolean isBrief){
         mContext = context;
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
-        this.listData = listData;
+        this.mListData = new ArrayList<>();
         this.isBrief = isBrief;
     }
 
     public void update(List<AppEntity> listData){
-        this.listData = listData;
-        notifyDataSetChanged();
+       if(this.mListData.isEmpty()){
+           this.mListData.addAll(listData);
+           notifyItemRangeInserted(0,listData.size());
+       }else{
+           this.mListData.clear();
+           this.mListData.addAll(listData);
+           notifyDataSetChanged();
+       }
+    }
+
+    public void addItem(int position,AppEntity entity){
+        this.mListData.add(position,entity);
+        notifyItemInserted(position);
+    }
+
+    public void removeItem(AppEntity entity){
+        int position = mListData.indexOf(entity);
+        if(position >=0 ){
+            this.mListData.remove(position);
+            //notifyItemRemoved(position);
+            notifyDataSetChanged();
+        }
     }
 
     public void setBriefMode(boolean isBrief){
@@ -63,7 +89,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final AppEntity entity = listData.get(position);
+        final AppEntity entity = mListData.get(position);
         if(entity == null)return;
 
         Bitmap bitmap = BitmapFactory.decodeByteArray(entity.getAppIconData(),0,entity.getAppIconData().length);
@@ -151,7 +177,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
 
     @Override
     public int getItemCount() {
-        return listData.size();
+        return mListData.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -183,7 +209,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     }
 
     public List<AppEntity>getListData(){
-        return listData;
+        return mListData;
     }
 
 }

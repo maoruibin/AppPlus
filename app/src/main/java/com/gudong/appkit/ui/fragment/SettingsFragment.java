@@ -68,6 +68,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             int flag = Utils.isShowSelf(getActivity()) ? 1 : 0;
             MobclickAgent.onEventValue(getActivity(), "show_self_or_no", map_value, flag);
             EventCenter.getInstance().triggerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,null);
+            getActivity().finish();
         }
 
         if (key.equals(getString(R.string.switch_preference_key_list_item_brief_mode))) {

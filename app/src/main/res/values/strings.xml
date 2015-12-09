@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppPlus</string>
+    <string name="app_name" translatable="false">AppPlus</string>
 
     <string name="action_settings">设置</string>
     <string name="action_retry">重试</string>
@@ -24,7 +24,7 @@
     <string name="dialog_message_no_sdcard">你的设备尚未挂载SD卡，请检查后重试。</string>
     <string name="dialog_message_file_exist">安装包 %1$s 已存在于文件夹 %2$s 下，是否覆盖？</string>
     <string name="dialog_message_export">"确定要将 %1$s 的安装包导出到本地目录 %2$s 下吗?</string>
-    <string name="dialog_message_sam_usage">检测到你的手机是三星或者LG,请到安全设置界面，找到访问限制相关的设置选项，勾选App+，使App+可以获取手机最近状态信息，否则最新打开列表将无法显示最近运行的程序信息。\n三星：安全->访问应用程序使用量数据设置\nLG：位置位置，请自行查找</string>
+    <string name="dialog_message_sam_usage">检测到你的手机是三星或者LG,请到安全设置界面，找到访问限制相关的设置选项，勾选 AppPlus，使 AppPlus 可以获取手机最近状态信息，否则最新打开列表将无法显示最近运行的程序信息。\n三星：安全->访问应用程序使用量数据设置\nLG：位置位置，请自行查找</string>
 
     <string name="dialog_know">知道了</string>
     <string name="dialog_confirm">确定</string>
@@ -60,10 +60,10 @@
     <string name="switch_preference_develop_on">已启用。(点击首页Item将会打开应用详情)</string>
     <string name="switch_preference_develop_off">已关闭</string>
 
-    <string name="switch_preference_show_self_title">最近列表显示App+</string>
+    <string name="switch_preference_show_self_title">最近列表显示AppPlus</string>
     <string name="switch_preference_key_show_self">show_self</string>
-    <string name="switch_preference_show_self_on">最近打开列表将会显示App+</string>
-    <string name="switch_preference_show_self_off">最近打开列表将会过滤掉App+</string>
+    <string name="switch_preference_show_self_on">最近打开列表将会显示AppPlus</string>
+    <string name="switch_preference_show_self_off">最近打开列表将会过滤掉AppPlus</string>
 
     <string name="switch_preference_list_item_brief_mode">简洁模式</string>
     <string name="switch_preference_key_list_item_brief_mode">list_item_brief_mode</string>
@@ -73,7 +73,7 @@
     <string name="preference_title_theme_primary">主题颜色</string>
     <string name="preference_summary_theme_primary">界面主色调，默认为Material蓝色</string>
 
-    <string name="preference_title_about">关于App+</string>
+    <string name="preference_title_about">关于AppPlus</string>
     <string name="preference_title_score">去市场评分</string>
     <string name="preference_title_opinion">意见反馈</string>
     <string name="preference_title_license">开源许可证</string>
@@ -87,7 +87,7 @@
     <string name="preference_key_license">license</string>
     <string name="preference_key_check_update">check_update</string>
     <string name="preference_key_theme_primary">theme_primary</string>
-    <string name="app_about">App+目前主要的功能是传输软件安装包。\n当你有一个好的软件要分享给你的好友，你就可以打开App+，然后轻松传输安装包到对方手机，或通过蓝牙，或通过手机QQ。\n\n如果你有别的功能需要App+实现，请通过邮件的方式告诉我，我将会考虑在以后的版本中实现。\n\n微博：@大侠咕咚\n知乎：@AppPlus</string>
+    <string name="app_about">AppPlus目前主要的功能是传输软件安装包。\n当你有一个好的软件要分享给你的好友，你就可以打开AppPlus，然后轻松传输安装包到对方手机，或通过蓝牙，或通过手机QQ。\n\n如果你有别的功能需要AppPlus实现，请通过邮件的方式告诉我，我将会考虑在以后的版本中实现。\n\n微博：@大侠咕咚\n知乎：@AppPlus</string>
     <string name="change_log">更新日志</string>
     <string name="title_activity_app_detail">AppDetailActivity</string>
 

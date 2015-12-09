@@ -31,6 +31,7 @@ import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.event.Subscribe;
 import com.gudong.appkit.ui.activity.AppActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
+import com.gudong.appkit.ui.helper.AppItemAnimator;
 import com.gudong.appkit.utils.ActionUtil;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
@@ -170,7 +171,12 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
-        mAdapter = new AppInfoListAdapter(getActivity(), new ArrayList<AppEntity>(),Utils.isBriefMode(getActivity()));
+//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setItemAnimator(new AppItemAnimator());
+        //every item's height is fix so use this method
+        //RecyclerView can perform several optimizations
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new AppInfoListAdapter(getActivity(),Utils.isBriefMode(getActivity()));
         mAdapter.setClickPopupMenuItem(this);
         mAdapter.setClickListItem(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -303,11 +309,12 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                     boolean isShowSelf = !Utils.isShowSelf(getActivity());
                     AppEntity appPlus = DBHelper.getAppPlusEntity(getActivity());
                     if(isShowSelf){
-                        list.add(0,appPlus);
+//                        list.add(0,appPlus);
+                        mAdapter.addItem(0,appPlus);
                     }else{
-                        list.remove(appPlus);
+                        mAdapter.removeItem(appPlus);
+//                        list.remove(appPlus);
                     }
-                    mAdapter.update(list);
                 }
                 break;
             case LIST_ITEM_BRIEF_MODE_CHANGE:

@@ -18,13 +18,16 @@ import android.widget.Toast;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppPageListAdapter;
 import com.gudong.appkit.dao.AppInfoEngine;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.event.Subscribe;
 import com.gudong.appkit.ui.fragment.EListType;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements Subscribe {
     TabLayout mTabLayout;
     ViewPager mViewPager;
     AppPageListAdapter mFragmentAdapter;
@@ -40,6 +43,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventCenter.getInstance().registerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,this);
         //友盟检查更新
         checkAutoUpdateByUmeng();
 
@@ -58,6 +62,12 @@ public class MainActivity extends BaseActivity {
 
         //check version
         versionCheck();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventCenter.getInstance().unregisterEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,this);
     }
 
     @Override
@@ -154,4 +164,12 @@ public class MainActivity extends BaseActivity {
         viewPager.setAdapter(mFragmentAdapter);
     }
 
+    @Override
+    public void update(EEvent event, Bundle data) {
+        switch (event){
+            case RECENT_LIST_IS_SHOW_SELF_CHANGE:
+                mTabLayout.getTabAt(0).select();
+                break;
+        }
+    }
 }

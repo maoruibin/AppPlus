@@ -61,9 +61,14 @@
     <string name="switch_preference_develop_off">已关闭</string>
 
     <string name="switch_preference_show_self_title">最近列表显示App+</string>
-    <string name="switch_preference_show_self_key">show_self</string>
+    <string name="switch_preference_key_show_self">show_self</string>
     <string name="switch_preference_show_self_on">最近打开列表将会显示App+</string>
     <string name="switch_preference_show_self_off">最近打开列表将会过滤掉App+</string>
+
+    <string name="switch_preference_list_item_brief_mode">简洁模式</string>
+    <string name="switch_preference_key_list_item_brief_mode">list_item_brief_mode</string>
+    <string name="switch_preference_list_item_brief_mode_on">简洁模式开，列表将只显示应用名称和图标信息</string>
+    <string name="switch_preference_list_item_brief_mode_off">简洁模式关，首页列表会额外显示版本号和包名信息</string>
 
     <string name="preference_title_theme_primary">主题颜色</string>
     <string name="preference_summary_theme_primary">界面主色调，默认为Material蓝色</string>

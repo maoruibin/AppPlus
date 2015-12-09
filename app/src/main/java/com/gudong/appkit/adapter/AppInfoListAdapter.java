@@ -31,19 +31,26 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
     private Context mContext;
+    private boolean isBrief = true;
 
     private IClickPopupMenuItem mClickPopupMenuItem;
     private IClickListItem mClickListItem;
 
-    public AppInfoListAdapter(Context context,List<AppEntity> listData) {
+    public AppInfoListAdapter(Context context,List<AppEntity> listData,boolean isBrief) {
         mContext = context;
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         this.listData = listData;
+        this.isBrief = isBrief;
     }
 
     public void update(List<AppEntity> listData){
         this.listData = listData;
+        notifyDataSetChanged();
+    }
+
+    public void setBriefMode(boolean isBrief){
+        this.isBrief = isBrief;
         notifyDataSetChanged();
     }
 
@@ -62,8 +69,15 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         Bitmap bitmap = BitmapFactory.decodeByteArray(entity.getAppIconData(),0,entity.getAppIconData().length);
         holder.ivIcon.setImageBitmap(bitmap);
         holder.tvName.setText(entity.getAppName());
-        holder.tvVersion.setText(FormatUtil.formatVersionName(entity.getVersionName()));
-        holder.tvPackName.setText(entity.getPackageName());
+
+        holder.tvVersion.setVisibility(isBrief?View.GONE:View.VISIBLE);
+        holder.tvPackName.setVisibility(isBrief?View.GONE:View.VISIBLE);
+
+        if(!isBrief){
+            holder.tvVersion.setText(FormatUtil.formatVersionName(entity.getVersionName()));
+            holder.tvPackName.setText(entity.getPackageName());
+        }
+
 
         holder.ivIcon.setOnClickListener(this);
         holder.ivIcon.setTag(entity);

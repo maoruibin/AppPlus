@@ -11,6 +11,10 @@ public enum EEvent {
      */
     RECENT_LIST_IS_SHOW_SELF_CHANGE,
     /**
+     * the status change which list item show briefly or not
+     */
+    LIST_ITEM_BRIEF_MODE_CHANGE,
+    /**
      * uninstall a application from system,the app list need update data right now
      */
     UNINSTALL_APPLICATION_FROM_SYSTEM,

@@ -5,7 +5,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.dao.DBHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.ui.activity.BaseActivity;
@@ -28,7 +27,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         //设置点击监听
         findPreference(getString(R.string.preference_key_theme_primary)).setOnPreferenceClickListener(this);
-        findPreference(getString(R.string.switch_preference_show_self_key)).setOnPreferenceChangeListener(this);
+        findPreference(getString(R.string.switch_preference_key_show_self)).setOnPreferenceChangeListener(this);
+        findPreference(getString(R.string.switch_preference_key_list_item_brief_mode)).setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
-        if (key.equals(getString(R.string.switch_preference_show_self_key))) {
+        if (key.equals(getString(R.string.switch_preference_key_show_self))) {
             //用户的点击计数
             MobclickAgent.onEvent(mContext, "setting_show_self");
             //判断用户的选择行为
@@ -67,9 +67,11 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             map_value.put("is_show_self", "yes_or_not");
             int flag = Utils.isShowSelf(getActivity()) ? 1 : 0;
             MobclickAgent.onEventValue(getActivity(), "show_self_or_no", map_value, flag);
-            Bundle data = new Bundle();
-            data.putParcelable("entity", DBHelper.getAppPlusEntity(getActivity()));
-            EventCenter.getInstance().triggerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,data);
+            EventCenter.getInstance().triggerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,null);
+        }
+
+        if (key.equals(getString(R.string.switch_preference_key_list_item_brief_mode))) {
+            EventCenter.getInstance().triggerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,null);
         }
 
         return true;

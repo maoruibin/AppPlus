@@ -88,7 +88,17 @@ public class Utils {
      */
     public static boolean isShowSelf(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(context.getString(R.string.switch_preference_show_self_key), false);
+        return prefs.getBoolean(context.getString(R.string.switch_preference_key_show_self), false);
+    }
+
+    /**
+     * list item is brief mode or not
+     * @param context Context
+     * @return return true if brief mode else not
+     */
+    public static boolean isBriefMode(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(context.getString(R.string.switch_preference_key_list_item_brief_mode), true);
     }
 
     /**
@@ -97,7 +107,7 @@ public class Utils {
      * @param isShow
      */
     public static void setShowSelf(Context context,boolean isShow){
-        putBooleanPreference(context,context.getString(R.string.switch_preference_show_self_key),isShow);
+        putBooleanPreference(context,context.getString(R.string.switch_preference_key_show_self),isShow);
     }
     /**
      * 发送邮件的头信息

@@ -49,6 +49,7 @@
                 tools:text="(1.2.5)"
                 android:ellipsize="end"
                 android:singleLine="true"
+                tools:visibility="gone"
                 style="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle"/>
         </LinearLayout>
         <TextView
@@ -58,6 +59,7 @@
             android:ellipsize="end"
             tools:text="com.gudong.appplus"
             android:singleLine="true"
+            tools:visibility="gone"
             android:textSize="@dimen/text_size_item_body"
             style="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle"/>
 

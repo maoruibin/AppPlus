@@ -25,6 +25,7 @@ import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.AppInfoEngine;
+import com.gudong.appkit.dao.DBHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.event.Subscribe;
@@ -75,6 +76,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         EventCenter.getInstance().registerEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,this);
         EventCenter.getInstance().registerEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,this);
         EventCenter.getInstance().registerEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,this);
+        EventCenter.getInstance().registerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,this);
     }
 
     @Override
@@ -84,6 +86,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         EventCenter.getInstance().unregisterEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,this);
         EventCenter.getInstance().unregisterEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,this);
         EventCenter.getInstance().unregisterEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,this);
+        EventCenter.getInstance().unregisterEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,this);
     }
 
     protected int initLayout(){
@@ -167,7 +170,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
-        mAdapter = new AppInfoListAdapter(getActivity(), new ArrayList<AppEntity>());
+        mAdapter = new AppInfoListAdapter(getActivity(), new ArrayList<AppEntity>(),Utils.isBriefMode(getActivity()));
         mAdapter.setClickPopupMenuItem(this);
         mAdapter.setClickListItem(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -298,8 +301,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             case RECENT_LIST_IS_SHOW_SELF_CHANGE:
                 if(mType == EListType.TYPE_RECENT){
                     boolean isShowSelf = !Utils.isShowSelf(getActivity());
-                    Logger.i("RECENT_LIST_IS_SHOW_SELF_CHANGE  now the show self flag is "+String.valueOf(isShowSelf));
-                    AppEntity appPlus = data.getParcelable("entity");
+                    AppEntity appPlus = DBHelper.getAppPlusEntity(getActivity());
                     if(isShowSelf){
                         list.add(0,appPlus);
                     }else{
@@ -307,6 +309,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                     }
                     mAdapter.update(list);
                 }
+                break;
+            case LIST_ITEM_BRIEF_MODE_CHANGE:
+                mAdapter.setBriefMode(!Utils.isBriefMode(getActivity()));
                 break;
             case UNINSTALL_APPLICATION_FROM_SYSTEM:
                 AppEntity uninstalledEntity = data.getParcelable("entity");

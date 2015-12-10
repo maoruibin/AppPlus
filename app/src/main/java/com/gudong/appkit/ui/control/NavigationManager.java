@@ -8,6 +8,7 @@ import android.os.Build;
 import android.provider.Settings;
 
 import com.gudong.appkit.R;
+import com.gudong.appkit.ui.activity.MainActivity;
 import com.gudong.appkit.utils.Utils;
 
 import java.io.File;
@@ -107,4 +108,8 @@ public class NavigationManager {
         context.startActivity(intent);
     }
 
+    public static void gotoMainActivityFromSplashView(Activity context){
+        context.startActivity(new Intent(context, MainActivity.class));
+        context.finish();
+    }
 }

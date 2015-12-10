@@ -260,19 +260,6 @@ public class AppInfoEngine {
         return list;
     }
 
-//    public List<AppEntity>getInstalledAppListV1(){
-//        List<AppEntity> list = new ArrayList<>();
-//        List<ApplicationInfo> installedApplications = null;
-//        installedApplications = mPackageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-//        for (ApplicationInfo appInfo : installedApplications) {
-//            if(!isUserApp(mPackageManager.))continue;
-//            AppEntity entity = warpAppEntity(appInfo);
-//            if (entity == null)continue;;
-//            list.add(entity);
-//        }
-//        return list;
-//    }
-
     private byte[] formatBitmapToBytes(Bitmap bitmap){
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG,100,bos);

@@ -11,6 +11,7 @@ import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.utils.logger.Logger;
 
 /**
  * Created by GuDong on 12/7/15 22:49.
@@ -27,6 +28,7 @@ public class BootReceiver extends BroadcastReceiver {
         // receive uninstall action , now we need remove uninstalled app from list
         if(Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction())){
             AppEntity uninstalledApp = new AppEntity(packageName);
+            Logger.i("package remove "+packageName);
             App.sDb.delete(uninstalledApp);
             Bundle data = new Bundle();
             data.putParcelable("entity",uninstalledApp);
@@ -36,6 +38,7 @@ public class BootReceiver extends BroadcastReceiver {
             AppEntity installedEntity = AppInfoEngine.getInstance(context.getApplicationContext()).getAppByPackageName(packageName);
             App.sDb.delete(installedEntity);
             App.sDb.insert(installedEntity);
+            Logger.i("package insert "+installedEntity.getAppName());
             Bundle data = new Bundle();
             data.putParcelable("entity",installedEntity);
             EventCenter.getInstance().triggerEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,data);

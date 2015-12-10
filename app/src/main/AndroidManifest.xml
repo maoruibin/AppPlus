@@ -47,7 +47,8 @@
         <activity android:name=".ui.activity.MainActivity"/>
         <activity android:name=".ui.activity.SimpleContainerActivity">
         </activity>
-        <activity android:name=".ui.activity.SplashActivity">
+        <activity android:name=".ui.activity.SplashActivity"
+            android:theme="@style/Theme_Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

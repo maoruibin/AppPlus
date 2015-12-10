@@ -1,6 +1,5 @@
 package com.gudong.appkit.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.gudong.appkit.App;
@@ -10,6 +9,7 @@ import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.dao.DBHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.logger.Logger;
 
@@ -21,14 +21,26 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        findViewById(R.id.iv_icon).postDelayed(new Runnable() {
+        setStatusBarColorRes(R.color.colorPrimary);
+        checkAndUpdateLocalDb();
+        checkExportDirectoryIsChange();
+        gotoMainActivity();
+    }
+
+    private void gotoMainActivity() {
+        //delay 1500 mill and enter MainActivity
+        getWindow().getDecorView().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                finish();
+                NavigationManager.gotoMainActivityFromSplashView(SplashActivity.this);
             }
-        }, 2000);
+        },1500);
+    }
+
+    private void checkAndUpdateLocalDb(){
+        final long startTime = System.currentTimeMillis();
         //TODO use RxJava
+        //check and update local db data
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -37,7 +49,6 @@ public class SplashActivity extends BaseActivity {
                     if (!DBHelper.installedAppIsExistInLocalDB(entity.getPackageName())) {
                         //insert installed app entity to local db
                         App.sDb.insert(entity);
-                        Logger.i(entity.getAppName()+" version name is "+entity.getVersionName());
                     }
                 }
                 List<AppEntity>listDB = App.sDb.query(AppEntity.class);
@@ -49,12 +60,10 @@ public class SplashActivity extends BaseActivity {
                 }
                 Logger.i("prepare all installed data finish now notify AppListFragment ");
                 EventCenter.getInstance().triggerEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,null);
+                long endTime = System.currentTimeMillis();
+                Logger.i("checkAndUpdateLocalDb take "+(endTime-startTime)+" millis");
             }
         }).start();
-
-        checkExportDirectoryIsChange();
-
-        setStatusBarColorRes(R.color.colorPrimary);
     }
 
     /**
@@ -100,8 +109,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected int initLayout() {
-        return R.layout.activity_splash;
+        //splash layout is set by Theme in AndroidManifest file
+        return -1;
     }
-
-
 }

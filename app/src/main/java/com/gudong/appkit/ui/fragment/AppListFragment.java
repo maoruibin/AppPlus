@@ -134,7 +134,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     private void loadingDataEmpty(String emptyInfo) {
         if(mType == EListType.TYPE_SEARCH)return;
-        final Snackbar errorSnack = Snackbar.make(mRecyclerView, emptyInfo,Snackbar.LENGTH_INDEFINITE);
+        final Snackbar errorSnack = Snackbar.make(mRecyclerView, emptyInfo,Snackbar.LENGTH_LONG);
         errorSnack.setAction(R.string.action_retry, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

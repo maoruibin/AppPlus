@@ -32,7 +32,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         // 设置是否对日志信息进行加密, true 加密
         AnalyticsConfig.enableEncrypt(true);
         // 设置布局
-        setContentView(initLayout());
+        if(initLayout()>0){
+            setContentView(initLayout());
+        }
         // 初始化跟toolbar
         initToolBar();
         // 对Android4.4已上设备设置沉浸效果
@@ -92,8 +94,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 指定对应的布局文件
-     * @return 布局id
+     * set layout file
+     * @return res id of layout,if return value less then zero ,it indicate this activity will not set content view
      */
     protected abstract int initLayout();
 

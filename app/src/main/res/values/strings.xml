@@ -104,7 +104,7 @@
     <string name="app_list_error_recent">加载失败</string>
     <string name="app_list_error_all">加载失败</string>
     <string name="app_list_error_search">加载失败</string>
-    <string name="app_list_empty_recent">最近打开列表为空，请点击重试</string>
+    <string name="app_list_empty_recent">运行中列表为空，请点击重试</string>
     <string name="app_list_empty_all">已安装列表为空，请点击重试</string>
     <string name="app_list_empty_search">没有搜索到任何结果</string>
     <string name="unknow">未知</string>

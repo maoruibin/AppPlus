@@ -17,9 +17,12 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
+import com.gudong.appkit.progcess.models.AndroidProcess;
 import com.gudong.appkit.utils.Utils;
+import com.gudong.appkit.utils.logger.Logger;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -269,5 +272,25 @@ public class AppInfoEngine {
             e.printStackTrace();
         }
         return bos.toByteArray();
+    }
+
+    public void getRunningProcesses(){
+        List<AndroidProcess>list = new ArrayList<>();
+        File[]files = new File("/proc").listFiles();
+        for (File file:files){
+            if(file.isDirectory()){
+                int pid;
+                try{
+                    pid = Integer.parseInt(file.getName());
+                    AndroidProcess process = new AndroidProcess(pid);
+                    Logger.i("pid is "+file.getName() +" name is "+process.name);
+                    list.add(process);
+                }catch (NumberFormatException e){
+                    continue;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

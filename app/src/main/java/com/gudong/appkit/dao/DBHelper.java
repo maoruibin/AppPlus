@@ -1,6 +1,7 @@
 package com.gudong.appkit.dao;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.gudong.appkit.App;
 import com.litesuits.orm.db.assit.QueryBuilder;
@@ -28,6 +29,7 @@ public class DBHelper {
      * @return return AppEntity if this package name is not exist db will return null
      */
     public static AppEntity getAppByPackageName(String packageName){
+        if(TextUtils.isEmpty(packageName))return null;
         QueryBuilder queryBuilder = new QueryBuilder(AppEntity.class);
         queryBuilder = queryBuilder.whereEquals("packageName ", packageName);
         List<AppEntity>result = App.sDb.query(queryBuilder);

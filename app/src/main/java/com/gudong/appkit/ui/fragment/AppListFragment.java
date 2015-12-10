@@ -3,7 +3,6 @@ package com.gudong.appkit.ui.fragment;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +28,7 @@ import com.gudong.appkit.dao.DBHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.event.Subscribe;
+import com.gudong.appkit.progcess.ProcessManager;
 import com.gudong.appkit.ui.activity.AppActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.helper.AppItemAnimator;
@@ -66,7 +66,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     /**
      * Fragment列表的类型变量，小于0表示是搜索结果对应的列表Fragment，大于等于0，则是正常的用于显示App的列表Fragment
      **/
-    private EListType mType = EListType.TYPE_RECENT;
+    private EListType mType = EListType.TYPE_RUNNING;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -189,12 +189,13 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             public void run() {
                 List<AppEntity> list = null;
                 switch (mType) {
-                    case TYPE_RECENT:
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                            list = mEngine.getRecentAppList();
-                        } else {
-                            list = mEngine.getRecentAppInfo();
-                        }
+                    case TYPE_RUNNING:
+//                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+//                            list = mEngine.getRecentAppList();
+//                        } else {
+//                            list = mEngine.getRecentAppInfo();
+//                        }
+                        list = ProcessManager.getRunningAppEntity(getActivity());
                         break;
                     case TYPE_ALL:
                         list = App.sDb.query(AppEntity.class);
@@ -281,9 +282,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
 
     private String getErrorInfo(int type) {
-        if(type == EListType.TYPE_RECENT.ordinal()){
+        if(type == EListType.TYPE_RUNNING.ordinal()){
             return getString(R.string.app_list_error_recent);
-        }else if(type == EListType.TYPE_RECENT.ordinal()){
+        }else if(type == EListType.TYPE_RUNNING.ordinal()){
             return getString(R.string.app_list_error_all);
         }else{
             return getString(R.string.app_list_error_all);
@@ -291,7 +292,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     }
 
     private String getEmptyInfo(int type) {
-        if(type == EListType.TYPE_RECENT.ordinal()){
+        if(type == EListType.TYPE_RUNNING.ordinal()){
             return getString(R.string.app_list_empty_recent);
         }else if(type == EListType.TYPE_ALL.ordinal()){
             return getString(R.string.app_list_empty_all);
@@ -305,7 +306,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         List<AppEntity>list = mAdapter.getListData();
         switch (event){
             case RECENT_LIST_IS_SHOW_SELF_CHANGE:
-                if(mType == EListType.TYPE_RECENT){
+                if(mType == EListType.TYPE_RUNNING){
                     boolean isShowSelf = !Utils.isShowSelf(getActivity());
                     AppEntity appPlus = DBHelper.getAppPlusEntity(getActivity());
                     if(isShowSelf){

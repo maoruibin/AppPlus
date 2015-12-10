@@ -7,7 +7,7 @@ public enum EListType {
     /**
      * recent apps list
      */
-    TYPE_RECENT("最近打开"),
+    TYPE_RUNNING("运行中"),
     /**
      * all apps list
      */

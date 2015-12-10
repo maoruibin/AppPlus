@@ -9,6 +9,7 @@ import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.dao.DBHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.progcess.ProcessManager;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.logger.Logger;
@@ -45,6 +46,8 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 List<AppEntity> list = AppInfoEngine.getInstance(getApplicationContext()).getInstalledAppList();
+                //AppInfoEngine.getInstance(getApplicationContext()).getRunningProcesses();
+                ProcessManager.getRunningAppEntity(getApplication());
                 for (AppEntity entity : list) {
                     if (!DBHelper.installedAppIsExistInLocalDB(entity.getPackageName())) {
                         //insert installed app entity to local db

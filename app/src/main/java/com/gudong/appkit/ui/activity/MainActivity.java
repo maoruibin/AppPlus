@@ -160,7 +160,7 @@ public class MainActivity extends BaseActivity implements Subscribe {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        mFragmentAdapter = new AppPageListAdapter(getSupportFragmentManager(), this, new EListType[]{EListType.TYPE_RECENT,EListType.TYPE_ALL});
+        mFragmentAdapter = new AppPageListAdapter(getSupportFragmentManager(), this, new EListType[]{EListType.TYPE_RUNNING,EListType.TYPE_ALL});
         viewPager.setAdapter(mFragmentAdapter);
     }
 

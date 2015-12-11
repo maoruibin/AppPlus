@@ -47,7 +47,8 @@ public class SplashActivity extends BaseActivity {
             public void run() {
                 List<AppEntity> list = AppInfoEngine.getInstance(getApplicationContext()).getInstalledAppList();
                 //AppInfoEngine.getInstance(getApplicationContext()).getRunningProcesses();
-                ProcessManager.getRunningAppEntity(getApplication());
+//                ProcessManager.getRunningAppEntity(getApplication());
+                ProcessManager.getRunningAppProcesses();
                 for (AppEntity entity : list) {
                     if (!DBHelper.installedAppIsExistInLocalDB(entity.getPackageName())) {
                         //insert installed app entity to local db

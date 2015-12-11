@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2015. Jared Rummler <jared.rummler@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package com.gudong.appkit.progcess;
 
 import android.app.ActivityManager;
@@ -9,6 +25,7 @@ import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.DBHelper;
 import com.gudong.appkit.progcess.models.AndroidAppProcess;
 import com.gudong.appkit.progcess.models.AndroidProcess;
+import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 
 import java.io.File;
@@ -118,6 +135,7 @@ public class ProcessManager {
             // TODO: remove this block?
             continue;
           }
+          Logger.i("前台进程 "+process.name);
           processes.add(process);
         } catch (AndroidAppProcess.NotAndroidAppProcessException ignored) {
         } catch (IOException e) {
@@ -153,8 +171,8 @@ public class ProcessManager {
    * specified.
    */
   public static List<ActivityManager.RunningAppProcessInfo> getRunningAppProcessInfo(Context ctx) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-      Logger.i("is LOLLIPOP_MR1");
+    getRunningForegroundApps(ctx);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       List<AndroidAppProcess> runningAppProcesses = ProcessManager.getRunningAppProcesses();
       List<ActivityManager.RunningAppProcessInfo> appProcessInfos = new ArrayList<>();
       for (AndroidAppProcess process : runningAppProcesses) {
@@ -167,7 +185,6 @@ public class ProcessManager {
       }
       return appProcessInfos;
     }
-    Logger.i("is not LOLLIPOP_MR1");
     ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
     return am.getRunningAppProcesses();
   }
@@ -177,11 +194,22 @@ public class ProcessManager {
     List<AppEntity>list = new ArrayList<>();
     for (ActivityManager.RunningAppProcessInfo processInfo : runningList){
       String packageName = processInfo.processName;
+      if (isNotShowSelf(ctx,packageName)) continue;
       AppEntity entity = DBHelper.getAppByPackageName(packageName);
       if(entity == null)continue;
+      //Logger.i("processInfo uid "+processInfo.uid +" <-->  local uid "+entity.getUid());
       list.add(entity);
     }
     return list;
+  }
+
+  /**
+   * check running list should show AppPlus or not
+   * @param packagename
+   * @return true if show else false
+   */
+  private static boolean isNotShowSelf(Context ctx, String packagename){
+    return !Utils.isShowSelf(ctx) && packagename.equals(ctx.getPackageName());
   }
 
   /**

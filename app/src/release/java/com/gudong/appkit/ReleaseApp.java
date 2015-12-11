@@ -11,6 +11,6 @@ public class ReleaseApp extends App {
     @Override
     public void onCreate() {
         super.onCreate();
-        Utils.isSetDebugMode(this,false);
+        Logger.init("AppPlusLog").setLogLevel(LogLevel.NONE);
     }
 }

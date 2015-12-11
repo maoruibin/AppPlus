@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
 import com.gudong.appkit.R;
@@ -77,14 +78,13 @@ public class Utils {
      * @return 对应的int value
      */
     public static int getColorWarp(Activity context,@ColorRes int color){
-        return context.getResources().getColor(color);
-//        return context.getResources().getColor(color,context.getTheme());
+        return ContextCompat.getColor(context,color);
     }
 
     /**
-     * 最近列表是否显示App+
-     * @param context 上下文对象
-     * @return return true if recent listview need show app+
+     * running list is show AppPlus or not
+     * @param context Context
+     * @return return true if recent list view need show appplus
      */
     public static boolean isShowSelf(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -102,15 +102,7 @@ public class Utils {
     }
 
     /**
-     * set app is show self in recent list
-     * @param context
-     * @param isShow
-     */
-    public static void setShowSelf(Context context,boolean isShow){
-        putBooleanPreference(context,context.getString(R.string.switch_preference_key_show_self),isShow);
-    }
-    /**
-     * 发送邮件的头信息
+     * get the device info
      * @param activity
      * @return
      */
@@ -210,28 +202,6 @@ public class Utils {
     public static boolean getBooleanPreference(Context context,String key){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return sp.getBoolean(key,false);
-    }
-
-    // -------------------    SharePreference Util End   -------------------  //
-
-    public static class Setting{
-
-        /**
-         * set preference for whether show sum bug point
-         * @param context context
-         */
-        public static void setDoNotShowPointForSumBug(Context context){
-            putBooleanPreference(context,"do_not_show_point",true);
-        }
-
-        /**
-         * get preference for whether show sum bug point
-         * @param context context
-         * @return return false if app need show bug point dialog
-         */
-        public static boolean isNotShowPointForSumBug(Context context){
-            return getBooleanPreference(context,"do_not_show_point");
-        }
     }
 }
 

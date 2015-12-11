@@ -86,6 +86,7 @@ public class AppInfoEngine {
      * get recent running app list
      * @return recent running app list
      */
+    @Deprecated
     public List<AppEntity> getRecentAppList() {
         List<AppEntity> list = new ArrayList<>();
         ActivityManager mActivityManager = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
@@ -105,12 +106,12 @@ public class AppInfoEngine {
     }
 
     /**
-     * 判断是不是在最近列表显示App+
+     * check running list should show AppPlus or not
      * @param packagename
-     * @return 如果显示返回false 否则返回true
+     * @return true if show else false
      */
     private boolean isShowSelf(String packagename){
-        return !Utils.isShowSelf(mContext) && isSelf(packagename);
+        return !Utils.isShowSelf(mContext) && packagename.equals(mContext.getPackageName());
     }
 
     /**
@@ -141,6 +142,7 @@ public class AppInfoEngine {
     }
 
     //////////////////////// Android L ///////////////////////////////////
+    @Deprecated
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public List<UsageStats> getUsageStatsList(){
         UsageStatsManager usm = getUsageStatsManager();
@@ -152,6 +154,7 @@ public class AppInfoEngine {
         return usageStatsList;
     }
 
+    @Deprecated
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public List<AppEntity> getRecentAppInfo(){
         List<UsageStats> usageStatsList = getUsageStatsList();
@@ -170,6 +173,7 @@ public class AppInfoEngine {
     }
 
     @SuppressWarnings("ResourceType")
+    @Deprecated
     private UsageStatsManager getUsageStatsManager(){
         UsageStatsManager usm = (UsageStatsManager) mContext.getSystemService("usagestats");
         return usm;
@@ -190,6 +194,7 @@ public class AppInfoEngine {
         entity.setSrcPath(packageInfo.applicationInfo.sourceDir);
         entity.setVersionName(packageInfo.versionName);
         entity.setVersionCode(packageInfo.versionCode);
+        entity.setUid(packageInfo.applicationInfo.uid);
         return entity;
     }
 

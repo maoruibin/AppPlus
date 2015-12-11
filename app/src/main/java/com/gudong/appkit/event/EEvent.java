@@ -7,11 +7,11 @@ package com.gudong.appkit.event;
  */
 public enum EEvent {
     /**
-     * the status is change which recent list need hide or show AppPlus
+     * in setting activity,when user clicked Show AppPlus setting item,this Event will be trigger
      */
     RECENT_LIST_IS_SHOW_SELF_CHANGE,
     /**
-     * the status change which list item show briefly or not
+     * in setting activity,when user clicked Brief mode setting item,this Event will be trigger
      */
     LIST_ITEM_BRIEF_MODE_CHANGE,
     /**

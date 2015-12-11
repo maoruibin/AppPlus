@@ -129,6 +129,14 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // make swipeRefreshLayout visible manually
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showRefresh();
+                Logger.i("onViewCreated ---------  ");
+            }
+        }, 568);
         fillData();
     }
 
@@ -151,6 +159,10 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     private void loadingFinish() {
         hideRefresh();
+    }
+
+    public void showRefresh() {
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     public void hideRefresh() {
@@ -183,7 +195,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     }
 
     private synchronized void fillData() {
-        prepareFillData();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -204,12 +215,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 mHandler.sendMessage(mHandler.obtainMessage(mType.ordinal(), list));
             }
         }).start();
-    }
-
-    private void prepareFillData(){
-        if(!mSwipeRefreshLayout.isRefreshing()){
-            mSwipeRefreshLayout.setRefreshing(true);
-        }
     }
 
     /**
@@ -310,11 +315,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                     boolean isShowSelf = !Utils.isShowSelf(getActivity());
                     AppEntity appPlus = DBHelper.getAppPlusEntity(getActivity());
                     if(isShowSelf){
-//                        list.add(0,appPlus);
                         mAdapter.addItem(0,appPlus);
                     }else{
                         mAdapter.removeItem(appPlus);
-//                        list.remove(appPlus);
                     }
                 }
                 break;

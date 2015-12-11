@@ -22,7 +22,7 @@ import com.litesuits.orm.db.annotation.Table;
     @Column("versionCode") private int versionCode=0;
     @Column("appIconData") private byte[] appIconData=null;
     @Column("srcPath") private String srcPath;
-
+    @Column("uid") private int uid;
     public AppEntity() {
     }
 
@@ -78,41 +78,14 @@ import com.litesuits.orm.db.annotation.Table;
         this.appIconData = appIconData;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getUid() {
+        return uid;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.id);
-        dest.writeString(this.appName);
-        dest.writeString(this.packageName);
-        dest.writeString(this.versionName);
-        dest.writeInt(this.versionCode);
-        dest.writeByteArray(this.appIconData);
-        dest.writeString(this.srcPath);
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
-    private AppEntity(Parcel in) {
-        this.id = in.readLong();
-        this.appName = in.readString();
-        this.packageName = in.readString();
-        this.versionName = in.readString();
-        this.versionCode = in.readInt();
-        this.appIconData = in.createByteArray();
-        this.srcPath = in.readString();
-    }
-
-    public static final Creator<AppEntity> CREATOR = new Creator<AppEntity>() {
-        public AppEntity createFromParcel(Parcel source) {
-            return new AppEntity(source);
-        }
-
-        public AppEntity[] newArray(int size) {
-            return new AppEntity[size];
-        }
-    };
 
     @Override
     public boolean equals(Object o) {
@@ -129,4 +102,42 @@ import com.litesuits.orm.db.annotation.Table;
     public int hashCode() {
         return packageName != null ? packageName.hashCode() : 0;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.appName);
+        dest.writeString(this.packageName);
+        dest.writeString(this.versionName);
+        dest.writeInt(this.versionCode);
+        dest.writeByteArray(this.appIconData);
+        dest.writeString(this.srcPath);
+        dest.writeInt(this.uid);
+    }
+
+    private AppEntity(Parcel in) {
+        this.id = in.readLong();
+        this.appName = in.readString();
+        this.packageName = in.readString();
+        this.versionName = in.readString();
+        this.versionCode = in.readInt();
+        this.appIconData = in.createByteArray();
+        this.srcPath = in.readString();
+        this.uid = in.readInt();
+    }
+
+    public static final Creator<AppEntity> CREATOR = new Creator<AppEntity>() {
+        public AppEntity createFromParcel(Parcel source) {
+            return new AppEntity(source);
+        }
+
+        public AppEntity[] newArray(int size) {
+            return new AppEntity[size];
+        }
+    };
 }

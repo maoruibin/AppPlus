@@ -36,6 +36,7 @@ public class BootReceiver extends BroadcastReceiver {
         // receive install action , now we need add installed app to list
         }else if(Intent.ACTION_PACKAGE_ADDED.equals(intent.getAction())){
             AppEntity installedEntity = AppInfoEngine.getInstance(context.getApplicationContext()).getAppByPackageName(packageName);
+            if(installedEntity == null)return;
             App.sDb.delete(installedEntity);
             App.sDb.insert(installedEntity);
             Logger.i("package insert "+installedEntity.getAppName());

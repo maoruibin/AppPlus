@@ -21,6 +21,8 @@ import java.util.List;
 public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // make view full screen
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setStatusBarColorRes(R.color.colorPrimary);
         checkAndUpdateLocalDb();

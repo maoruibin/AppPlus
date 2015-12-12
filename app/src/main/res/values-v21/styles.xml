@@ -2,6 +2,7 @@
 <resources>
     <style name="Theme_AppPlus" parent="@style/ThemeLightAppPlus">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">?colorPrimaryDark</item>
+        <!--<item name="android:statusBarColor">?colorPrimaryDark</item>-->
+        <item name="android:statusBarColor">?colorPrimary</item>
     </style>
 </resources>

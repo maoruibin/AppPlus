@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package com.gudong.appkit.progcess.models;
+package com.gudong.appkit.process.models;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;

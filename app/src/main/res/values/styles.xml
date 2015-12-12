@@ -7,7 +7,8 @@
         <item name="title_text_light">@android:color/white</item>
         <item name="body_text_light">#cccccc</item>
         <item name="colorPrimary">?attr/theme_color</item>
-        <item name="colorPrimaryDark">?attr/theme_color_dark</item>
+        <item name="colorPrimaryDark">?attr/theme_color</item>
+        <!--<item name="colorPrimaryDark">?attr/theme_color_dark</item>-->
         <item name="colorAccent">?attr/theme_accent_color</item>
     </style>
     <!-- 正常主题-->

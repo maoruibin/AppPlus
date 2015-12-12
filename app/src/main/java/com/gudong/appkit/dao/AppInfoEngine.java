@@ -17,7 +17,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 
-import com.gudong.appkit.progcess.models.AndroidProcess;
+import com.gudong.appkit.App;
+import com.gudong.appkit.process.models.AndroidProcess;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 
@@ -36,13 +37,12 @@ public class AppInfoEngine {
     private Context mContext;
     private PackageManager mPackageManager;
 
-    private static AppInfoEngine mInstance;
+    private static class SingletonHolder{
+        private static final AppInfoEngine INSTANCE = new AppInfoEngine(App.sContext);
+    }
 
-    public static AppInfoEngine getInstance(Context context){
-        if(mInstance == null){
-            mInstance = new AppInfoEngine(context);
-        }
-        return mInstance;
+    public static AppInfoEngine getInstance(){
+        return SingletonHolder.INSTANCE;
     }
 
     private AppInfoEngine(Context context) {

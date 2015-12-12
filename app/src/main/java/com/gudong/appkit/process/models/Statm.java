@@ -14,9 +14,11 @@
  * limitations under the License.
  *
  */
-package com.gudong.appkit.progcess.models;
+package com.gudong.appkit.process.models;
 
 import android.os.Parcel;
+
+import com.gudong.appkit.utils.logger.Logger;
 
 import java.io.IOException;
 
@@ -55,6 +57,7 @@ public final class Statm extends ProcFile {
   private Statm(String path) throws IOException {
     super(path);
     fields = content.split("\\s+");
+    Logger.i("content "+content);
   }
 
   private Statm(Parcel in) {

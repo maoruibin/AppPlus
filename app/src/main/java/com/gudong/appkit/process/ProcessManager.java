@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package com.gudong.appkit.progcess;
+package com.gudong.appkit.process;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -23,8 +23,8 @@ import android.os.Build;
 
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.DBHelper;
-import com.gudong.appkit.progcess.models.AndroidAppProcess;
-import com.gudong.appkit.progcess.models.AndroidProcess;
+import com.gudong.appkit.process.models.AndroidAppProcess;
+import com.gudong.appkit.process.models.AndroidProcess;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 
@@ -135,7 +135,6 @@ public class ProcessManager {
             // TODO: remove this block?
             continue;
           }
-          Logger.i("前台进程 "+process.name);
           processes.add(process);
         } catch (AndroidAppProcess.NotAndroidAppProcessException ignored) {
         } catch (IOException e) {
@@ -179,6 +178,14 @@ public class ProcessManager {
         ActivityManager.RunningAppProcessInfo info = new ActivityManager.RunningAppProcessInfo(
             process.name, process.pid, null
         );
+        try {
+          long size = process.statm().getSize();
+          long resident = process.statm().getResidentSetSize();
+          Logger.i(process.name +" size "+size/(1204*1024) +"M");
+          Logger.i(process.name +" resident "+resident/(1204*1024) +"M");
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
         info.uid = process.uid;
         // TODO: Get more information about the process. pkgList, importance, lru, etc.
         appProcessInfos.add(info);
@@ -197,7 +204,6 @@ public class ProcessManager {
       if (isNotShowSelf(ctx,packageName)) continue;
       AppEntity entity = DBHelper.getAppByPackageName(packageName);
       if(entity == null)continue;
-      //Logger.i("processInfo uid "+processInfo.uid +" <-->  local uid "+entity.getUid());
       list.add(entity);
     }
     return list;

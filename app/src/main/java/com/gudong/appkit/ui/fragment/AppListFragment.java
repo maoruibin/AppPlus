@@ -23,12 +23,11 @@ import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppEntity;
-import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.dao.DBHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.event.Subscribe;
-import com.gudong.appkit.progcess.ProcessManager;
+import com.gudong.appkit.process.ProcessManager;
 import com.gudong.appkit.ui.activity.AppActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.helper.AppItemAnimator;
@@ -48,7 +47,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     public static final String KEY_TYPE = "type";
 
-    private AppInfoEngine mEngine;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -71,7 +69,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEngine = AppInfoEngine.getInstance(getActivity().getApplicationContext());
         mType = (EListType) getArguments().getSerializable(KEY_TYPE);
         EventCenter.getInstance().registerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,this);
         EventCenter.getInstance().registerEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,this);
@@ -113,7 +110,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     private void setupSwipeLayout(View rootView) {
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorAccent);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -134,7 +131,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             @Override
             public void run() {
                 showRefresh();
-                Logger.i("onViewCreated ---------  ");
             }
         }, 568);
         fillData();
@@ -201,11 +197,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 List<AppEntity> list = null;
                 switch (mType) {
                     case TYPE_RUNNING:
-//                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-//                            list = mEngine.getRecentAppList();
-//                        } else {
-//                            list = mEngine.getRecentAppInfo();
-//                        }
                         list = ProcessManager.getRunningAppEntity(getActivity());
                         break;
                     case TYPE_ALL:
@@ -344,23 +335,14 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 }
                 break;
             case PREPARE_FOR_ALL_INSTALLED_APP_FINISH:
-                if(viewIsEmpty()){
-                    Logger.i(mType.getTitle()+" is empty and fill data");
-                    mRecyclerView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            fillData();
-                        }
-                    });
-                }else{
-                    Logger.i(mType.getTitle()+" has data");
-                }
+                mRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        fillData();
+                    }
+                });
                 break;
         }
-    }
-
-    private boolean viewIsEmpty(){
-        return mAdapter.getListData().isEmpty();
     }
 }
 

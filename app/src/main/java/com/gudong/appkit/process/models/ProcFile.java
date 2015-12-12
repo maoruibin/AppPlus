@@ -14,12 +14,10 @@
  * limitations under the License.
  *
  */
-package com.gudong.appkit.progcess.models;
+package com.gudong.appkit.process.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.gudong.appkit.utils.logger.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;

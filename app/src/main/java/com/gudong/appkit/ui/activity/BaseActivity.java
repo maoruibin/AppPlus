@@ -91,6 +91,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void setStatusBarColorRes(int res) {
         if (mBarTintManager != null)
             mBarTintManager.setStatusBarTintResource(res);
+
     }
 
     /**

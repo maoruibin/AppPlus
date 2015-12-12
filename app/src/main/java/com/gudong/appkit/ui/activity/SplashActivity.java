@@ -9,7 +9,7 @@ import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.dao.DBHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
-import com.gudong.appkit.progcess.ProcessManager;
+import com.gudong.appkit.process.ProcessManager;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.logger.Logger;
@@ -45,7 +45,7 @@ public class SplashActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<AppEntity> list = AppInfoEngine.getInstance(getApplicationContext()).getInstalledAppList();
+                List<AppEntity> list = AppInfoEngine.getInstance().getInstalledAppList();
                 //AppInfoEngine.getInstance(getApplicationContext()).getRunningProcesses();
 //                ProcessManager.getRunningAppEntity(getApplication());
                 ProcessManager.getRunningAppProcesses();

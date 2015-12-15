@@ -1,7 +1,31 @@
+/*
+ *     Copyright (c) 2015 Maoruibin
+ *
+ *     Permission is hereby granted, free of charge, to any person obtaining a copy
+ *     of this software and associated documentation files (the "Software"), to deal
+ *     in the Software without restriction, including without limitation the rights
+ *     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *     copies of the Software, and to permit persons to whom the Software is
+ *     furnished to do so, subject to the following conditions:
+ *
+ *     The above copyright notice and this permission notice shall be included in all
+ *     copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *     SOFTWARE.
+ */
+
 package com.gudong.appkit.ui.fragment;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +51,6 @@ import com.gudong.appkit.dao.DBHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.event.Subscribe;
-import com.gudong.appkit.process.ProcessManager;
 import com.gudong.appkit.ui.activity.AppActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.helper.AppItemAnimator;
@@ -35,6 +58,7 @@ import com.gudong.appkit.utils.ActionUtil;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 import com.gudong.appkit.view.DividerItemDecoration;
+import com.jaredrummler.android.processes.ProcessManager;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -197,7 +221,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 List<AppEntity> list = null;
                 switch (mType) {
                     case TYPE_RUNNING:
-                        list = ProcessManager.getRunningAppEntity(getActivity());
+                        list = getRunningAppEntity(getActivity());
                         break;
                     case TYPE_ALL:
                         list = App.sDb.query(AppEntity.class);
@@ -206,6 +230,28 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 mHandler.sendMessage(mHandler.obtainMessage(mType.ordinal(), list));
             }
         }).start();
+    }
+
+    private  List<AppEntity>getRunningAppEntity(Context ctx){
+        List<ActivityManager.RunningAppProcessInfo> runningList = ProcessManager.getRunningAppProcessInfo(ctx);
+        List<AppEntity>list = new ArrayList<>();
+        for (ActivityManager.RunningAppProcessInfo processInfo : runningList){
+            String packageName = processInfo.processName;
+            if (isNotShowSelf(ctx,packageName)) continue;
+            AppEntity entity = DBHelper.getAppByPackageName(packageName);
+            if(entity == null)continue;
+            list.add(entity);
+        }
+        return list;
+    }
+
+    /**
+     * check running list should show AppPlus or not
+     * @param packagename
+     * @return true if show else false
+     */
+    private static boolean isNotShowSelf(Context ctx, String packagename){
+        return !Utils.isShowSelf(ctx) && packagename.equals(ctx.getPackageName());
     }
 
     /**
@@ -309,6 +355,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                         mAdapter.addItem(0,appPlus);
                     }else{
                         mAdapter.removeItem(appPlus);
+                    }
+                    if(!mAdapter.getListData().isEmpty()){
+                        mRecyclerView.scrollToPosition(0);
                     }
                 }
                 break;

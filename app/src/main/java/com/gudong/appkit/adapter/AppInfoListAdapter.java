@@ -1,7 +1,31 @@
+/*
+ *     Copyright (c) 2015 Maoruibin
+ *
+ *     Permission is hereby granted, free of charge, to any person obtaining a copy
+ *     of this software and associated documentation files (the "Software"), to deal
+ *     in the Software without restriction, including without limitation the rights
+ *     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *     copies of the Software, and to permit persons to whom the Software is
+ *     furnished to do so, subject to the following conditions:
+ *
+ *     The above copyright notice and this permission notice shall be included in all
+ *     copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *     SOFTWARE.
+ */
+
 package com.gudong.appkit.adapter;
 
 import android.content.Context;
-import android.support.v7.internal.view.menu.MenuPopupHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -14,9 +38,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.entity.AppEntity;
+import com.gudong.appkit.dao.AppEntity;
+import com.gudong.appkit.utils.FormatUtil;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,23 +50,55 @@ import java.util.List;
  */
 public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.ViewHolder> implements View.OnClickListener {
 
-    private List<AppEntity>listData;
+    private List<AppEntity> mListData;
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
     private Context mContext;
+    private boolean isBrief = true;
 
     private IClickPopupMenuItem mClickPopupMenuItem;
     private IClickListItem mClickListItem;
 
-    public AppInfoListAdapter(Context context,List<AppEntity> listData) {
+    public AppInfoListAdapter(Context context,List<AppEntity> listData,boolean isBrief) {
+        this(context,isBrief);
+        this.mListData = listData;
+    }
+
+    public AppInfoListAdapter(Context context,boolean isBrief){
         mContext = context;
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
-        this.listData = listData;
+        this.mListData = new ArrayList<>();
+        this.isBrief = isBrief;
     }
 
     public void update(List<AppEntity> listData){
-        this.listData = listData;
+       if(this.mListData.isEmpty()){
+           this.mListData.addAll(listData);
+           notifyItemRangeInserted(0,listData.size());
+       }else{
+           this.mListData.clear();
+           this.mListData.addAll(listData);
+           notifyDataSetChanged();
+       }
+    }
+
+    public void addItem(int position,AppEntity entity){
+        this.mListData.add(position,entity);
+        notifyItemInserted(position);
+    }
+
+    public void removeItem(AppEntity entity){
+        int position = mListData.indexOf(entity);
+        if(position >=0 ){
+            this.mListData.remove(position);
+            //notifyItemRemoved(position);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void setBriefMode(boolean isBrief){
+        this.isBrief = isBrief;
         notifyDataSetChanged();
     }
 
@@ -53,20 +111,34 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        final AppEntity entity = listData.get(position);
+        final AppEntity entity = mListData.get(position);
         if(entity == null)return;
 
-        holder.ivIcon.setImageBitmap(entity.getAppIcon());
+        Bitmap bitmap = BitmapFactory.decodeByteArray(entity.getAppIconData(),0,entity.getAppIconData().length);
+        holder.ivIcon.setImageBitmap(bitmap);
         holder.tvName.setText(entity.getAppName());
-        holder.tvPackName.setText(entity.getPackageName());
+
+        holder.tvVersion.setVisibility(isBrief?View.GONE:View.VISIBLE);
+        holder.tvPackName.setVisibility(isBrief?View.GONE:View.VISIBLE);
+
+        if(!isBrief){
+            holder.tvVersion.setText(FormatUtil.formatVersionName(entity.getVersionName()));
+            holder.tvPackName.setText(entity.getPackageName());
+
+        }else{
+
+        }
+
 
         holder.ivIcon.setOnClickListener(this);
         holder.ivIcon.setTag(entity);
-        holder.llAppInfo.setOnClickListener(this);
-        holder.llAppInfo.setTag(entity);
+        holder.view.setOnClickListener(this);
+        holder.view.setTag(entity);
         holder.ivOverFlow.setOnClickListener(this);
         holder.ivOverFlow.setTag(entity);
     }
+
+    private void showBriefWithAnim(){}
 
     /**
      * 显示弹出式菜单
@@ -110,9 +182,9 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
                 if (mClickListItem == null) return;
                 mClickListItem.onClickListItemIcon(v,entity);
                 break;
-            case R.id.ll_app_info:
+            case R.id.rl_item:
                 if (mClickListItem == null) return;
-                mClickListItem.onClickListItemContent(entity);
+                mClickListItem.onClickListItemContent(v,entity);
                 break;
             case R.id.iv_over_flow:
                 showPopMenu(entity, v);
@@ -125,14 +197,14 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     }
 
     public interface IClickListItem{
-        void onClickListItemContent(AppEntity entity);
+        void onClickListItemContent(View view,AppEntity entity);
         void onClickListItemIcon(View iconView,AppEntity entity);
     }
 
 
     @Override
     public int getItemCount() {
-        return listData.size();
+        return mListData.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -141,6 +213,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         public LinearLayout llAppInfo;
         public ImageView ivOverFlow;
         private TextView tvName;
+        private TextView tvVersion;
         private TextView tvPackName;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -149,6 +222,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
             llAppInfo = (LinearLayout) view.findViewById(R.id.ll_app_info);
             ivOverFlow = (ImageView) view.findViewById(R.id.iv_over_flow);
             tvName = (TextView) view.findViewById(android.R.id.text1);
+            tvVersion = (TextView) view.findViewById(R.id.tv_version);
             tvPackName = (TextView) view.findViewById(android.R.id.text2);
         }
     }
@@ -162,7 +236,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     }
 
     public List<AppEntity>getListData(){
-        return listData;
+        return mListData;
     }
 
 }

@@ -1,20 +1,36 @@
 <resources>
     <style name="ThemeLightAppPlus" parent="@style/LightParent">
-        <item name="themeOverFlowDrawable">@drawable/ic_overflow_dark</item>
+        <item name="themeOverFlowDrawable">@drawable/ic_more_vert_black_24dp</item>
         <item name="title_text">@android:color/black</item>
         <item name="body_text">#303030</item>
+        <!--<item name="body_text">#303030</item>-->
+        <item name="title_text_light">@android:color/white</item>
+        <item name="body_text_light">#cccccc</item>
         <item name="colorPrimary">?attr/theme_color</item>
-        <item name="colorPrimaryDark">?attr/theme_color_dark</item>
+        <item name="colorPrimaryDark">?attr/theme_color</item>
+        <!--<item name="colorPrimaryDark">?attr/theme_color_dark</item>-->
         <item name="colorAccent">?attr/theme_accent_color</item>
     </style>
     <!-- 正常主题-->
     <style name="Theme_AppPlus" parent="@style/ThemeLightAppPlus"/>
 
+    <style name="Theme_Splash" parent="@style/Theme_AppPlus">
+        <item name="android:background">@drawable/bg_splash</item>
+    </style>
+
     <style name="MaterialButton">
-        <item name="android:layout_height">@dimen/material_button_height</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/material_button_text_size</item>
+        <item name="android:layout_height">34dp</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:layout_gravity">center</item>
+    </style>
+    <style name="ActionButton">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">30dip</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
 </resources>

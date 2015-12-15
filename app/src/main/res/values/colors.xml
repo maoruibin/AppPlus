@@ -6,10 +6,10 @@
     <color name="white">#FFFFFF</color>
 
     <color name="colorPrimary">#3F51B5</color>
+    <color name="colorAccent">#E91E63</color>
     <color name="colorPrimaryDark">#3F51B5</color>
     <color name="colorPrimary700">#303F9F</color>
     <color name="colorPrimaryLight">#7986CB</color>
-    <color name="colorAccent">#E91E63</color>
 
 
     <color name="textColorPrimary">#DE000000</color>

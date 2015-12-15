@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:title="@string/menu_pop_item_share"
+        android:icon="?attr/ic_menu_share"
+        android:id="@+id/pop_share"/>
+    <item
         android:title="@string/menu_pop_item_file"
         android:icon="?attr/ic_menu_export"
         android:id="@+id/pop_export"/>

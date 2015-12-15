@@ -1,9 +1,32 @@
-package com.gudong.appkit.ui.base;
+/*
+ *     Copyright (c) 2015 Maoruibin
+ *
+ *     Permission is hereby granted, free of charge, to any person obtaining a copy
+ *     of this software and associated documentation files (the "Software"), to deal
+ *     in the Software without restriction, including without limitation the rights
+ *     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *     copies of the Software, and to permit persons to whom the Software is
+ *     furnished to do so, subject to the following conditions:
+ *
+ *     The above copyright notice and this permission notice shall be included in all
+ *     copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *     SOFTWARE.
+ */
+
+package com.gudong.appkit.ui.activity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -21,6 +44,7 @@ import com.umeng.analytics.MobclickAgent;
 public abstract class BaseActivity extends AppCompatActivity {
     private ThemeControl mThemeUtils;
     private Toolbar mToolbar;
+    private SystemBarTintManager mBarTintManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mThemeUtils = new ThemeControl(this);
@@ -31,7 +55,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         // 设置是否对日志信息进行加密, true 加密
         AnalyticsConfig.enableEncrypt(true);
         // 设置布局
-        setContentView(initLayout());
+        if(initLayout()>0){
+            setContentView(initLayout());
+        }
         // 初始化跟toolbar
         initToolBar();
         // 对Android4.4已上设备设置沉浸效果
@@ -79,15 +105,31 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void setTintLayout() {
-        SystemBarTintManager tintManager = new SystemBarTintManager(this);
-        tintManager.setStatusBarTintEnabled(true);
-        tintManager.setNavigationBarTintEnabled(true);
-        tintManager.setTintColor(Utils.getThemePrimaryDarkColor(this));
+        mBarTintManager = new SystemBarTintManager(this);
+        mBarTintManager.setStatusBarTintEnabled(true);
+        mBarTintManager.setNavigationBarTintEnabled(true);
+        mBarTintManager.setTintColor(Utils.getThemePrimaryColor(this));
+    }
+
+    protected void setStatusBarColorRes(int res) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setStatusBarColor(res);
+        }else {
+            mBarTintManager.setStatusBarTintResource(res);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setStatusBarColor(int res){
+//        Window window = getWindow();
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().setStatusBarColor(ContextCompat.getColor(this,res));
     }
 
     /**
-     * 指定对应的布局文件
-     * @return 布局id
+     * set layout file
+     * @return res id of layout,if return value less then zero ,it indicate this activity will not set content view
      */
     protected abstract int initLayout();
 
@@ -110,7 +152,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 break;
         }
         return super.onOptionsItemSelected(item);

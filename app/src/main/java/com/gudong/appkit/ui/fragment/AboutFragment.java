@@ -1,3 +1,25 @@
+/*
+ *     Copyright (c) 2015 Maoruibin
+ *
+ *     Permission is hereby granted, free of charge, to any person obtaining a copy
+ *     of this software and associated documentation files (the "Software"), to deal
+ *     in the Software without restriction, including without limitation the rights
+ *     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *     copies of the Software, and to permit persons to whom the Software is
+ *     furnished to do so, subject to the following conditions:
+ *
+ *     The above copyright notice and this permission notice shall be included in all
+ *     copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *     SOFTWARE.
+ */
+
 package com.gudong.appkit.ui.fragment;
 
 import android.os.Bundle;
@@ -5,7 +27,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.ui.base.BaseActivity;
+import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
@@ -41,11 +63,11 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
         String key = preference.getKey();
         //用if判断 效率不会很好 待改善
         if(key.equals(getString(R.string.preference_key_about))){
-            DialogUtil.showCusotomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_about), "about.html", "about");
+            DialogUtil.showCustomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_about), "about.html", "about");
             MobclickAgent.onEvent(mContext, "setting_about");
         }
         if(key.equals(getString(R.string.preference_key_score))){
-            NavigationManager.gotoScore(mContext);
+            NavigationManager.gotoMarket(mContext,getActivity().getPackageName());
             MobclickAgent.onEvent(mContext, "setting_market");
         }
         if(key.equals(getString(R.string.preference_key_opinion))){
@@ -58,7 +80,7 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
             MobclickAgent.onEvent(mContext, "setting_check_update");
         }
         if(key.equals(getString(R.string.preference_key_license))){
-            DialogUtil.showCusotomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_license), "license.html", "license");
+            DialogUtil.showCustomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_license), "license.html", "license");
             MobclickAgent.onEvent(mContext, "setting_license");
         }
         return false;

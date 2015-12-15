@@ -1,3 +1,25 @@
+/*
+ *     Copyright (c) 2015 Maoruibin
+ *
+ *     Permission is hereby granted, free of charge, to any person obtaining a copy
+ *     of this software and associated documentation files (the "Software"), to deal
+ *     in the Software without restriction, including without limitation the rights
+ *     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *     copies of the Software, and to permit persons to whom the Software is
+ *     furnished to do so, subject to the following conditions:
+ *
+ *     The above copyright notice and this permission notice shall be included in all
+ *     copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *     SOFTWARE.
+ */
+
 package com.gudong.appkit.utils;
 
 import android.app.Activity;
@@ -8,27 +30,17 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.control.ThemeControl;
-import com.gudong.appkit.utils.logger.LogLevel;
-import com.gudong.appkit.utils.logger.Logger;
 
 /**
  * the util class for app
  * Created by mao on 7/21/15.
  */
 public class Utils {
-    /**
-     * setting for debug mode or not
-     * @param context context
-     * @param isDebug is true set application is run in debug mode
-     */
-    public static void isSetDebugMode(Context context,boolean isDebug){
-        Logger.init("AppPlusLog").setLogLevel(isDebug?LogLevel.FULL:LogLevel.NONE);
-        setShowSelf(context,isDebug);
-    }
     public static void setCurrentVersion(Context context,String version){
         putStringPreference(context,"current_version",version);
     }
@@ -88,30 +100,31 @@ public class Utils {
      * @return 对应的int value
      */
     public static int getColorWarp(Activity context,@ColorRes int color){
-        return context.getResources().getColor(color);
-//        return context.getResources().getColor(color,context.getTheme());
+        return ContextCompat.getColor(context,color);
     }
 
     /**
-     * 最近列表是否显示App+
-     * @param context 上下文对象
-     * @return return true if recent listview need show app+
+     * running list is show AppPlus or not
+     * @param context Context
+     * @return return true if recent list view need show appplus
      */
     public static boolean isShowSelf(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(context.getString(R.string.switch_preference_show_self_key), false);
+        return prefs.getBoolean(context.getString(R.string.switch_preference_key_show_self), false);
     }
 
     /**
-     * set app is show self in recent list
-     * @param context
-     * @param isShow
+     * list item is brief mode or not
+     * @param context Context
+     * @return return true if brief mode else not
      */
-    public static void setShowSelf(Context context,boolean isShow){
-        putBooleanPreference(context,context.getString(R.string.switch_preference_show_self_key),isShow);
+    public static boolean isBriefMode(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean(context.getString(R.string.switch_preference_key_list_item_brief_mode), true);
     }
+
     /**
-     * 发送邮件的头信息
+     * get the device info
      * @param activity
      * @return
      */
@@ -172,6 +185,10 @@ public class Utils {
         return (int) (dip * scale + 0.5f);
     }
 
+    public static boolean isOwnApp(Activity activity,String packageName){
+        return activity.getPackageName().equals(packageName);
+    }
+
     // -------------------    SharePreference Util Begin   -------------------  //
 
     public static void removeKey(Context context,String key){
@@ -207,28 +224,6 @@ public class Utils {
     public static boolean getBooleanPreference(Context context,String key){
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return sp.getBoolean(key,false);
-    }
-
-    // -------------------    SharePreference Util End   -------------------  //
-
-    public static class Setting{
-
-        /**
-         * set preference for whether show sum bug point
-         * @param context context
-         */
-        public static void setDoNotShowPointForSumBug(Context context){
-            putBooleanPreference(context,"do_not_show_point",true);
-        }
-
-        /**
-         * get preference for whether show sum bug point
-         * @param context context
-         * @return return false if app need show bug point dialog
-         */
-        public static boolean isNotShowPointForSumBug(Context context){
-            return getBooleanPreference(context,"do_not_show_point");
-        }
     }
 }
 

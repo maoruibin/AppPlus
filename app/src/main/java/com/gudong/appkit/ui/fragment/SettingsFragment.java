@@ -1,3 +1,25 @@
+/*
+ *     Copyright (c) 2015 Maoruibin
+ *
+ *     Permission is hereby granted, free of charge, to any person obtaining a copy
+ *     of this software and associated documentation files (the "Software"), to deal
+ *     in the Software without restriction, including without limitation the rights
+ *     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *     copies of the Software, and to permit persons to whom the Software is
+ *     furnished to do so, subject to the following conditions:
+ *
+ *     The above copyright notice and this permission notice shall be included in all
+ *     copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *     SOFTWARE.
+ */
+
 package com.gudong.appkit.ui.fragment;
 
 import android.os.Bundle;
@@ -5,10 +27,11 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.ui.base.BaseActivity;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.ThemeControl;
 import com.gudong.appkit.utils.Utils;
-import com.jenzz.materialpreference.PreferenceCategory;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
@@ -26,7 +49,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         //设置点击监听
         findPreference(getString(R.string.preference_key_theme_primary)).setOnPreferenceClickListener(this);
-        findPreference(getString(R.string.switch_preference_show_self_key)).setOnPreferenceChangeListener(this);
+        findPreference(getString(R.string.switch_preference_key_show_self)).setOnPreferenceChangeListener(this);
+        findPreference(getString(R.string.switch_preference_key_list_item_brief_mode)).setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -57,15 +81,21 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         String key = preference.getKey();
-        if (key.equals(getString(R.string.switch_preference_show_self_key))) {
+        if (key.equals(getString(R.string.switch_preference_key_show_self))) {
             //用户的点击计数
             MobclickAgent.onEvent(mContext, "setting_show_self");
-
             //判断用户的选择行为
             Map<String, String> map_value = new HashMap<>();
             map_value.put("is_show_self", "yes_or_not");
             int flag = Utils.isShowSelf(getActivity()) ? 1 : 0;
             MobclickAgent.onEventValue(getActivity(), "show_self_or_no", map_value, flag);
+            EventCenter.getInstance().triggerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,null);
+            getActivity().finish();
+        }
+
+        if (key.equals(getString(R.string.switch_preference_key_list_item_brief_mode))) {
+            EventCenter.getInstance().triggerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,null);
+            getActivity().finish();
         }
 
         return true;

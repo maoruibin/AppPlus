@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
+    android:paddingTop="@dimen/md_content_padding_top"
+    android:paddingBottom="@dimen/md_content_padding_top"
+    android:background="?attr/selectableItemBackgroundBorderless"
     android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="@dimen/list_item_icon_size"
         android:layout_height="@dimen/list_item_icon_size"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        tools:src="@mipmap/ic_launcher"/>
 
     <LinearLayout
         android:id="@+id/ll_app_info"
@@ -23,21 +26,41 @@
         android:layout_toRightOf="@+id/iv_icon"
         android:layout_toLeftOf="@+id/iv_over_flow"
         android:orientation="vertical">
-        <TextView
-            android:id="@android:id/text1"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?title_text"
-            android:singleLine="true"
-            android:textAppearance="?attr/textAppearanceListItem"/>
-
+            android:orientation="horizontal">
+            <TextView
+                android:id="@android:id/text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_item_title"
+                android:ellipsize="end"
+                tools:text="App+"
+                android:singleLine="true"
+                style="@style/TextAppearance.AppCompat.Body1"/>
+            <TextView
+                android:id="@+id/tv_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_6"
+                android:textSize="@dimen/text_size_item_body"
+                tools:text="(1.2.5)"
+                android:ellipsize="end"
+                android:singleLine="true"
+                tools:visibility="gone"
+                style="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle"/>
+        </LinearLayout>
         <TextView
             android:id="@android:id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?body_text"
+            android:ellipsize="end"
+            tools:text="com.gudong.appplus"
             android:singleLine="true"
-            android:textAppearance="?attr/textAppearanceListItemSmall"/>
+            tools:visibility="gone"
+            android:textSize="@dimen/text_size_item_body"
+            style="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle"/>
 
     </LinearLayout>
     <ImageView

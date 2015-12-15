@@ -21,6 +21,11 @@
         <item>#9e9e9e</item>
         <item>#607d8b</item>
     </array>
+    <array name="more_action">
+        <item>打开应用</item>
+        <item>卸载应用</item>
+        <item>去市场查看</item>
+    </array>
 </resources>
 
 

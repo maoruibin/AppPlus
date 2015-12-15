@@ -1,134 +1,124 @@
+/*
+ *     Copyright (c) 2015 Maoruibin
+ *
+ *     Permission is hereby granted, free of charge, to any person obtaining a copy
+ *     of this software and associated documentation files (the "Software"), to deal
+ *     in the Software without restriction, including without limitation the rights
+ *     to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ *     copies of the Software, and to permit persons to whom the Software is
+ *     furnished to do so, subject to the following conditions:
+ *
+ *     The above copyright notice and this permission notice shall be included in all
+ *     copies or substantial portions of the Software.
+ *
+ *     THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *     IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *     FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *     AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *     SOFTWARE.
+ */
+
 package com.gudong.appkit.ui.fragment;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
-import android.content.ComponentName;
-import android.content.DialogInterface;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.LabeledIntent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.util.Pair;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
-import com.gudong.appkit.dao.AppInfoEngine;
-import com.gudong.appkit.entity.AppEntity;
-import com.gudong.appkit.utils.DialogUtil;
-import com.gudong.appkit.utils.FileUtil;
+import com.gudong.appkit.dao.AppEntity;
+import com.gudong.appkit.dao.DBHelper;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.event.Subscribe;
+import com.gudong.appkit.ui.activity.AppActivity;
+import com.gudong.appkit.ui.control.NavigationManager;
+import com.gudong.appkit.ui.helper.AppItemAnimator;
+import com.gudong.appkit.utils.ActionUtil;
 import com.gudong.appkit.utils.Utils;
-import com.gudong.appkit.view.CircularProgressDrawable;
+import com.gudong.appkit.utils.logger.Logger;
+import com.gudong.appkit.view.DividerItemDecoration;
+import com.jaredrummler.android.processes.ProcessManager;
 import com.umeng.analytics.MobclickAgent;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by mao on 15/7/8.
  */
-public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem {
-    /**
-     * 最近列表
-     **/
-    public static final int KEY_RECENT = 0;
-    /**
-     * 所有app列表
-     **/
-    public static final int KEY_ALL = 1;
-    /**
-     * 搜索结果列表
-     **/
-    public static final int KEY_SEARCH = -1;
-    private static final String SCHEME = "package";
-    private static final String APP_PKG_NAME_21 = "com.android.settings.ApplicationPkgName";
-    private static final String APP_PKG_NAME_22 = "pkg";
-    private static final String APP_DETAILS_PACKAGE_NAME = "com.android.settings";
-    private static final String APP_DETAILS_CLASS_NAME = "com.android.settings.InstalledAppDetails";
+public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem, Subscribe {
 
-    private AppInfoEngine mEngine;
-    private Handler mHandler;
+    public static final String KEY_TYPE = "type";
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.obj != null && msg.obj instanceof List) {
+                List<AppEntity> result = (List<AppEntity>) msg.obj;
+                loadingFinish();
+                setData(result, msg.what);
+            }
+        }
+    };;
     private RecyclerView mRecyclerView;
-
-    private RelativeLayout mRlLoadLayout;
-    private ProgressBar mPbLoading;
-    private TextView mTvPoint;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private AppInfoListAdapter mAdapter;
     /**
      * Fragment列表的类型变量，小于0表示是搜索结果对应的列表Fragment，大于等于0，则是正常的用于显示App的列表Fragment
      **/
-    private int mType = KEY_RECENT;
+    private EListType mType = EListType.TYPE_RUNNING;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mEngine = new AppInfoEngine(getActivity().getApplicationContext());
-        mType = getArguments().getInt("type");
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                List<AppEntity> result = new ArrayList<>();
-                if(msg.obj != null && msg.obj instanceof List){
-                    result = (List<AppEntity>) msg.obj;
-                }
-                setData(result, msg.what);
-            }
-        };
+        mType = (EListType) getArguments().getSerializable(KEY_TYPE);
+        EventCenter.getInstance().registerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,this);
+        EventCenter.getInstance().registerEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,this);
+        EventCenter.getInstance().registerEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,this);
+        EventCenter.getInstance().registerEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,this);
+        EventCenter.getInstance().registerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,this);
     }
 
-    private String getErrorInfo(int type) {
-        switch (type) {
-            case KEY_RECENT:
-                return getString(R.string.app_list_error_recent);
-            case KEY_ALL:
-                return getString(R.string.app_list_error_recent);
-            case KEY_SEARCH:
-                return getString(R.string.app_list_error_all);
-            default:
-                return getString(R.string.app_list_error_recent);
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventCenter.getInstance().unregisterEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,this);
+        EventCenter.getInstance().unregisterEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,this);
+        EventCenter.getInstance().unregisterEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,this);
+        EventCenter.getInstance().unregisterEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,this);
+        EventCenter.getInstance().unregisterEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,this);
     }
 
-    private String getEmptyInfo(int type) {
-        switch (type) {
-            case KEY_RECENT:
-                return getString(R.string.app_list_empty_recent);
-            case KEY_ALL:
-                return getString(R.string.app_list_empty_all);
-            case KEY_SEARCH:
-                return getString(R.string.app_list_empty_search);
-            default:
-                return getString(R.string.app_list_empty_recent);
-        }
+    protected int initLayout(){
+        return R.layout.fragment_app_list;
     }
 
-    public static AppListFragment getInstance(int type) {
+    public static AppListFragment getInstance(EListType type) {
         AppListFragment fragment = new AppListFragment();
-        Bundle bundle = new Bundle(1);
-        bundle.putInt("type", type);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(KEY_TYPE, type);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -136,88 +126,132 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(
-                R.layout.fragment_app_list, container, false);
+        View rootView = inflater.inflate(initLayout(), container, false);
+        setupSwipeLayout(rootView);
         setupRecyclerView(rootView);
-        setupLoadLayout(rootView);
         return rootView;
     }
 
-    private void setupLoadLayout(View rootView) {
-        mRlLoadLayout = (RelativeLayout) rootView.findViewById(R.id.rl_app_list_load);
-        mPbLoading = (ProgressBar) rootView.findViewById(R.id.pb_app_list_loading);
-        mTvPoint = (TextView) rootView.findViewById(R.id.tv_app_list_point);
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            mPbLoading.setIndeterminateDrawable(new CircularProgressDrawable(Utils.getColorWarp(getActivity(), R.color.colorAccent), getResources().getDimension(R.dimen.loading_border_width)));
+    private void setupSwipeLayout(View rootView) {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeColors(Utils.getThemePrimaryColor(getActivity()));
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fillData();
+            }
+        });
+        //if the list type is search result,the mSwipeRefreshLayout will unable
+        if(mType == EListType.TYPE_SEARCH){
+            mSwipeRefreshLayout.setEnabled(false);
         }
-        mRlLoadLayout.setVisibility(View.GONE);
-    }
-
-    private void loadingData(String loadingInfo) {
-        mRecyclerView.setVisibility(View.GONE);
-        mRlLoadLayout.setVisibility(View.VISIBLE);
-        mTvPoint.setText(loadingInfo);
-    }
-
-    private void loadingDataEmpty(String emptyInfo) {
-        mRecyclerView.setVisibility(View.GONE);
-        mRlLoadLayout.setVisibility(View.VISIBLE);
-        mTvPoint.setText(emptyInfo);
-        mPbLoading.setVisibility(View.GONE);
-    }
-
-    private void loadingDataError(String errorInfo) {
-        mRecyclerView.setVisibility(View.GONE);
-        mRlLoadLayout.setVisibility(View.VISIBLE);
-        mTvPoint.setText(errorInfo);
-        mPbLoading.setVisibility(View.GONE);
-    }
-
-    private void loadingFinish() {
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mRlLoadLayout.setVisibility(View.GONE);
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (mType >= 0) {
-            fillData();
-        }
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // make swipeRefreshLayout visible manually
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showRefresh();
+            }
+        }, 568);
+        fillData();
     }
+
+    private void loadingDataEmpty(String emptyInfo) {
+        if(mType == EListType.TYPE_SEARCH)return;
+        final Snackbar errorSnack = Snackbar.make(mRecyclerView, emptyInfo,Snackbar.LENGTH_LONG);
+        errorSnack.setAction(R.string.action_retry, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorSnack.dismiss();
+                fillData();
+            }
+        });
+        errorSnack.show();
+    }
+
+    private void loadingDataError(String errorInfo) {
+
+    }
+
+    private void loadingFinish() {
+        hideRefresh();
+    }
+
+    public void showRefresh() {
+        mSwipeRefreshLayout.setRefreshing(true);
+    }
+
+    public void hideRefresh() {
+        // 防止刷新消失太快，让子弹飞一会儿. do not use lambda!!
+        mSwipeRefreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mSwipeRefreshLayout != null) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        }, 1000);
+    }
+
 
     private void setupRecyclerView(View rootView) {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new AppInfoListAdapter(getActivity(), new ArrayList<AppEntity>());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
+//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setItemAnimator(new AppItemAnimator());
+        //every item's height is fix so use this method
+        //RecyclerView can perform several optimizations
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter = new AppInfoListAdapter(getActivity(),Utils.isBriefMode(getActivity()));
         mAdapter.setClickPopupMenuItem(this);
         mAdapter.setClickListItem(this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
     private synchronized void fillData() {
-        loadingData(getString(R.string.app_list_loading));
         new Thread(new Runnable() {
             @Override
             public void run() {
                 List<AppEntity> list = null;
                 switch (mType) {
-                    case KEY_RECENT:
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                            list = mEngine.getRecentAppList();
-                        } else {
-                            list = mEngine.getRecentAppInfo();
-                        }
+                    case TYPE_RUNNING:
+                        list = getRunningAppEntity(getActivity());
                         break;
-                    case KEY_ALL:
-                        list = mEngine.getInstalledAppList();
+                    case TYPE_ALL:
+                        list = App.sDb.query(AppEntity.class);
                         break;
                 }
-                mHandler.sendMessage(mHandler.obtainMessage(mType, list));
+                mHandler.sendMessage(mHandler.obtainMessage(mType.ordinal(), list));
             }
         }).start();
+    }
+
+    private  List<AppEntity>getRunningAppEntity(Context ctx){
+        List<ActivityManager.RunningAppProcessInfo> runningList = ProcessManager.getRunningAppProcessInfo(ctx);
+        List<AppEntity>list = new ArrayList<>();
+        for (ActivityManager.RunningAppProcessInfo processInfo : runningList){
+            String packageName = processInfo.processName;
+            if (isNotShowSelf(ctx,packageName)) continue;
+            AppEntity entity = DBHelper.getAppByPackageName(packageName);
+            if(entity == null)continue;
+            list.add(entity);
+        }
+        return list;
+    }
+
+    /**
+     * check running list should show AppPlus or not
+     * @param packagename
+     * @return true if show else false
+     */
+    private static boolean isNotShowSelf(Context ctx, String packagename){
+        return !Utils.isShowSelf(ctx) && packagename.equals(ctx.getPackageName());
     }
 
     /**
@@ -230,10 +264,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         }
         if (result.isEmpty()) {
             loadingDataEmpty(getEmptyInfo(type));
-            return;
         }
+
         mAdapter.update(result);
-        loadingFinish();
     }
 
     /**
@@ -246,12 +279,16 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public void onClickMenuItem(int itemId, AppEntity entity) {
         switch (itemId) {
+            case R.id.pop_share:
+                ActionUtil.shareApk(getActivity(),entity);
+                MobclickAgent.onEvent(getActivity(), "pop_share");
+                break;
             case R.id.pop_export:
-                onClickExport(entity);
+                ActionUtil.exportApk(getActivity(),entity);
                 MobclickAgent.onEvent(getActivity(), "pop_export");
                 break;
             case R.id.pop_detail:
-                showInstalledAppDetails(entity);
+                NavigationManager.openAppDetail(getActivity(),entity.getPackageName());
                 MobclickAgent.onEvent(getActivity(), "pop_detail");
                 break;
         }
@@ -259,195 +296,19 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
 
     @Override
-    public void onClickListItemContent(AppEntity entity) {
-        onTransferClick(entity);
-        MobclickAgent.onEvent(getActivity(), "item_click_share");
+    public void onClickListItemContent(View view,AppEntity entity) {
+        Intent intent = new Intent(getContext(), AppActivity.class);
+        intent.putExtra(AppActivity.EXTRA_APP_ENTITY, entity);
+        ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                getActivity(),
+                new Pair<View, String>(view.findViewById(R.id.iv_icon),
+                        AppActivity.VIEW_NAME_HEADER_IMAGE));
+
+        // Now we can start the Activity, providing the activity options as a bundle
+        ActivityCompat.startActivity(getActivity(), intent, activityOptions.toBundle());
     }
 
-    /**
-     * 打开App详情界面
-     *
-     * @param appEntity
-     */
-    private void showInstalledAppDetails(AppEntity appEntity) {
-        Intent intent = new Intent();
-        final int apiLevel = Build.VERSION.SDK_INT;
-        if (apiLevel >= 9) {
-            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            Uri uri = Uri.fromParts(SCHEME, appEntity.getPackageName(), null);
-            intent.setData(uri);
-        } else {
-            final String appPkgName = (apiLevel == 8 ? APP_PKG_NAME_22
-                    : APP_PKG_NAME_21);
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setClassName(APP_DETAILS_PACKAGE_NAME,
-                    APP_DETAILS_CLASS_NAME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(appPkgName, appEntity.getPackageName());
-        }
-        startActivity(intent);
-    }
 
-    /**
-     * 传送安装包
-     *
-     * @param entity
-     */
-    private void onTransferClick(AppEntity entity) {
-        PackageManager pm = getActivity().getPackageManager();
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setType("text/plain");
-        List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
-        List<LabeledIntent> intentList = new ArrayList<LabeledIntent>();
-        for (int i = 0; i < resInfo.size(); i++) {
-            ResolveInfo ri = resInfo.get(i);
-            String packageName = ri.activityInfo.packageName;
-            if (packageName.contains("tencent") || packageName.contains("blue")) {
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(entity.getSrcPath())));
-                intent.setAction(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intentList.add(new LabeledIntent(intent, packageName, ri.loadLabel(pm), ri.icon));
-            }
-        }
-
-        LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
-
-        Intent openInChooser = Intent.createChooser(intentList.remove(0), warpChooserTitle(entity.getAppName()));
-        openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-        startActivity(openInChooser);
-    }
-
-    /**
-     * warp choose title and make app title accent
-     *
-     * @param appName app name
-     * @return warped chooser title
-     */
-    private SpannableStringBuilder warpChooserTitle(String appName) {
-        @SuppressLint("StringFormatMatches") String title = String.format(getString(R.string.select_transfer_way_apk, appName));
-        ForegroundColorSpan fontSpanRed = new ForegroundColorSpan(Utils.getColorWarp(getActivity(),R.color.colorAccent));
-        int start = 2;
-        int end = start + appName.length() + 3;
-        SpannableStringBuilder mSpannableBuilder = new SpannableStringBuilder(title);
-        mSpannableBuilder.setSpan(fontSpanRed, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-        return mSpannableBuilder;
-    }
-
-    private void onClickExport(AppEntity entity) {
-        //判断sd卡是否挂载
-        if (!FileUtil.isSdCardOnMounted()) {
-            DialogUtil.showSinglePointDialog(getActivity(), getString(R.string.dialog_message_no_sdcard));
-            return;
-        }
-
-        final File srcFile = new File(entity.getSrcPath());
-        File exportParentFile = new File(FileUtil.getSDPath(), "App+导出目录");
-        if (!exportParentFile.exists()) {
-            exportParentFile.mkdir();
-        }
-
-        String exportFileName = entity.getAppName() + ".apk";
-        final File exportFile = new File(exportParentFile, exportFileName);
-        String contentInfo = String.format(getString(R.string.dialog_message_file_exist), exportFileName, exportFile.getParentFile().getAbsolutePath());
-        if (exportFile.exists()) {
-            new AlertDialog.Builder(getActivity())
-                    .setTitle(R.string.title_export)
-                    .setMessage(contentInfo)
-                    .setPositiveButton(R.string.dialog_confirm_yes, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            copyFile(srcFile, exportFile);
-                        }
-                    })
-                    .setNegativeButton(R.string.dialog_now_watch, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            browseFile(exportFile.getParentFile());
-                        }
-                    })
-                    .show();
-        } else {
-            copyFile(srcFile, exportFile);
-        }
-    }
-
-    private void copyFile(File srcFile, final File exportFile) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_progress, null);
-        ProgressBar progressBar = (ProgressBar) view.findViewById(android.R.id.progress);
-        TextView textView = (TextView) view.findViewById(R.id.content);
-
-        //改变Progress的背景为MaterialDesigner规范的样式
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            progressBar.setIndeterminateDrawable(new CircularProgressDrawable(Utils.getColorWarp(getActivity(), R.color.colorAccent), getResources().getDimension(R.dimen.loading_border_width)));
-        }
-
-        final AlertDialog progressDialog = new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.title_export)
-                .setView(view).create();
-        //设置显示文字
-        textView.setText(R.string.please_wait);
-
-        new AsyncTask<File, Void, Boolean>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressDialog.show();
-            }
-
-            @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                super.onPostExecute(aBoolean);
-                progressDialog.dismiss();
-                String contentInfo = String.format(getString(R.string.dialog_message_export_finish), exportFile.getName(), exportFile.getParentFile().getAbsolutePath());
-                new AlertDialog.Builder(getActivity())
-                        .setTitle(R.string.title_export_finish)
-                        .setMessage(contentInfo)
-                        .setPositiveButton(R.string.dialog_confirm_watch, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                browseFile(exportFile.getParentFile());
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_cancel_watch, null)
-                        .show();
-            }
-
-            @Override
-            protected Boolean doInBackground(File... params) {
-                //导出速度太快了 给人工降个速 可以让用户看到有一个导出的进度条，这样更舒服点
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                File srcFile = params[0];
-                File exportFile = params[1];
-                try {
-                    FileUtil.copyFileUsingFileChannels(srcFile, exportFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                return true;
-            }
-        }.execute(srcFile, exportFile);
-    }
-
-    /**
-     * 浏览文件夹
-     *
-     * @param file
-     */
-    void browseFile(File file) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        Uri uri = Uri.fromFile(file);
-        intent.setDataAndType(uri, "file/*");
-        startActivity(intent);
-    }
 
     @Override
     public void onClickListItemIcon(View iconView, AppEntity entity) {
@@ -458,6 +319,79 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         animationSet.playTogether(animatorRotation, scaleRotationY, scaleRotationX);
         animationSet.setDuration(500);
         animationSet.start();
+    }
+
+
+
+    private String getErrorInfo(int type) {
+        if(type == EListType.TYPE_RUNNING.ordinal()){
+            return getString(R.string.app_list_error_recent);
+        }else if(type == EListType.TYPE_RUNNING.ordinal()){
+            return getString(R.string.app_list_error_all);
+        }else{
+            return getString(R.string.app_list_error_all);
+        }
+    }
+
+    private String getEmptyInfo(int type) {
+        if(type == EListType.TYPE_RUNNING.ordinal()){
+            return getString(R.string.app_list_empty_recent);
+        }else if(type == EListType.TYPE_ALL.ordinal()){
+            return getString(R.string.app_list_empty_all);
+        }else{
+            return getString(R.string.app_list_empty_search);
+        }
+    }
+
+    @Override
+    public void update(EEvent event,Bundle data) {
+        List<AppEntity>list = mAdapter.getListData();
+        switch (event){
+            case RECENT_LIST_IS_SHOW_SELF_CHANGE:
+                if(mType == EListType.TYPE_RUNNING){
+                    boolean isShowSelf = !Utils.isShowSelf(getActivity());
+                    AppEntity appPlus = DBHelper.getAppPlusEntity(getActivity());
+                    if(isShowSelf){
+                        mAdapter.addItem(0,appPlus);
+                    }else{
+                        mAdapter.removeItem(appPlus);
+                    }
+                    if(!mAdapter.getListData().isEmpty()){
+                        mRecyclerView.scrollToPosition(0);
+                    }
+                }
+                break;
+            case LIST_ITEM_BRIEF_MODE_CHANGE:
+                mAdapter.setBriefMode(!Utils.isBriefMode(getActivity()));
+                break;
+            case UNINSTALL_APPLICATION_FROM_SYSTEM:
+                AppEntity uninstalledEntity = data.getParcelable("entity");
+                Logger.i("now we found the "+uninstalledEntity.getPackageName()+" has uninstalled by user ");
+                if(list.contains(uninstalledEntity)){
+                    Logger.i("list find "+uninstalledEntity.getPackageName()+" exist list ,now need remove it and update lsit");
+                    list.remove(uninstalledEntity);
+                    mAdapter.update(list);
+                }else{
+                    Logger.i("list not contain "+uninstalledEntity.getPackageName()+" so do nothing" );
+                }
+                break;
+            case INSTALL_APPLICATION_FROM_SYSTEM:
+                AppEntity installedEntity = data.getParcelable("entity");
+                if(mType == EListType.TYPE_ALL && !list.contains(installedEntity)){
+                    list.add(installedEntity);
+                    mAdapter.update(list);
+                    Logger.i("this is all type and list not contain "+installedEntity.getAppName()+"now add it" );
+                }
+                break;
+            case PREPARE_FOR_ALL_INSTALLED_APP_FINISH:
+                mRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        fillData();
+                    }
+                });
+                break;
+        }
     }
 }
 

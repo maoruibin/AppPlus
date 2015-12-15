@@ -7,10 +7,13 @@
 
         <item name="ic_menu_export">@drawable/ic_exit_to_app_black_24dp</item>
         <item name="ic_menu_detail">@drawable/ic_info_outline_black_24dp</item>
+        <item name="ic_menu_share">@drawable/ic_share_black_24dp</item>
 
         <item name="appColorPrimary">@color/colorPrimary</item>
         <item name="fits_windows">true</item>
         <item name="alertDialogTheme">@style/AlertDialogCustom</item>
+
+        <item name="android:listDivider">@drawable/divider_bg</item>
     </style>
 
     <!-- 自定义Dialog显示风格 -->

@@ -36,8 +36,6 @@ import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.ui.fragment.AppListFragment;
-import com.gudong.appkit.ui.fragment.EListType;
-import com.gudong.appkit.utils.logger.Logger;
 import com.litesuits.orm.db.assit.QueryBuilder;
 
 import java.util.List;
@@ -104,8 +102,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
             QueryBuilder queryBuilder = new QueryBuilder(AppEntity.class);
             queryBuilder = queryBuilder.where("appName like ?",new String[]{'%'+newText+'%'});
             List<AppEntity> result = App.sDb.query(queryBuilder);
-            Logger.i("搜索结果大小为 "+result.size());
-            mSearchResultFragment.setData(result, EListType.TYPE_SEARCH.ordinal());
+            mSearchResultFragment.setData(result, 3);
         }
         return true;
     }
@@ -121,7 +118,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     private void initSearchContent() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mSearchResultFragment = AppListFragment.getInstance(EListType.TYPE_SEARCH);
+        mSearchResultFragment = AppListFragment.getInstance(3);
         fragmentTransaction.replace(R.id.fl_container, mSearchResultFragment);
         fragmentTransaction.commitAllowingStateLoss();
     }

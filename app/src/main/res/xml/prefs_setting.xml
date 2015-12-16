@@ -14,8 +14,7 @@
             android:title="@string/switch_preference_list_item_brief_mode"
             android:key="@string/switch_preference_key_list_item_brief_mode"
             android:defaultValue="true"
-            android:summaryOn="@string/switch_preference_list_item_brief_mode_on"
-            android:summaryOff="@string/switch_preference_list_item_brief_mode_off"/>
+            android:summary="@string/switch_preference_list_item_brief_mode_on"/>
 
         <com.jenzz.materialpreference.Preference
             android:title="@string/preference_title_theme_primary"

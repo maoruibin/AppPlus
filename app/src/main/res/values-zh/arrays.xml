@@ -22,9 +22,9 @@
         <item>#607d8b</item>
     </array>
     <array name="more_action">
-        <item>Open</item>
-        <item>Uninstall</item>
-        <item>Go market</item>
+        <item>打开应用</item>
+        <item>卸载应用</item>
+        <item>去市场查看</item>
     </array>
 </resources>
 

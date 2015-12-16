@@ -36,7 +36,6 @@ import com.gudong.appkit.adapter.AppPageListAdapter;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.event.Subscribe;
-import com.gudong.appkit.ui.fragment.EListType;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
@@ -48,7 +47,7 @@ public class MainActivity extends BaseActivity implements Subscribe {
     AppPageListAdapter mFragmentAdapter;
     RelativeLayout mLayoutMainRoot;
     private long lastTime = 0;
-
+    private static final int[]TITLES = new int[]{R.string.tab_recent,R.string.tab_installed};
     @Override
     protected int initLayout() {
         return R.layout.activity_main;
@@ -133,7 +132,7 @@ public class MainActivity extends BaseActivity implements Subscribe {
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        mFragmentAdapter = new AppPageListAdapter(getSupportFragmentManager(), this, new EListType[]{EListType.TYPE_RUNNING,EListType.TYPE_ALL});
+        mFragmentAdapter = new AppPageListAdapter(getSupportFragmentManager(), this, TITLES);
         viewPager.setAdapter(mFragmentAdapter);
     }
 

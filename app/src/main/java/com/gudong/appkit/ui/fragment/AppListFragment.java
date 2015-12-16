@@ -71,6 +71,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     public static final String KEY_TYPE = "type";
 
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -88,18 +89,31 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     /**
      * Fragment列表的类型变量，小于0表示是搜索结果对应的列表Fragment，大于等于0，则是正常的用于显示App的列表Fragment
      **/
-    private EListType mType = EListType.TYPE_RUNNING;
+    private int mType = 0;
+
+    protected int initLayout(){
+        return R.layout.fragment_app_list;
+    }
+
+    public static AppListFragment getInstance(int type) {
+        AppListFragment fragment = new AppListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(KEY_TYPE, type);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mType = (EListType) getArguments().getSerializable(KEY_TYPE);
+        mType = getArguments().getInt(KEY_TYPE);
         EventCenter.getInstance().registerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,this);
         EventCenter.getInstance().registerEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,this);
         EventCenter.getInstance().registerEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,this);
         EventCenter.getInstance().registerEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,this);
         EventCenter.getInstance().registerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,this);
     }
+
 
     @Override
     public void onDestroy() {
@@ -109,18 +123,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         EventCenter.getInstance().unregisterEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,this);
         EventCenter.getInstance().unregisterEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,this);
         EventCenter.getInstance().unregisterEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,this);
-    }
-
-    protected int initLayout(){
-        return R.layout.fragment_app_list;
-    }
-
-    public static AppListFragment getInstance(EListType type) {
-        AppListFragment fragment = new AppListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(KEY_TYPE, type);
-        fragment.setArguments(bundle);
-        return fragment;
     }
 
     @Nullable
@@ -142,7 +144,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             }
         });
         //if the list type is search result,the mSwipeRefreshLayout will unable
-        if(mType == EListType.TYPE_SEARCH){
+        if(mType == 3){
             mSwipeRefreshLayout.setEnabled(false);
         }
     }
@@ -161,7 +163,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     }
 
     private void loadingDataEmpty(String emptyInfo) {
-        if(mType == EListType.TYPE_SEARCH)return;
+        if(mType == 3)return;
         final Snackbar errorSnack = Snackbar.make(mRecyclerView, emptyInfo,Snackbar.LENGTH_LONG);
         errorSnack.setAction(R.string.action_retry, new View.OnClickListener() {
             @Override
@@ -220,14 +222,14 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             public void run() {
                 List<AppEntity> list = null;
                 switch (mType) {
-                    case TYPE_RUNNING:
+                    case 0:
                         list = getRunningAppEntity(getActivity());
                         break;
-                    case TYPE_ALL:
+                    case 1:
                         list = App.sDb.query(AppEntity.class);
                         break;
                 }
-                mHandler.sendMessage(mHandler.obtainMessage(mType.ordinal(), list));
+                mHandler.sendMessage(mHandler.obtainMessage(mType, list));
             }
         }).start();
     }
@@ -324,9 +326,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
 
     private String getErrorInfo(int type) {
-        if(type == EListType.TYPE_RUNNING.ordinal()){
+        if(type == 0){
             return getString(R.string.app_list_error_recent);
-        }else if(type == EListType.TYPE_RUNNING.ordinal()){
+        }else if(type == 1){
             return getString(R.string.app_list_error_all);
         }else{
             return getString(R.string.app_list_error_all);
@@ -334,9 +336,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     }
 
     private String getEmptyInfo(int type) {
-        if(type == EListType.TYPE_RUNNING.ordinal()){
+        if(type == 0){
             return getString(R.string.app_list_empty_recent);
-        }else if(type == EListType.TYPE_ALL.ordinal()){
+        }else if(type == 1){
             return getString(R.string.app_list_empty_all);
         }else{
             return getString(R.string.app_list_empty_search);
@@ -348,7 +350,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         List<AppEntity>list = mAdapter.getListData();
         switch (event){
             case RECENT_LIST_IS_SHOW_SELF_CHANGE:
-                if(mType == EListType.TYPE_RUNNING){
+                if(mType == 0){
                     boolean isShowSelf = !Utils.isShowSelf(getActivity());
                     AppEntity appPlus = DBHelper.getAppPlusEntity(getActivity());
                     if(isShowSelf){
@@ -377,7 +379,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 break;
             case INSTALL_APPLICATION_FROM_SYSTEM:
                 AppEntity installedEntity = data.getParcelable("entity");
-                if(mType == EListType.TYPE_ALL && !list.contains(installedEntity)){
+                if(mType == 1 && !list.contains(installedEntity)){
                     list.add(installedEntity);
                     mAdapter.update(list);
                     Logger.i("this is all type and list not contain "+installedEntity.getAppName()+"now add it" );

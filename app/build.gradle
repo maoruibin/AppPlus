@@ -22,9 +22,6 @@
 
 apply plugin: 'com.android.application'
 
-Properties prop = new Properties()
-prop.load(new FileInputStream(file("signing.properties")))
-
 def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }
@@ -46,32 +43,31 @@ android {
     }
 
     signingConfigs {
-        release {
-            storeFile file(prop['KEY_FILE'])
-            storePassword prop['STORE_PASSWORD']
-            keyAlias prop['KEY_ALIAS']
-            keyPassword prop['KEY_PASSWORD']
-        }
+        release
+//        release {
+//            storeFile file(prop['KEY_FILE'])
+//            storePassword prop['STORE_PASSWORD']
+//            keyAlias prop['KEY_ALIAS']
+//            keyPassword prop['KEY_PASSWORD']
+//        }
     }
 
     buildTypes {
         release {
-            //是否输出LOG信息  暂时用不到
-            buildConfigField "boolean", "LOG_DEBUG", "false"
-            //设置是否混淆
+            //set for is proguard or not
             minifyEnabled true
             zipAlignEnabled true
-            //移除无用的资源文件
+            // remove useless resource file
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
-            //指定签名包得输入文件名称
+            //set the output file name
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                        // 输出apk名称为AppPlus_v1.0_2015-01-15_wandoujia.apk
+                        // the name is AppPlus_v1.0_2015-01-15_wandoujia.apk
                         def fileName = "AppPlus_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
                         output.outputFile = new File(outputFile.parent, fileName)
                     }
@@ -79,10 +75,6 @@ android {
             }
         }
         debug {
-            //是否输出LOG信息  暂时用不到
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-            //为debug模式下的apk，指定一个另外的application id ,这样debug和release包就可以同时安装在手机上了
-            //applicationIdSuffix ".debug"
         }
     }
 
@@ -101,6 +93,29 @@ android {
         }
     }
 }
+
+//set release sign info synchronously
+def Properties props = new Properties()
+def propFile = file('signing.properties')
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+    if (props != null &&
+            props.containsKey('SIGN_FILE') && props.containsKey('SIGN_KEYSTORE_PASS') &&
+            props.containsKey('SIGN_KEYSTORE_ALIAS') && props.containsKey('SIGN_KEYSTORE_ALIAS_PASS')) {
+        println 'release build signing'
+        android.signingConfigs.release.storeFile = file(props['SIGN_FILE'])
+        android.signingConfigs.release.storePassword = props['SIGN_KEYSTORE_PASS']
+        android.signingConfigs.release.keyAlias = props['SIGN_KEYSTORE_ALIAS']
+        android.signingConfigs.release.keyPassword = props['SIGN_KEYSTORE_ALIAS_PASS']
+    } else {
+        println 'release build not found signing properties'
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    println 'release build not found signing file'
+    android.buildTypes.release.signingConfig = null
+}
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

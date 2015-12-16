@@ -28,30 +28,29 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.gudong.appkit.ui.fragment.AppListFragment;
-import com.gudong.appkit.ui.fragment.EListType;
 
 public class AppPageListAdapter extends FragmentPagerAdapter {
-        EListType[]mTitles;
+        int[] mResTitles;
         Context mContext;
-        public AppPageListAdapter(FragmentManager fm, Context context, EListType[] titles) {
+        public AppPageListAdapter(FragmentManager fm, Context context, int[] titles) {
             super(fm);
-            this.mTitles = titles;
+            this.mResTitles = titles;
             this.mContext = context;
 
         }
 
         @Override
         public Fragment getItem(int position) {
-            return AppListFragment.getInstance(mTitles[position]);
+            return AppListFragment.getInstance(position);
         }
 
         @Override
         public int getCount() {
-            return mTitles.length;
+            return mResTitles.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mTitles[position].getTitle();
+            return mContext.getString(mResTitles[position]);
         }
     }

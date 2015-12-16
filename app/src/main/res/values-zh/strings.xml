@@ -1,0 +1,114 @@
+<resources>
+    <string name="app_name" translatable="false">AppPlus</string>
+
+    <string name="action_settings">设置</string>
+    <string name="action_retry">重试</string>
+    <string name="action_about">关于</string>
+    <string name="empty"></string>
+
+    <string name="tab_recent">最近打开</string>
+    <string name="tab_installed">已安装</string>
+
+    <string name="menu_pop_item_file">导出到本地</string>
+    <string name="menu_pop_item_share">分享安装包</string>
+    <string name="menu_pop_item_detail">查看应用详情</string>
+    <string name="menu_pop_item_open">打开此软件</string>
+    <string name="menu_pop_item_more">更多操作</string>
+
+    <string name="menu_main_support">支持开发者</string>
+    <string name="menu_main_theme">切换主题</string>
+
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_point">提示</string>
+    <string name="title_export">导出中...</string>
+    <string name="dialog_message_no_sdcard">你的设备尚未挂载SD卡，请检查后重试。</string>
+    <string name="dialog_message_file_exist">安装包 %1$s 已存在于文件夹 %2$s 下，是否覆盖？</string>
+    <string name="dialog_message_export">"确定要将 %1$s 的安装包导出到本地目录 %2$s 下吗?</string>
+    <string name="dialog_message_sam_usage">检测到你的手机是三星或者LG,请到安全设置界面，找到访问限制相关的设置选项，勾选 AppPlus，使 AppPlus 可以获取手机最近状态信息，否则最新打开列表将无法显示最近运行的程序信息。\n三星：安全->访问应用程序使用量数据设置\nLG：位置位置，请自行查找</string>
+
+    <string name="dialog_know">知道了</string>
+    <string name="dialog_confirm">确定</string>
+    <string name="dialog_go_setting_safe">去设置</string>
+    <string name="dialog_cancel">取消</string>
+    <string name="dialog_do_not_point">不再提示</string>
+    <string name="title_progress_export">导出中&#8230;</string>
+    <string name="please_wait">请稍等&#8230;</string>
+    <string name="title_export_finish">导出成功</string>
+    <string name="dialog_message_export_finish">安装包 %1$s 已成功导出到本地目录%2$s，是否查看文件？</string>
+    <string name="dialog_confirm_watch">是，查看</string>
+    <string name="dialog_confirm_yes">是</string>
+    <string name="dialog_confirm_export">确定导出</string>
+    <string name="dialog_action_exist_not_override">不覆盖</string>
+    <string name="dialog_action_exist_override">覆盖</string>
+    <string name="dialog_action_exist_watch_now">查看文件</string>
+    <string name="dialog_cancel_watch">不</string>
+    <string name="select_transfer_way">选择传输方式</string>
+    <string name="select_transfer_way_apk">发送%s安装包给好友</string>
+    <string name="title_email_opinion">给App+的反馈</string>
+
+    <string name="category_advanced">高级</string>
+    <string name="category_advanced_key">category_key</string>
+
+    <string name="category_other">其他</string>
+    <string name="category_other_key">other_key</string>
+
+    <string name="category_more">更多</string>
+    <string name="category_more_key">category_more</string>
+
+    <string name="switch_preference_develop_title">开发者模式</string>
+    <string name="switch_preference_develop_key">mode_develop</string>
+    <string name="switch_preference_develop_on">已启用。(点击首页Item将会打开应用详情)</string>
+    <string name="switch_preference_develop_off">已关闭</string>
+
+    <string name="switch_preference_show_self_title">最近列表显示AppPlus</string>
+    <string name="switch_preference_key_show_self">show_self</string>
+    <string name="switch_preference_show_self_on">最近打开列表将会显示AppPlus</string>
+    <string name="switch_preference_show_self_off">最近打开列表将会过滤掉AppPlus</string>
+
+    <string name="switch_preference_list_item_brief_mode">简洁模式</string>
+    <string name="switch_preference_key_list_item_brief_mode">list_item_brief_mode</string>
+    <string name="switch_preference_list_item_brief_mode_on">简洁模式开，列表将只显示应用名称和图标信息</string>
+    <string name="switch_preference_list_item_brief_mode_off">简洁模式关，首页列表会额外显示版本号和包名信息</string>
+
+    <string name="preference_title_theme_primary">主题颜色</string>
+    <string name="preference_summary_theme_primary">界面主色调，默认为Material蓝色</string>
+
+    <string name="preference_title_about">关于AppPlus</string>
+    <string name="preference_title_score">去市场评分</string>
+    <string name="preference_title_opinion">意见反馈</string>
+    <string name="preference_title_license">开源许可证</string>
+    <string name="preference_title_check_update">检查新版本</string>
+
+    <string name="preference_summary_score">支持该应用</string>
+
+    <string name="preference_key_about">about</string>
+    <string name="preference_key_score">score</string>
+    <string name="preference_key_opinion">opinion</string>
+    <string name="preference_key_license">license</string>
+    <string name="preference_key_check_update">check_update</string>
+    <string name="preference_key_theme_primary">theme_primary</string>
+    <string name="app_about">AppPlus目前主要的功能是传输软件安装包。\n当你有一个好的软件要分享给你的好友，你就可以打开AppPlus，然后轻松传输安装包到对方手机，或通过蓝牙，或通过手机QQ。\n\n如果你有别的功能需要AppPlus实现，请通过邮件的方式告诉我，我将会考虑在以后的版本中实现。\n\n微博：@大侠咕咚\n知乎：@AppPlus</string>
+    <string name="change_log">更新日志</string>
+    <string name="title_activity_app_detail">AppDetailActivity</string>
+
+    <string name="search_title">搜索</string>
+    <string name="search_app_hint">请输入应用关键字</string>
+    <string name="color_chooser">选择颜色</string>
+    <string name="current_version_info">当前版本：%1$s</string>
+    <string name="exit_point">再按一次退出</string>
+    <string name="dialog_button_send_email">发邮件</string>
+    <string name="update_point_no_update">当前版本已是最新版本</string>
+    <string name="update_point_no_wifi">没有wifi连接， 只在wifi下更新。</string>
+    <string name="update_point_time_out">网络连接超时，请稍后重试。</string>
+    <string name="app_list_loading">加载中...</string>
+    <string name="app_list_error_recent">加载失败</string>
+    <string name="app_list_error_all">加载失败</string>
+    <string name="app_list_error_search">加载失败</string>
+    <string name="app_list_empty_recent">运行中列表为空，请点击重试</string>
+    <string name="app_list_empty_all">已安装列表为空，请点击重试</string>
+    <string name="app_list_empty_search">没有搜索到任何结果</string>
+    <string name="unknow">未知</string>
+    <string name="fail_open_app">打开 %1$s 失败,请检查应用是否存在。</string>
+    <string name="fail_export_app">导出 %1$s 安装包失败,请检查应用是否存在。</string>
+    <string name="fail_share_app">分享 %1$s 安装包失败,请检查应用是否存在。</string>
+</resources>

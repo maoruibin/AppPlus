@@ -35,7 +35,7 @@ android {
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_MIN_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode Integer.parseInt(project.VERSION_CODE)
-        versionName gitTag
+        versionName project.VERSION_NAME
     }
 
     lintOptions {
@@ -49,7 +49,7 @@ android {
     buildTypes {
         release {
             //set for is proguard or not
-            minifyEnabled true
+            minifyEnabled false
             zipAlignEnabled true
             // remove useless resource file
             shrinkResources true
@@ -85,6 +85,9 @@ android {
         }
         fir {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "fir"]
+        }
+        umeng {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng"]
         }
     }
 }

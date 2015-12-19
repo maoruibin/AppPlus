@@ -94,6 +94,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         }
 
         if (key.equals(getString(R.string.switch_preference_key_list_item_brief_mode))) {
+            MobclickAgent.onEvent(mContext, "setting_brief");
             EventCenter.getInstance().triggerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,null);
             getActivity().finish();
         }

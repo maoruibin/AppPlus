@@ -363,6 +363,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 }
                 break;
             case LIST_ITEM_BRIEF_MODE_CHANGE:
+                if(Utils.isBriefMode(getActivity())){
+                    MobclickAgent.onEvent(getActivity(), "setting_brief_is_true");
+                }
                 mAdapter.setBriefMode(!Utils.isBriefMode(getActivity()));
                 break;
             case UNINSTALL_APPLICATION_FROM_SYSTEM:

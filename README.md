@@ -18,7 +18,7 @@ A open source android application,used to manage app on mobile phone.
 ### Screenshots ###
 
 ![index](/art/index.png "")
-![send](/art/send.jpg "")<br>
+![detail](/art/detail.png "")<br>
 ![setting](/art/setting.png "")
 ![theme](/art/theme.png "")
 
@@ -26,9 +26,7 @@ A open source android application,used to manage app on mobile phone.
 ### Dependencies ###
 
 * [materialpreference](https://github.com/jenzz/Android-MaterialPreference)
-* [systembartint](https://github.com/jgilfelt/SystemBarTint) 
-* umeng.analytics 
-* [leakcanary](https://github.com/square/leakcanary) 
+* [systembartint](https://github.com/jgilfelt/SystemBarTint)  
 * [AndroidProcesses](https://github.com/jaredrummler/AndroidProcesses) 
 
 ### Changelog ###

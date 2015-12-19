@@ -138,12 +138,15 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
                         switch (which){
                             case 0:
                                 openApp();
+                                MobclickAgent.onEvent(AppActivity.this, "more_open");
                                 break;
                             case 1:
-                                installApp();
+                                uninstallApp();
+                                MobclickAgent.onEvent(AppActivity.this, "more_uninstall");
                                 break;
                             case 2:
                                 NavigationManager.gotoMarket(AppActivity.this,mAppEntity.getPackageName());
+                                MobclickAgent.onEvent(AppActivity.this, "action_market");
                                 break;
                         }
                     }
@@ -152,7 +155,7 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
                 .show();
     }
 
-    private void installApp() {
+    private void uninstallApp() {
         if(Utils.isOwnApp(this,mAppEntity.getPackageName()))return;
         NavigationManager.uninstallApp(AppActivity.this,mAppEntity.getPackageName());
     }

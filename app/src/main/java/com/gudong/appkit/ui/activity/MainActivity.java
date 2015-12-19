@@ -36,6 +36,7 @@ import com.gudong.appkit.adapter.AppPageListAdapter;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.event.Subscribe;
+import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
@@ -102,6 +103,10 @@ public class MainActivity extends BaseActivity implements Subscribe {
                 intentAbout.putExtra(SimpleContainerActivity.KEY_TYPE, SimpleContainerActivity.FragmentType.ABOUT);
                 startActivity(intentAbout);
                 MobclickAgent.onEvent(this, "setting_about");
+                break;
+            case R.id.action_opinion:
+                NavigationManager.gotoSendOpinion(this);
+                MobclickAgent.onEvent(this, "send_email");
                 break;
         }
         return true;

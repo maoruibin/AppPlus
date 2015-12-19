@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">AppPlus</string>
 
     <string name="action_settings">设置</string>
+    <string name="action_opinion">意见反馈</string>
     <string name="action_retry">重试</string>
     <string name="action_about">关于</string>
     <string name="empty"></string>

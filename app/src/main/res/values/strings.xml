@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">AppPlus</string>
 
     <string name="action_settings">Setting</string>
+    <string name="action_opinion">Send opinion</string>
     <string name="action_retry">Reload</string>
     <string name="action_about">About</string>
     <string name="empty"></string>

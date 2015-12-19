@@ -50,7 +50,7 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
             //设置点击监听
             findPreference(getString(R.string.preference_key_about)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.preference_key_score)).setOnPreferenceClickListener(this);
-            findPreference(getString(R.string.preference_key_opinion)).setOnPreferenceClickListener(this);
+//            findPreference(getString(R.string.preference_key_opinion)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.preference_key_check_update)).setOnPreferenceClickListener(this);
             findPreference(getString(R.string.preference_key_license)).setOnPreferenceClickListener(this);
 

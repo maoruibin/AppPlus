@@ -3,9 +3,9 @@
     <com.jenzz.materialpreference.Preference
         android:key="@string/preference_key_score"
         android:title="@string/preference_title_score"/>
-    <com.jenzz.materialpreference.Preference
-        android:key="@string/preference_key_opinion"
-        android:title="@string/preference_title_opinion"/>
+    <!--<com.jenzz.materialpreference.Preference-->
+    <!--android:key="@string/preference_key_opinion"-->
+    <!--android:title="@string/preference_title_opinion"/>-->
     <com.jenzz.materialpreference.Preference
         android:key="@string/preference_key_check_update"
         android:title="@string/preference_title_check_update"/>

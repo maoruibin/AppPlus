@@ -34,7 +34,6 @@ import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.logger.Logger;
-import com.jaredrummler.android.processes.ProcessManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,14 +69,12 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 List<AppEntity> list = AppInfoEngine.getInstance().getInstalledAppList();
-                //AppInfoEngine.getInstance(getApplicationContext()).getRunningProcesses();
-//                ProcessManager.getRunningAppEntity(getApplication());
-                ProcessManager.getRunningAppProcesses();
                 for (AppEntity entity : list) {
                     if (!DBHelper.installedAppIsExistInLocalDB(entity.getPackageName())) {
                         //insert installed app entity to local db
                         App.sDb.insert(entity);
                     }
+                    //TODO check update
                 }
                 List<AppEntity>listDB = App.sDb.query(AppEntity.class);
                 //

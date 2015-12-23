@@ -2,14 +2,15 @@
 
 ![icon](/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png "")
 
-A open source android application,used to manage app on mobile phone.
+### Describtion ###
 
-[中文](/doc/README_CN.md)
+A open source android application,used to manage app.
+
+[中文介绍](/doc/README_cn.md)
 
 ### Download ###
 
 [fir link](http://fir.im/appplus)
-
 
 ![scan code](/art/download.png "scan code")
 

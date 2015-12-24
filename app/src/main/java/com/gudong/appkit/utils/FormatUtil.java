@@ -29,6 +29,7 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 
 import com.gudong.appkit.R;
+import com.gudong.appkit.dao.AppEntity;
 
 /**
  * Created by GuDong on 12/6/15 15:36.
@@ -54,15 +55,10 @@ public class FormatUtil {
      * some application's version name is too long,like WeChat etc,
      * now if version name include more than two point,we only keep two point like this
      * WeChat 6.3.7.51_dafdaa12 after format(keep two point) 6.3.7
-     * @param versionName app's version name
+     * @param entity app entity
      * @return formated version name
      */
-    public static String formatVersionName(String versionName){
-        return "(".concat(versionName).concat(")");
-//        String[]array = versionName.split(".");
-//        if(array.length<=3){
-//            return versionName;
-//        }
-//        return array[0].concat(".").concat(array[1]).concat(".").concat(array[2]);
+    public static String formatVersionName(AppEntity entity){
+        return "(".concat(entity.getVersionName()).concat(")");
     }
 }

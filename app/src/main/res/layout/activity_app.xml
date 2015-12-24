@@ -70,6 +70,17 @@
                 android:singleLine="true"
                 tools:text="com.gudong.appplus"/>
 
+            <TextView
+                android:id="@+id/tv_version_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@android:id/text2"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/text_size_item_small"
+                android:textColor="?body_text_light"
+                android:singleLine="true"
+                tools:text="222"/>
+
         </RelativeLayout>
 
         <LinearLayout

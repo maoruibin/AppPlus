@@ -69,18 +69,34 @@ public class SplashActivity extends BaseActivity {
             @Override
             public void run() {
                 List<AppEntity> list = AppInfoEngine.getInstance().getInstalledAppList();
-                for (AppEntity entity : list) {
-                    if (!DBHelper.installedAppIsExistInLocalDB(entity.getPackageName())) {
-                        //insert installed app entity to local db
-                        App.sDb.insert(entity);
+                for (final AppEntity installedEntity : list) {
+                    switch (DBHelper.checkEntityStatus(installedEntity)){
+                        case CREATE:
+                            Logger.i("need insert "+installedEntity.getAppName() );
+                            App.sDb.insert(installedEntity);
+                            break;
+                        case CHANGE:
+                            Logger.i("need update "+installedEntity.getAppName() );
+
+                            AppEntity localChange = DBHelper.getAppByPackageName(installedEntity.getPackageName());
+                            Logger.i("splash",localChange.toString());
+                            installedEntity.setId(localChange.getId());
+
+                            if(App.sDb.update(installedEntity)>0){
+                                Logger.i("update success");
+                            }else{
+                                Logger.i("update fail");
+                            }
+                            break;
                     }
-                    //TODO check update
+
                 }
                 List<AppEntity>listDB = App.sDb.query(AppEntity.class);
                 //
                 for(AppEntity entity : listDB){
                     if(!list.contains(entity)){
                         App.sDb.delete(entity);
+                        Logger.i("installed list has not "+entity.getAppName()+" now delete it in local db.");
                     }
                 }
                 Logger.i("prepare all installed data finish now notify AppListFragment ");

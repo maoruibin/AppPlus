@@ -56,6 +56,7 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
     private ImageView mImageView;
     private TextView mTvAppName;
     private TextView mTvAppVersion;
+    private TextView mTvAppVersionCode;
     private TextView mTvAppPackageName;
     private TextView mTvOpen;
     private TextView mTvShare;
@@ -84,14 +85,19 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
         Bitmap bitmap = BitmapFactory.decodeByteArray(mAppEntity.getAppIconData(), 0, mAppEntity.getAppIconData().length);
         mImageView.setImageBitmap(bitmap);
         mTvAppName.setText(mAppEntity.getAppName());
-        mTvAppVersion.setText(FormatUtil.formatVersionName(mAppEntity.getVersionName()));
+        mTvAppVersion.setText(FormatUtil.formatVersionName(mAppEntity));
         mTvAppPackageName.setText(mAppEntity.getPackageName());
+        mTvAppVersionCode.setText("VersionCode:"+mAppEntity.getVersionCode());
+        if(Utils.isBriefMode(this)){
+            mTvAppVersionCode.setVisibility(View.GONE);
+        }
     }
 
     private void setupView() {
         mImageView = (ImageView) findViewById(R.id.iv_icon);
         mTvAppName = (TextView) findViewById(android.R.id.text1);
         mTvAppVersion = (TextView) findViewById(R.id.tv_version);
+        mTvAppVersionCode = (TextView) findViewById(R.id.tv_version_code);
         mTvAppPackageName = (TextView) findViewById(android.R.id.text2);
         mTvOpen = (TextView) findViewById(R.id.tv_more);
         mTvExport = (TextView) findViewById(R.id.tv_export);

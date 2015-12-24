@@ -122,7 +122,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         holder.tvPackName.setVisibility(isBrief?View.GONE:View.VISIBLE);
 
         if(!isBrief){
-            holder.tvVersion.setText(FormatUtil.formatVersionName(entity.getVersionName()));
+            holder.tvVersion.setText(FormatUtil.formatVersionName(entity));
             holder.tvPackName.setText(entity.getPackageName());
 
         }else{

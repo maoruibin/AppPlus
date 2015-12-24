@@ -52,6 +52,14 @@ import com.litesuits.orm.db.enums.AssignType;
         this.packageName = packageName;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getAppName() {
         return appName;
     }
@@ -114,9 +122,18 @@ import com.litesuits.orm.db.enums.AssignType;
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        AppEntity appEntity = (AppEntity) o;
+        AppEntity entity = (AppEntity) o;
 
-        return !(packageName != null ? !packageName.equals(appEntity.packageName) : appEntity.packageName != null);
+        if (versionCode != entity.versionCode) return false;
+        if (appName != null ? !appName.equals(entity.appName) : entity.appName != null)
+            return false;
+        if (packageName != null ? !packageName.equals(entity.packageName) : entity.packageName != null)
+            return false;
+        if (versionName != null ? !versionName.equals(entity.versionName) : entity.versionName != null)
+            return false;
+        if (appIconData != null ? !(appIconData.length == entity.appIconData.length) : entity.appIconData != null)
+            return false;
+        return srcPath != null ? srcPath.equals(entity.srcPath) : entity.srcPath == null;
 
     }
 
@@ -162,4 +179,18 @@ import com.litesuits.orm.db.enums.AssignType;
             return new AppEntity[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "AppEntity{" +
+                "appIconData size =" + appIconData.length +
+                ", id=" + id +
+                ", appName='" + appName + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", versionName='" + versionName + '\'' +
+                ", versionCode=" + versionCode +
+                ", srcPath='" + srcPath + '\'' +
+                ", uid=" + uid +
+                '}';
+    }
 }

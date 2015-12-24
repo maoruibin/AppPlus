@@ -45,6 +45,19 @@ public class DBHelper {
         return entity != null;
     }
 
+    public static AppStatus checkEntityStatus(AppEntity installedEntity){
+        AppEntity localResult = getAppByPackageName(installedEntity.getPackageName());
+        //this app is a new app,now it not exist in my local db
+        if(localResult ==null){
+            return AppStatus.CREATE;
+        }
+        // the installed app info is change,so the
+        if(!installedEntity.equals(localResult)){
+            return AppStatus.CHANGE;
+        }
+        return AppStatus.NORMAL;
+    }
+
     /**
      * query App info by local db
      * @param packageName Application's package name

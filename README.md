@@ -6,7 +6,7 @@
 
 A open source android application,used to manage app.
 
-[中文介绍](/doc/README_cn.md)
+[中文介绍](/doc/README_CN.md)
 
 ### Download ###
 

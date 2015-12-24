@@ -127,3 +127,7 @@ dependencies {
     compile 'com.android.support:percent:23.1.0'
     compile 'com.jaredrummler:android-processes:1.0.2'
 }
+
+task showMeCache << {
+    configurations.compile.each { println it }
+}

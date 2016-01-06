@@ -10,10 +10,9 @@ A open source android application,used to manage app(export\share apk file etc).
 
 ### Download ###
 
-[fir link](http://fir.im/appplus)
+<a href="https://play.google.com/store/apps/details?id=com.gudong.appkit"><img src="http://www.android.com/images/brand/get_it_on_play_logo_large.png"/></a>
 
-![scan code](/art/download.png "scan code")
-
+<a href="http://fir.im/appplus"><img src="http://7xju1s.com1.z0.glb.clouddn.com/image/f/e4/c6448a68d2b26dd2fc31a20693a66.png"/></a>
 
 
 ### Screenshots ###

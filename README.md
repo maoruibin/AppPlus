@@ -29,6 +29,7 @@ A open source android application,used to manage app.
 * [materialpreference](https://github.com/jenzz/Android-MaterialPreference)
 * [systembartint](https://github.com/jgilfelt/SystemBarTint)  
 * [AndroidProcesses](https://github.com/jaredrummler/AndroidProcesses) 
+* [recyclerview-animators](https://github.com/wasabeef/recyclerview-animators)
 
 ### Changelog ###
 Changelog is available [here](/doc/Changelog.md)

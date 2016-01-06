@@ -4,7 +4,7 @@
 
 ### Describtion ###
 
-A open source android application,used to manage app.
+A open source android application,used to manage app(export\share apk file etc).
 
 [中文介绍](/doc/README_CN.md)
 
@@ -19,9 +19,7 @@ A open source android application,used to manage app.
 ### Screenshots ###
 
 ![index](/art/index.png "")
-![detail](/art/detail.png "")<br>
-![setting](/art/setting.png "")
-![theme](/art/theme.png "")
+![detail](/art/detail.png "")
 
 
 ### Dependencies ###
@@ -36,7 +34,7 @@ Changelog is available [here](/doc/Changelog.md)
     
 ### About me ###
 Android developer 
-<br>[Site](https://maoruibin.github.io/)
+<br>[Website](https://maoruibin.github.io/)
 <br>[Weibo](http://weibo.com/u/1874136301)
 
 ### License ###

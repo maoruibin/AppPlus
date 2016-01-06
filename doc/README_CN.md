@@ -14,7 +14,7 @@ AppPlus是一个可以用于传送Apk文件，提取APK文件等的工具软件�
 ### 截图 ###
 
 ![index](/art/index.png "")
-![send](/art/send.jpg "")
+![detail](/art/detail.png "")
 
 ### <a name="jump">知识点</a> ###
 * 官方support design库的使用

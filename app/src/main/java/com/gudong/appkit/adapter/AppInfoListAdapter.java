@@ -79,7 +79,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
        }else{
            this.mListData.clear();
            this.mListData.addAll(listData);
-           notifyDataSetChanged();
+           notifyItemRangeChanged(0,listData.size());
        }
     }
 
@@ -92,8 +92,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         int position = mListData.indexOf(entity);
         if(position >=0 ){
             this.mListData.remove(position);
-            //notifyItemRemoved(position);
-            notifyDataSetChanged();
+            notifyItemRemoved(position);
         }
     }
 

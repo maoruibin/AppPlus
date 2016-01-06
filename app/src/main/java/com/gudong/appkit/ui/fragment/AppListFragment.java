@@ -42,6 +42,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.gudong.appkit.App;
 import com.gudong.appkit.R;
@@ -53,7 +54,6 @@ import com.gudong.appkit.event.EventCenter;
 import com.gudong.appkit.event.Subscribe;
 import com.gudong.appkit.ui.activity.AppActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
-import com.gudong.appkit.ui.helper.AppItemAnimator;
 import com.gudong.appkit.utils.ActionUtil;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
@@ -63,6 +63,8 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
 
 /**
  * Created by mao on 15/7/8.
@@ -204,15 +206,20 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL_LIST));
-//        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setItemAnimator(new AppItemAnimator());
+
         //every item's height is fix so use this method
         //RecyclerView can perform several optimizations
         mRecyclerView.setHasFixedSize(true);
         mAdapter = new AppInfoListAdapter(getActivity(),Utils.isBriefMode(getActivity()));
         mAdapter.setClickPopupMenuItem(this);
         mAdapter.setClickListItem(this);
-        mRecyclerView.setAdapter(mAdapter);
+
+        SlideInBottomAnimationAdapter slideInLeftAdapter = new SlideInBottomAnimationAdapter(mAdapter);
+        slideInLeftAdapter.setDuration(300);
+        slideInLeftAdapter.setFirstOnly(false);
+        slideInLeftAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
+
+        mRecyclerView.setAdapter(slideInLeftAdapter);
     }
 
     private synchronized void fillData() {
@@ -309,8 +316,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         ActivityCompat.startActivity(getActivity(), intent, activityOptions.toBundle());
     }
 
-
-
     @Override
     public void onClickListItemIcon(View iconView, AppEntity entity) {
         ObjectAnimator animatorRotation = ObjectAnimator.ofFloat(iconView, "rotation", 0, 360);
@@ -321,8 +326,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         animationSet.setDuration(500);
         animationSet.start();
     }
-
-
 
     private String getErrorInfo(int type) {
         if(type == 0){

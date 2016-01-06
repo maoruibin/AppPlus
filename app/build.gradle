@@ -89,6 +89,9 @@ android {
         umeng {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng"]
         }
+        play {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "play"]
+        }
     }
 }
 

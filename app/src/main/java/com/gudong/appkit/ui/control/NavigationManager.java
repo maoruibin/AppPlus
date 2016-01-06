@@ -31,7 +31,6 @@ import android.provider.Settings;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.activity.MainActivity;
-import com.gudong.appkit.utils.Utils;
 
 import java.io.File;
 
@@ -53,9 +52,9 @@ public class NavigationManager {
      * @param context
      */
     public static void gotoSendOpinion(Activity context){
-        Intent localIntent = new Intent("android.intent.action.SENDTO", Uri.parse("mailto:1252768410@qq.com"));
+        Intent localIntent = new Intent("android.intent.action.SENDTO", Uri.parse("mailto:maoruibin9035@gmail.com"));
         localIntent.putExtra("android.intent.extra.SUBJECT", context.getString(R.string.title_email_opinion));
-        localIntent.putExtra("android.intent.extra.TEXT", Utils.getLog(context));
+//        localIntent.putExtra("android.intent.extra.TEXT", Utils.getLog(context));
         context.startActivity(localIntent);
     }
 

@@ -44,7 +44,7 @@
     <string name="dialog_cancel_watch">No</string>
     <string name="select_transfer_way">select way</string>
     <string name="select_transfer_way_apk">Send %s package to friend</string>
-    <string name="title_email_opinion">for AppPlus opinion</string>
+    <string name="title_email_opinion">AppPlus opinion</string>
 
     <string name="category_advanced">Advance</string>
     <string name="category_advanced_key">category_key</string>

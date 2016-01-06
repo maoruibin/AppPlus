@@ -50,7 +50,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         mThemeUtils = new ThemeControl(this);
         // 设置当前主题
         setTheme(mThemeUtils.getTheme(this));
-//        hasRecreate = true;
         super.onCreate(savedInstanceState);
         // 设置是否对日志信息进行加密, true 加密
         AnalyticsConfig.enableEncrypt(true);

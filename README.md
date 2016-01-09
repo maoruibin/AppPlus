@@ -4,17 +4,13 @@
 
 ### Describtion ###
 
-A open source android application,used to manage app(export\share apk file etc).
+A open source android application and used to manage app(export\share apk file etc).
 
 [中文介绍](/doc/README_CN.md)
 
 ### Download ###
 
-[fir link](http://fir.im/appplus)
-
-![scan code](/art/download.png "scan code")
-
-
+<a href="https://play.google.com/store/apps/details?id=com.gudong.appkit"><img src="http://www.android.com/images/brand/get_it_on_play_logo_large.png"/></a>
 
 ### Screenshots ###
 

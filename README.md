@@ -4,7 +4,7 @@
 
 ### Describtion ###
 
-A open source android application and used to manage app(export\share apk file etc).
+AppPlus is a open source android application,and used to manage app,export apk,watch recent processes.
 
 [中文介绍](/doc/README_CN.md)
 
@@ -26,7 +26,13 @@ A open source android application and used to manage app(export\share apk file e
 * [recyclerview-animators](https://github.com/wasabeef/recyclerview-animators)
 
 ### Changelog ###
-Changelog is available [here](/doc/Changelog.md)
+Changelog is available [here](/doc/Changelog.md)(write by chinese)
+    
+### TODO ###
+
+* ~~add anim into index view's item~~
+* export Apk files batch
+* manage exported apk file
     
 ### About me ###
 Android developer 
@@ -37,7 +43,7 @@ Android developer
 
     The MIT License (MIT)
 
-    Copyright (c) 2015 Maoruibin
+    Copyright (c) 2015 GuDong
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal

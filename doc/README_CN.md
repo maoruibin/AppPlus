@@ -1,5 +1,5 @@
 # AppPlus #
-![icon](/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png "")
+![icon](../app/src/main/res/mipmap-xxxhdpi/ic_launcher.png "")
 ### 介绍 ###
 AppPlus是一个可以用于传送Apk文件，提取APK文件等的工具软件。<br>
 目前已开源，涉及到了一些[知识点](#jump)。欢迎学习交流。
@@ -13,8 +13,8 @@ AppPlus是一个可以用于传送Apk文件，提取APK文件等的工具软件�
 
 ### 截图 ###
 
-![index](/art/index.png "")
-![detail](/art/detail.png "")
+![index](../art/index.png "")
+![detail](../art/detail.png "")
 
 ### <a name="jump">知识点</a> ###
 * 官方support design库的使用
@@ -44,7 +44,7 @@ Note:如果有人想帮助完成这些功能，很欢迎你的参与,具体交�
 ### 关于我 ###
 Android开发者，爱折腾，爱篮球
 <br>QQ:1252768410
-<br>[个人博客](https://www.gudong.name/)
+<br>[个人博客](https://maoruibin.github.io/)
 <br>[微博](http://weibo.com/u/1874136301)
 <br>[知乎](https://www.zhihu.com/people/maoruibin)
 
@@ -52,7 +52,7 @@ Android开发者，爱折腾，爱篮球
 
    The MIT License (MIT)
 
-    Copyright (c) 2015 Maoruibin
+    Copyright (c) 2015 GuDong
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal

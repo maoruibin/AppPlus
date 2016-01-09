@@ -26,7 +26,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorRes;
@@ -36,24 +35,28 @@ import android.util.TypedValue;
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.control.ThemeControl;
 
+import java.util.Locale;
+
 /**
  * the util class for app
  * Created by mao on 7/21/15.
  */
 public class Utils {
-    public static void setCurrentVersion(Context context,String version){
-        putStringPreference(context,"current_version",version);
+    public static void setCurrentVersion(Context context, String version) {
+        putStringPreference(context, "current_version", version);
     }
 
-    public static String getLocalVersion(Context context){
+    public static String getLocalVersion(Context context) {
         return getStringPreference(context, "current_version", "");
     }
+
     /**
      * 获取主题强调色
+     *
      * @param context
      * @return
      */
-    public static int getAccentColor(Context context){
+    public static int getAccentColor(Context context) {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.theme_accent_color, typedValue, true);
@@ -62,9 +65,10 @@ public class Utils {
 
     /**
      * 获取当前主题对应的暗色调
+     *
      * @return
      */
-    public static int getThemePrimaryDarkColor(Context context){
+    public static int getThemePrimaryDarkColor(Context context) {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.theme_color_dark, typedValue, true);
@@ -73,10 +77,11 @@ public class Utils {
 
     /**
      * 获取当前主题色对应色值
+     *
      * @param context
      * @return
      */
-    public static int getThemePrimaryColor(Context context){
+    public static int getThemePrimaryColor(Context context) {
         TypedValue typedValue = new TypedValue();
         Resources.Theme theme = context.getTheme();
         theme.resolveAttribute(R.attr.theme_color, typedValue, true);
@@ -85,26 +90,29 @@ public class Utils {
 
     /**
      * 获取当前设置的主题
+     *
      * @param context
      * @return
      */
-    public static int getCurrentTheme(Context context){
-        int position =  Utils.getIntPreference(context, "themePosition", 4);
+    public static int getCurrentTheme(Context context) {
+        int position = Utils.getIntPreference(context, "themePosition", 4);
         return ThemeControl.themeArr()[position];
     }
 
     /**
      * 获取color对应的int值
+     *
      * @param context Activity
-     * @param color 资源颜色id
+     * @param color   资源颜色id
      * @return 对应的int value
      */
-    public static int getColorWarp(Activity context,@ColorRes int color){
-        return ContextCompat.getColor(context,color);
+    public static int getColorWarp(Activity context, @ColorRes int color) {
+        return ContextCompat.getColor(context, color);
     }
 
     /**
      * running list is show AppPlus or not
+     *
      * @param context Context
      * @return return true if recent list view need show appplus
      */
@@ -115,6 +123,7 @@ public class Utils {
 
     /**
      * list item is brief mode or not
+     *
      * @param context Context
      * @return return true if brief mode else not
      */
@@ -123,50 +132,14 @@ public class Utils {
         return prefs.getBoolean(context.getString(R.string.switch_preference_key_list_item_brief_mode), true);
     }
 
-    /**
-     * get the device info
-     * @param activity
-     * @return
-     */
-    public static String getLog(Activity activity) {
-        PackageManager pm = activity.getPackageManager();
-        StringBuffer sb = new StringBuffer();
-        try {
-            PackageInfo info = pm.getPackageInfo(activity.getPackageName(), 0);
-            sb.append("versionName:" + info.versionName).append("\n");
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        String brand = android.os.Build.BRAND;
-        String device = android.os.Build.DEVICE;
-        String product = android.os.Build.PRODUCT;
-        String hardware = android.os.Build.HARDWARE;
-        String SDK = android.os.Build.VERSION.SDK;
-        String androidv = android.os.Build.VERSION.RELEASE;
-        sb.append("ANDROID:" + androidv).append("\n");
-        sb.append("BRAND:" + brand).append("\n");
-        sb.append("DEVICE:" + device).append("\n");
-        sb.append("PRODUCT:" + product).append("\n");
-        sb.append("HARDWARE:" + hardware).append("\n");
-        sb.append("SDK:" + SDK).append("\n");
-
-        return sb.toString();
-    }
-
-    /**
-     * get brand info
-     * @return brand info
-     */
-    public static String getBrand(){
-        return android.os.Build.BRAND;
-    }
 
     /**
      * get app version info
+     *
      * @param context context
      * @return app version info if occur exception return unknow
      */
-    public static String getAppVersion(Context context){
+    public static String getAppVersion(Context context) {
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             return info.versionName;
@@ -176,54 +149,90 @@ public class Utils {
         }
     }
 
-    public static float getDensity(Context context){
+    public static float getDensity(Context context) {
         return context.getResources().getDisplayMetrics().density;
     }
 
-    public static int convertDensityPix(Context context, int dip){
+    public static int convertDensityPix(Context context, int dip) {
         float scale = getDensity(context);
         return (int) (dip * scale + 0.5f);
     }
 
-    public static boolean isOwnApp(Activity activity,String packageName){
+    public static boolean isOwnApp(Activity activity, String packageName) {
         return activity.getPackageName().equals(packageName);
+    }
+
+    // ------------------- Language Info ------------------------------------------------
+
+    /**
+     * check current language is chinese or not
+     *
+     * @return true if it is else return false
+     */
+    public static boolean isChineseLanguage() {
+        String language = getLanguageEnv();
+        if (language != null && (language.trim().equals("zh-CN") || language.trim().equals("zh-TW")))
+            return true;
+        else
+            return false;
+    }
+
+
+    private static String getLanguageEnv() {
+        Locale l = Locale.getDefault();
+        String language = l.getLanguage();
+        String country = l.getCountry().toLowerCase();
+        if ("zh".equals(language)) {
+            if ("cn".equals(country)) {
+                language = "zh-CN";
+            } else if ("tw".equals(country)) {
+                language = "zh-TW";
+            }
+        } else if ("pt".equals(language)) {
+            if ("br".equals(country)) {
+                language = "pt-BR";
+            } else if ("pt".equals(country)) {
+                language = "pt-PT";
+            }
+        }
+        return language;
     }
 
     // -------------------    SharePreference Util Begin   -------------------  //
 
-    public static void removeKey(Context context,String key){
+    public static void removeKey(Context context, String key) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         sp.edit().remove(key).apply();
     }
 
-    public static void putStringPreference(Context context,String key,String value){
+    public static void putStringPreference(Context context, String key, String value) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         sp.edit().putString(key, value).apply();
     }
 
-    public static String getStringPreference(Context context,String key,String def){
+    public static String getStringPreference(Context context, String key, String def) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return sp.getString(key, def);
     }
 
-    public static void putIntPreference(Context context,String key,int value){
+    public static void putIntPreference(Context context, String key, int value) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         sp.edit().putInt(key, value).apply();
     }
 
-    public static int getIntPreference(Context context,String key,int def){
+    public static int getIntPreference(Context context, String key, int def) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return sp.getInt(key, def);
     }
 
-    public static void putBooleanPreference(Context context,String key,boolean value){
+    public static void putBooleanPreference(Context context, String key, boolean value) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         sp.edit().putBoolean(key, value).apply();
     }
 
-    public static boolean getBooleanPreference(Context context,String key){
+    public static boolean getBooleanPreference(Context context, String key) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        return sp.getBoolean(key,false);
+        return sp.getBoolean(key, false);
     }
 }
 

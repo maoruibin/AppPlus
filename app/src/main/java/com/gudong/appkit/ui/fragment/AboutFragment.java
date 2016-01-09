@@ -63,7 +63,8 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
         String key = preference.getKey();
         //用if判断 效率不会很好 待改善
         if(key.equals(getString(R.string.preference_key_about))){
-            DialogUtil.showCustomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_about), "about.html", "about");
+            String htmlFileName =  Utils.isChineseLanguage()?"about_ch.html":"about.html";
+            DialogUtil.showCustomDialogFillInWebView(mContext, mContext.getSupportFragmentManager(), getString(R.string.preference_title_about), htmlFileName, "about");
             MobclickAgent.onEvent(mContext, "setting_about");
         }
         if(key.equals(getString(R.string.preference_key_score))){

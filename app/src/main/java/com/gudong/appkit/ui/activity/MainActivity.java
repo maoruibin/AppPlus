@@ -127,7 +127,8 @@ public class MainActivity extends BaseActivity implements Subscribe {
         String currentVersion = Utils.getAppVersion(this);
         String localVersionName = Utils.getLocalVersion(this);
         if (!localVersionName.equals(currentVersion)) {
-            DialogUtil.showCustomDialogFillInWebView(this, getSupportFragmentManager(), getString(R.string.change_log), "changelog.html", "changelog");
+            String htmlFileName =  Utils.isChineseLanguage()?"changelog_ch.html":"changelog.html";
+            DialogUtil.showCustomDialogFillInWebView(this, getSupportFragmentManager(), getString(R.string.change_log),htmlFileName, "changelog");
             Utils.setCurrentVersion(this, currentVersion);
         }
     }

@@ -215,8 +215,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         mAdapter.setClickListItem(this);
 
         SlideInBottomAnimationAdapter slideInLeftAdapter = new SlideInBottomAnimationAdapter(mAdapter);
-        slideInLeftAdapter.setDuration(300);
-        slideInLeftAdapter.setFirstOnly(false);
+        slideInLeftAdapter.setDuration(500);
         slideInLeftAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
 
         mRecyclerView.setAdapter(slideInLeftAdapter);

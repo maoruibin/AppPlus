@@ -79,8 +79,14 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
        }else{
            this.mListData.clear();
            this.mListData.addAll(listData);
-           notifyItemRangeChanged(0,listData.size());
+           //notifyItemRangeChanged(0,listData.size());
+           notifyDataSetChanged();
        }
+    }
+
+    public void clear(){
+        notifyItemRangeRemoved(0,mListData.size());
+        this.mListData.clear();
     }
 
     public void addItem(int position,AppEntity entity){

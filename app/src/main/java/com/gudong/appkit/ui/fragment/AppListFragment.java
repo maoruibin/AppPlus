@@ -145,15 +145,16 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 fillData();
             }
         });
-        //if the list type is search result,the mSwipeRefreshLayout will unable
-        if(mType == 3){
-            mSwipeRefreshLayout.setEnabled(false);
-        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //if the list type is search result layout,the mSwipeRefreshLayout will not need show
+        if(mType == 3){
+            mSwipeRefreshLayout.setEnabled(false);
+            return;
+        }
         // make swipeRefreshLayout visible manually
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -215,7 +216,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         mAdapter.setClickListItem(this);
 
         SlideInBottomAnimationAdapter slideInLeftAdapter = new SlideInBottomAnimationAdapter(mAdapter);
-        slideInLeftAdapter.setDuration(500);
+        slideInLeftAdapter.setDuration(300);
         slideInLeftAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
 
         mRecyclerView.setAdapter(slideInLeftAdapter);
@@ -280,7 +281,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
      * 清空列表数据
      */
     public void clearData() {
-        mAdapter.update(new ArrayList<AppEntity>());
+        mAdapter.clear();
     }
 
     @Override

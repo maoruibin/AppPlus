@@ -10,7 +10,7 @@ AppPlus is a open source android application,and used to manage app,export apk,w
 
 ### Download ###
 
-<a href="https://play.google.com/store/apps/details?id=com.gudong.appkit"><img src="http://www.android.com/images/brand/get_it_on_play_logo_large.png"/></a>
+<a href="https://play.google.com/store/apps/details?id=com.gudong.appkit" target="_blank"><img src="http://www.android.com/images/brand/get_it_on_play_logo_large.png"/></a>
 
 ### Screenshots ###
 

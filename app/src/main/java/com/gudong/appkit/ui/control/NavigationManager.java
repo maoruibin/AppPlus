@@ -23,11 +23,14 @@
 package com.gudong.appkit.ui.control;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.activity.MainActivity;
@@ -52,10 +55,18 @@ public class NavigationManager {
      * @param context
      */
     public static void gotoSendOpinion(Activity context){
-        Intent localIntent = new Intent("android.intent.action.SENDTO", Uri.parse("mailto:maoruibin9035@gmail.com"));
-        localIntent.putExtra("android.intent.extra.SUBJECT", context.getString(R.string.title_email_opinion));
-//        localIntent.putExtra("android.intent.extra.TEXT", Utils.getLog(context));
-        context.startActivity(localIntent);
+
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL,new String[]{"maoruibin9035@gmail.com"});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.title_email_opinion));
+
+        try{
+            context.startActivity(emailIntent);
+        }catch (ActivityNotFoundException e){
+            Log.e("----",e.getMessage());
+            Toast.makeText(context, "There are no email applications installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

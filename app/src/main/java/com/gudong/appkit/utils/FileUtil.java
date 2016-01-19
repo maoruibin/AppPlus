@@ -57,6 +57,12 @@ public class FileUtil {
         return Environment.getExternalStorageDirectory().toString();
     }
 
+    /**
+     * copy file
+     * @param source
+     * @param dest
+     * @throws IOException
+     */
     public static void copyFileUsingFileChannels(File source, File dest)
             throws IOException {
         FileChannel inputChannel = null;

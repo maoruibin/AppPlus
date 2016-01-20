@@ -28,7 +28,8 @@ import android.preference.PreferenceFragment;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.event.EEvent;
-import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.event.RxBus;
+import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.ThemeControl;
 import com.gudong.appkit.utils.Utils;
@@ -89,13 +90,15 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             map_value.put("is_show_self", "yes_or_not");
             int flag = Utils.isShowSelf(getActivity()) ? 1 : 0;
             MobclickAgent.onEventValue(getActivity(), "show_self_or_no", map_value, flag);
-            EventCenter.getInstance().triggerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,null);
+            //EventCenter.getInstance().triggerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,null);
+            RxBus.getInstance().send(RxEvent.get(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE));
             getActivity().finish();
         }
 
         if (key.equals(getString(R.string.switch_preference_key_list_item_brief_mode))) {
             MobclickAgent.onEvent(mContext, "setting_brief");
-            EventCenter.getInstance().triggerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,null);
+//            EventCenter.getInstance().triggerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,null);
+            RxBus.getInstance().send(RxEvent.get(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE));
             getActivity().finish();
         }
 

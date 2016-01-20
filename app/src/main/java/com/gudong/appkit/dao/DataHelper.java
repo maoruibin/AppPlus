@@ -43,47 +43,6 @@ import rx.Observable;
  * Contact with 1252768410@qq.com.
  */
 public class DataHelper {
-    /**
-     * check installed package has existed in local or not
-     * @param packageName installed app's packageName
-     * @return return true if the installed package has existed in local db else return false
-     */
-    public static boolean installedAppIsExistInLocalDB(String packageName) {
-        AppEntity entity = getAppByPackageName(packageName);
-        return entity != null;
-    }
-
-    public static AppStatus checkEntityStatus(AppEntity installedEntity){
-        AppEntity localResult = getAppByPackageName(installedEntity.getPackageName());
-        //this app is a new app,now it not exist in my local db
-        if(localResult ==null){
-            return AppStatus.CREATE;
-        }
-        // the installed app info is change,so the
-        if(!installedEntity.equals(localResult)){
-            return AppStatus.CHANGE;
-        }
-        return AppStatus.NORMAL;
-    }
-
-   public static Observable<AppEntity> checkEntityStatusAsyn(final AppEntity installedEntity){
-        final AppEntity localResult = getAppByPackageName(installedEntity.getPackageName());
-        return RxUtil.makeObservable(new Callable<AppEntity>() {
-            @Override
-            public AppEntity call() throws Exception {
-                //this app is a new app,now it not exist in my local db
-                if(localResult ==null){
-                    installedEntity.setStatus(AppStatus.CREATE.ordinal());
-                // the installed app info is change,so the
-                } else if(!installedEntity.equals(localResult)){
-                    installedEntity.setStatus(AppStatus.CHANGE.ordinal());
-                }else{
-                    installedEntity.setStatus(AppStatus.NORMAL.ordinal());
-                }
-                return installedEntity;
-            }
-        });
-    }
 
    public static AppEntity checkAndSetAppEntityStatus(final AppEntity installedEntity){
         final AppEntity localResult = getAppByPackageName(installedEntity.getPackageName());
@@ -98,9 +57,6 @@ public class DataHelper {
        }
        return installedEntity;
     }
-
-
-
 
     /**
      * query App info by local db
@@ -117,28 +73,6 @@ public class DataHelper {
         }catch (IndexOutOfBoundsException e){
             return null;
         }
-    }
-    /**
-     * query App info by local db
-     * @param packageName Application's package name
-     * @return return AppEntity if this package name is not exist db will return null
-     */
-    public static Observable<AppEntity> getAppByPackageNameAsyn(final String packageName){
-        return RxUtil.makeObservable(new Callable<AppEntity>() {
-            @Override
-            public AppEntity call() throws Exception {
-                if(TextUtils.isEmpty(packageName))return null;
-                QueryBuilder queryBuilder = new QueryBuilder(AppEntity.class);
-                queryBuilder = queryBuilder.whereEquals("packageName ", packageName);
-                List<AppEntity>result = App.sDb.query(queryBuilder);
-                try {
-                    return result.get(0);
-                }catch (IndexOutOfBoundsException e){
-                    return null;
-                }
-            }
-        });
-
     }
 
     public static Observable<List<AppEntity>>getAllEntityByDbAsyn(){

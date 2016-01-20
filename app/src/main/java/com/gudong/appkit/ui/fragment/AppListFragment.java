@@ -45,9 +45,8 @@ import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.DataHelper;
-import com.gudong.appkit.event.EEvent;
-import com.gudong.appkit.event.EventCenter;
-import com.gudong.appkit.event.Subscribe;
+import com.gudong.appkit.event.RxBus;
+import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.activity.AppActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ActionUtil;
@@ -67,7 +66,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by mao on 15/7/8.
  */
-public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem, Subscribe {
+public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem {
 
     public static final String KEY_TYPE = "type";
 
@@ -96,22 +95,73 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mType = getArguments().getInt(KEY_TYPE);
-        EventCenter.getInstance().registerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE, this);
-        EventCenter.getInstance().registerEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM, this);
-        EventCenter.getInstance().registerEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM, this);
-        EventCenter.getInstance().registerEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH, this);
-        EventCenter.getInstance().registerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE, this);
+        // subscribe event from RxBus
+        subscribeEvents();
     }
 
+    private void subscribeEvents() {
+        RxBus.getInstance()
+                .toObservable()
+                .subscribe(new Action1() {
+                    @Override
+                    public void call(Object o) {
+                        if(o instanceof RxEvent){
+                            RxEvent msg = (RxEvent) o;
+                            List<AppEntity> list = mAdapter.getListData();
+                            dealRxEvent(msg, list);
+                        }
+                    }
+                });
+    }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventCenter.getInstance().unregisterEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE, this);
-        EventCenter.getInstance().unregisterEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM, this);
-        EventCenter.getInstance().unregisterEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM, this);
-        EventCenter.getInstance().unregisterEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH, this);
-        EventCenter.getInstance().unregisterEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE, this);
+    private void dealRxEvent(RxEvent msg, List<AppEntity> list) {
+        switch (msg.getType()) {
+            case RECENT_LIST_IS_SHOW_SELF_CHANGE:
+                if (mType == 0) {
+                    boolean isShowSelf = !Utils.isShowSelf(getActivity());
+                    AppEntity appPlus = DataHelper.getAppPlusEntity(getActivity());
+                    if (isShowSelf) {
+                        mAdapter.addItem(0, appPlus);
+                    } else {
+                        mAdapter.removeItem(appPlus);
+                    }
+                    if (!mAdapter.getListData().isEmpty()) {
+                        mRecyclerView.scrollToPosition(0);
+                    }
+                }
+                break;
+            case LIST_ITEM_BRIEF_MODE_CHANGE:
+                if (Utils.isBriefMode(getActivity())) {
+                    MobclickAgent.onEvent(getActivity(), "setting_brief_is_true");
+                }
+                mAdapter.setBriefMode(!Utils.isBriefMode(getActivity()));
+                break;
+            case UNINSTALL_APPLICATION_FROM_SYSTEM:
+                AppEntity uninstalledEntity = msg.getData().getParcelable("entity");
+                Logger.i("now we found the " + uninstalledEntity.getPackageName() + " has uninstalled by user ");
+                if (list.contains(uninstalledEntity)) {
+                    Logger.i("list find " + uninstalledEntity.getPackageName() + " exist list ,now need remove it and update lsit");
+                    mAdapter.removeItem(uninstalledEntity);
+                } else {
+                    Logger.i("list not contain " + uninstalledEntity.getPackageName() + " so do nothing");
+                }
+                break;
+            case INSTALL_APPLICATION_FROM_SYSTEM:
+                AppEntity installedEntity = msg.getData().getParcelable("entity");
+                if (mType == 1 && !list.contains(installedEntity)) {
+                    mAdapter.addItem(0,installedEntity);
+                    Logger.i("this is all type and list not contain " + installedEntity.getAppName() + "now add it");
+                }
+                break;
+            case PREPARE_FOR_ALL_INSTALLED_APP_FINISH:
+                mRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        fillData();
+                    }
+                });
+                break;
+        }
     }
 
     @Nullable
@@ -324,60 +374,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             return getString(R.string.app_list_empty_all);
         } else {
             return getString(R.string.app_list_empty_search);
-        }
-    }
-
-    @Override
-    public void update(EEvent event, Bundle data) {
-        List<AppEntity> list = mAdapter.getListData();
-        switch (event) {
-            case RECENT_LIST_IS_SHOW_SELF_CHANGE:
-                if (mType == 0) {
-                    boolean isShowSelf = !Utils.isShowSelf(getActivity());
-                    AppEntity appPlus = DataHelper.getAppPlusEntity(getActivity());
-                    if (isShowSelf) {
-                        mAdapter.addItem(0, appPlus);
-                    } else {
-                        mAdapter.removeItem(appPlus);
-                    }
-                    if (!mAdapter.getListData().isEmpty()) {
-                        mRecyclerView.scrollToPosition(0);
-                    }
-                }
-                break;
-            case LIST_ITEM_BRIEF_MODE_CHANGE:
-                if (Utils.isBriefMode(getActivity())) {
-                    MobclickAgent.onEvent(getActivity(), "setting_brief_is_true");
-                }
-                mAdapter.setBriefMode(!Utils.isBriefMode(getActivity()));
-                break;
-            case UNINSTALL_APPLICATION_FROM_SYSTEM:
-                AppEntity uninstalledEntity = data.getParcelable("entity");
-                Logger.i("now we found the " + uninstalledEntity.getPackageName() + " has uninstalled by user ");
-                if (list.contains(uninstalledEntity)) {
-                    Logger.i("list find " + uninstalledEntity.getPackageName() + " exist list ,now need remove it and update lsit");
-                    list.remove(uninstalledEntity);
-                    mAdapter.update(list);
-                } else {
-                    Logger.i("list not contain " + uninstalledEntity.getPackageName() + " so do nothing");
-                }
-                break;
-            case INSTALL_APPLICATION_FROM_SYSTEM:
-                AppEntity installedEntity = data.getParcelable("entity");
-                if (mType == 1 && !list.contains(installedEntity)) {
-                    list.add(installedEntity);
-                    mAdapter.update(list);
-                    Logger.i("this is all type and list not contain " + installedEntity.getAppName() + "now add it");
-                }
-                break;
-            case PREPARE_FOR_ALL_INSTALLED_APP_FINISH:
-                mRecyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        fillData();
-                    }
-                });
-                break;
         }
     }
 }

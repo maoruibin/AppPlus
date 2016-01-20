@@ -31,8 +31,10 @@ import android.text.TextUtils;
 import com.gudong.appkit.App;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.AppInfoEngine;
+import com.gudong.appkit.dao.DataHelper;
 import com.gudong.appkit.event.EEvent;
-import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.event.RxBus;
+import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.utils.logger.Logger;
 
 /**
@@ -49,12 +51,13 @@ public class BootReceiver extends BroadcastReceiver {
         }
         // receive uninstall action , now we need remove uninstalled app from list
         if(Intent.ACTION_PACKAGE_REMOVED.equals(intent.getAction())){
-            AppEntity uninstalledApp = new AppEntity(packageName);
+//            AppEntity uninstalledApp = new AppEntity(packageName);
+            AppEntity uninstalledApp = DataHelper.getAppByPackageName(packageName);
             Logger.i("package remove "+packageName);
             App.sDb.delete(uninstalledApp);
             Bundle data = new Bundle();
             data.putParcelable("entity",uninstalledApp);
-            EventCenter.getInstance().triggerEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,data);
+            RxBus.getInstance().send(new RxEvent(EEvent.UNINSTALL_APPLICATION_FROM_SYSTEM,data));
         // receive install action , now we need add installed app to list
         }else if(Intent.ACTION_PACKAGE_ADDED.equals(intent.getAction())){
             AppEntity installedEntity = AppInfoEngine.getInstance().getAppByPackageName(packageName);
@@ -64,7 +67,7 @@ public class BootReceiver extends BroadcastReceiver {
             Logger.i("package insert "+installedEntity.getAppName());
             Bundle data = new Bundle();
             data.putParcelable("entity",installedEntity);
-            EventCenter.getInstance().triggerEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,data);
+            RxBus.getInstance().send(new RxEvent(EEvent.INSTALL_APPLICATION_FROM_SYSTEM,data));
         }
     }
 }

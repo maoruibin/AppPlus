@@ -1,5 +1,5 @@
 /*
- *     Copyright (c) 2015 GuDong
+ *     Copyright (c) 2015 Maoruibin
  *
  *     Permission is hereby granted, free of charge, to any person obtaining a copy
  *     of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,42 @@ package com.gudong.appkit.event;
 import android.os.Bundle;
 
 /**
- * Created by GuDong on 12/8/15 11:29.
- * Update use RxBus replace it
+ * Created by GuDong on 1/20/16 18:22.
  * Contact with 1252768410@qq.com.
  */
-@Deprecated
-public interface Subscribe {
-    void update(EEvent event,Bundle data);
+public class RxEvent {
+    private EEvent mType;
+    private Bundle mData;
+
+    public RxEvent() {
+    }
+
+    public RxEvent(EEvent type) {
+        mType = type;
+    }
+
+    public RxEvent(EEvent type,Bundle data) {
+        mData = data;
+        mType = type;
+    }
+
+    public static RxEvent get(EEvent mType){
+        return new RxEvent(mType);
+    }
+
+    public Bundle getData() {
+        return mData;
+    }
+
+    public void setData(Bundle data) {
+        mData = data;
+    }
+
+    public EEvent getType() {
+        return mType;
+    }
+
+    public void setType(EEvent type) {
+        mType = type;
+    }
 }

@@ -34,8 +34,10 @@ import java.util.Set;
 
 /**
  * Created by GuDong on 12/8/15 10:55.
+ * Update now use RxBus replace it
  * Contact with 1252768410@qq.com.
  */
+@Deprecated
 public class EventCenter {
     private static EventCenter ourInstance = new EventCenter();
 //    private static HashSet mEvents;

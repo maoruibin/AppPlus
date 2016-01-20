@@ -28,9 +28,8 @@ import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.AppInfoEngine;
-import com.gudong.appkit.dao.DBHelper;
-import com.gudong.appkit.event.EEvent;
-import com.gudong.appkit.event.EventCenter;
+import com.gudong.appkit.dao.AppStatus;
+import com.gudong.appkit.dao.DataHelper;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.logger.Logger;
@@ -38,6 +37,14 @@ import com.gudong.appkit.utils.logger.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class SplashActivity extends BaseActivity {
     @Override
@@ -48,63 +55,78 @@ public class SplashActivity extends BaseActivity {
         setStatusBarColorRes(R.color.colorPrimary);
         checkAndUpdateLocalDb();
         checkExportDirectoryIsChange();
-        gotoMainActivity();
+        //gotoMainActivity();
     }
 
     private void gotoMainActivity() {
         //delay 1500 mill and enter MainActivity
-        getWindow().getDecorView().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                NavigationManager.gotoMainActivityFromSplashView(SplashActivity.this);
-            }
-        },1500);
+        Observable.timer(1500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .map(new Func1<Long, Object>() {
+                    @Override
+                    public Object call(Long aLong) {
+                        NavigationManager.gotoMainActivityFromSplashView(SplashActivity.this);
+                        return null;
+                    }
+                })
+                .subscribe();
     }
 
+    /**
+     * check local db data,because the installed App info will be changed or removed
+     * so,we need check local data and update it before enter MainActivity
+     */
     private void checkAndUpdateLocalDb(){
-        final long startTime = System.currentTimeMillis();
-        //TODO use RxJava
-        //check and update local db data
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<AppEntity> list = AppInfoEngine.getInstance().getInstalledAppList();
-                for (final AppEntity installedEntity : list) {
-                    switch (DBHelper.checkEntityStatus(installedEntity)){
-                        case CREATE:
-                            Logger.i("need insert "+installedEntity.getAppName() );
-                            App.sDb.insert(installedEntity);
-                            break;
-                        case CHANGE:
-                            Logger.i("need update "+installedEntity.getAppName() );
-
-                            AppEntity localChange = DBHelper.getAppByPackageName(installedEntity.getPackageName());
-                            Logger.i("splash",localChange.toString());
-                            installedEntity.setId(localChange.getId());
-
-                            if(App.sDb.update(installedEntity)>0){
-                                Logger.i("update success");
-                            }else{
-                                Logger.i("update fail");
+        AppInfoEngine.getInstance().getInstalledAppList()
+                .subscribeOn(Schedulers.io())
+                //将获取到的安装应用列表 appEntities 转换为单个的 AppEntity 对象
+                .flatMap(new Func1<List<AppEntity>, Observable<AppEntity>>() {
+                    @Override
+                    public Observable<AppEntity> call(List<AppEntity> appEntities) {
+                        List<AppEntity>listDB = App.sDb.query(AppEntity.class);
+                        //
+                        for(AppEntity entity : listDB) {
+                            if (!appEntities.contains(entity)) {
+                                App.sDb.delete(entity);
+                                Logger.e("installed list has not " + entity.getAppName() + " now delete it in local db.");
                             }
-                            break;
+                        }
+                        return Observable.from(appEntities);
                     }
-
-                }
-                List<AppEntity>listDB = App.sDb.query(AppEntity.class);
-                //
-                for(AppEntity entity : listDB){
-                    if(!list.contains(entity)){
-                        App.sDb.delete(entity);
-                        Logger.i("installed list has not "+entity.getAppName()+" now delete it in local db.");
+                })
+                //对每个已安装的 AppEntity 对象与存储在本地的 AppEntity 对象做对比 看这个对象是不是有什么变化
+                .map(new Func1<AppEntity, AppEntity>() {
+                    @Override
+                    public AppEntity call(AppEntity entity) {
+                        return DataHelper.checkAndSetAppEntityStatus(entity);
                     }
-                }
-                Logger.i("prepare all installed data finish now notify AppListFragment ");
-                EventCenter.getInstance().triggerEvent(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH,null);
-                long endTime = System.currentTimeMillis();
-                Logger.i("checkAndUpdateLocalDb take "+(endTime-startTime)+" millis");
-            }
-        }).start();
+                })
+                .subscribe(new Action1<AppEntity>() {
+                    @Override
+                    public void call(AppEntity entity) {
+                        int status = entity.getStatus();
+                        if (status == AppStatus.CHANGE.ordinal()) {
+                            AppEntity localChange = DataHelper.getAppByPackageName(entity.getPackageName());
+                            entity.setId(localChange.getId());
+                            if (App.sDb.update(entity) > 0) {
+                                Logger.e("rx", entity.getAppName() + " has change now update success");
+                            } else {
+                                Logger.e("rx", entity.getAppName() + " has change but now update fail");
+                            }
+                        } else if (status == AppStatus.CREATE.ordinal()) {
+                            App.sDb.insert(entity);
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Logger.e("is error "+throwable.getMessage());
+                    }
+                }, new Action0() {
+                    @Override
+                    public void call() {
+                        NavigationManager.gotoMainActivityFromSplashView(SplashActivity.this);
+                    }
+                });
     }
 
     /**
@@ -126,26 +148,24 @@ public class SplashActivity extends BaseActivity {
             oldExportDir.delete();
             return;
         }
-        Logger.i("发现"+files.length+"个文件");
-        final File nowExportDir = FileUtil.createDir(FileUtil.getSDPath(), FileUtil.KEY_EXPORT_DIR);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for(File file:files){
-                    File dest = new File(nowExportDir,file.getName());
-                    try {
-                        FileUtil.copyFileUsingFileChannels(file,dest);
-                        file.delete();
-                        Logger.i("拷贝文件"+file.getName()+"完成 删除文件");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                Logger.i("拷贝所有文件完成 删除文件夹");
-                oldExportDir.delete();
-            }
-        }).start();
 
+        final File nowExportDir = FileUtil.createDir(FileUtil.getSDPath(), FileUtil.KEY_EXPORT_DIR);
+        Observable.from(files)
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Action1<File>() {
+                    @Override
+                    public void call(File file) {
+                        File dest = new File(nowExportDir,file.getName());
+                        try {
+                            FileUtil.copyFileUsingFileChannels(file,dest);
+                            file.delete();
+                            Logger.i("copy "+file.getName()+" finish");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        oldExportDir.delete();
+                    }
+                });
     }
 
     @Override

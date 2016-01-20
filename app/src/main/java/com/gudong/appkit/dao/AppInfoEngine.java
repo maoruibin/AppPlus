@@ -40,6 +40,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 
 import com.gudong.appkit.App;
+import com.gudong.appkit.utils.RxUtil;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 import com.jaredrummler.android.processes.models.AndroidProcess;
@@ -50,6 +51,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.Callable;
+
+import rx.Observable;
 
 /**
  * 获取app信息的引擎
@@ -76,16 +80,21 @@ public class AppInfoEngine {
      * get all app info list which is installed by user
      * @return all installed app info list
      */
-    public List<AppEntity> getInstalledAppList() {
-        List<AppEntity> list = new ArrayList<>();
-        List<PackageInfo>packageInfos = mPackageManager.getInstalledPackages(PackageManager.GET_META_DATA);
-        for (PackageInfo info:packageInfos){
-            if(!isUserApp(info))continue;
-            AppEntity entity = warpAppEntity(info);
-            if (entity == null)continue;;
-            list.add(entity);
-        }
-        return list;
+    public Observable<List<AppEntity>> getInstalledAppList() {
+        return RxUtil.makeObservable(new Callable<List<AppEntity>>() {
+            @Override
+            public List<AppEntity> call() throws Exception {
+                List<AppEntity> list = new ArrayList<>();
+                List<PackageInfo>packageInfos = mPackageManager.getInstalledPackages(PackageManager.GET_META_DATA);
+                for (PackageInfo info:packageInfos){
+                    if(!isUserApp(info))continue;
+                    AppEntity entity = warpAppEntity(info);
+                    if (entity == null)continue;;
+                    list.add(entity);
+                }
+                return list;
+            }
+        });
     }
 
     /**
@@ -120,7 +129,7 @@ public class AppInfoEngine {
             String packageName = resolveInfo.activityInfo.packageName;
             if (isSystemApp(packageName)) continue;
             if (isShowSelf(packageName)) continue;
-            AppEntity appEntity = DBHelper.getAppByPackageName(packageName);
+            AppEntity appEntity = DataHelper.getAppByPackageName(packageName);
             if (appEntity == null)continue;
             list.add (appEntity);
         }
@@ -187,7 +196,7 @@ public class AppInfoEngine {
             //system app will not appear recent list
             //if(isSystemApp(packageName))continue;
             if (isShowSelf(packageName)) continue;
-            AppEntity entity = DBHelper.getAppByPackageName(packageName);
+            AppEntity entity = DataHelper.getAppByPackageName(packageName);
             if (entity == null)continue;
             list.add (entity);
         }

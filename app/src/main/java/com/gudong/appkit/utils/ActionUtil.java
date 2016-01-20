@@ -30,7 +30,6 @@ import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -48,6 +47,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * 常用操作工具类 如传送APK 导出APK等操作
@@ -183,49 +186,31 @@ public class ActionUtil {
         //设置显示文字
         textView.setText(R.string.please_wait);
 
-        new AsyncTask<File, Void, Boolean>() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressDialog.show();
-            }
-
-            @Override
-            protected void onPostExecute(Boolean aBoolean) {
-                super.onPostExecute(aBoolean);
-                progressDialog.dismiss();
-                String contentInfo = String.format(activity.getString(R.string.dialog_message_export_finish), exportFile.getName(), exportFile.getParentFile().getAbsolutePath());
-                new AlertDialog.Builder(activity)
-                        .setTitle(R.string.title_export_finish)
-                        .setMessage(contentInfo)
-                        .setPositiveButton(R.string.dialog_confirm_watch, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                NavigationManager.browseFile(activity,exportFile.getParentFile());
-                            }
-                        })
-                        .setNegativeButton(R.string.dialog_cancel_watch, null)
-                        .show();
-            }
-
-            @Override
-            protected Boolean doInBackground(File... params) {
-                //导出速度太快了 给人工降个速 可以让用户看到有一个导出的进度条，这样更舒服点
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        progressDialog.show();
+        try {
+            FileUtil.copyFileUsingFileChannelsAsyn(srcFile, exportFile)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<Boolean>() {
+                @Override
+                public void call(Boolean aBoolean) {
+                    progressDialog.dismiss();
+                    String contentInfo = String.format(activity.getString(R.string.dialog_message_export_finish), exportFile.getName(), exportFile.getParentFile().getAbsolutePath());
+                    new AlertDialog.Builder(activity)
+                            .setTitle(R.string.title_export_finish)
+                            .setMessage(contentInfo)
+                            .setPositiveButton(R.string.dialog_confirm_watch, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    NavigationManager.browseFile(activity,exportFile.getParentFile());
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_cancel_watch, null)
+                            .show();
                 }
-                File srcFile = params[0];
-                File exportFile = params[1];
-                try {
-                    FileUtil.copyFileUsingFileChannels(srcFile, exportFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return false;
-                }
-                return true;
-            }
-        }.execute(srcFile, exportFile);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

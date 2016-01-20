@@ -70,6 +70,7 @@ public class MainActivity extends BaseActivity implements Subscribe {
         mTabLayout.setupWithViewPager(mViewPager);
 
         versionCheck();
+
     }
 
     @Override

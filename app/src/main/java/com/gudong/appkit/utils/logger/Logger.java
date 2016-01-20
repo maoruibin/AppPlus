@@ -60,6 +60,14 @@ public class Logger {
         log(Log.ERROR,tag, message);
     }
 
+    public static void d(String tag,String message){
+        log(Log.DEBUG,tag, message);
+    }
+
+    public static void w(String tag,String message){
+        log(Log.WARN,tag, message);
+    }
+
     private static synchronized void log(int logType, String tag,String msg) {
         if(setting == null){
             throw new NullPointerException("before use Logger ,please init Logger in Application and set param");
@@ -71,6 +79,15 @@ public class Logger {
         switch (logType){
             case Log.INFO:
                 Log.i(finalTag,msg);
+                break;
+            case Log.ERROR:
+                Log.e(finalTag,msg);
+                break;
+            case Log.WARN:
+                Log.w(finalTag,msg);
+                break;
+            case Log.DEBUG:
+                Log.d(finalTag,msg);
                 break;
         }
     }

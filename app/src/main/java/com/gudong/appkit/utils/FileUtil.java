@@ -29,6 +29,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.concurrent.Callable;
+
+import rx.Observable;
 
 /**
  * Created by mao on 7/19/15.
@@ -75,6 +78,32 @@ public class FileUtil {
             inputChannel.close();
             outputChannel.close();
         }
+    }
+
+    /**
+     * copy file
+     * @param source
+     * @param dest
+     * @throws IOException
+     */
+    public static Observable<Boolean> copyFileUsingFileChannelsAsyn(final File source,final  File dest)
+            throws IOException {
+        return RxUtil.makeObservable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                FileChannel inputChannel = null;
+                FileChannel outputChannel = null;
+                try {
+                    inputChannel = new FileInputStream(source).getChannel();
+                    outputChannel = new FileOutputStream(dest).getChannel();
+                    outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+                } finally {
+                    inputChannel.close();
+                    outputChannel.close();
+                }
+                return true;
+            }
+        });
     }
 
     /**

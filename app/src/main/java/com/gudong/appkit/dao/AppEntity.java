@@ -45,6 +45,9 @@ import com.litesuits.orm.db.enums.AssignType;
     @Column("appIconData") private byte[] appIconData=null;
     @Column("srcPath") private String srcPath;
     @Column("uid") private int uid;
+
+    private int status;
+
     public AppEntity() {
     }
 
@@ -116,6 +119,13 @@ import com.litesuits.orm.db.enums.AssignType;
         this.uid = uid;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     @Override
     public boolean equals(Object o) {

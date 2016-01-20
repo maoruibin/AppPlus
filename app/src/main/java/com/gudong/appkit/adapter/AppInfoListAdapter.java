@@ -62,6 +62,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     public AppInfoListAdapter(Context context,List<AppEntity> listData,boolean isBrief) {
         this(context,isBrief);
         this.mListData = listData;
+
     }
 
     public AppInfoListAdapter(Context context,boolean isBrief){

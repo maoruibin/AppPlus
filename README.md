@@ -33,7 +33,7 @@ Changelog is available [here](/doc/Changelog.md)(write by chinese)
 * ~~add anim into index view's item~~
 * export Apk files batch
 * manage exported apk file
-* 
+
 ### Discuss
 
 [Google+ Communities](https://plus.google.com/u/0/communities/103659073881678230403)

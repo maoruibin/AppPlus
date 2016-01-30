@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:fitsSystemWindows="?attr/fits_windows"
+    android:fitsSystemWindows="true"
     tools:context="com.gudong.appkit.ui.activity.SearchActivity">
 
-    <include layout="@layout/module_toolbar"/>
+    <!--<include layout="@layout/module_toolbar"/>-->
 
     <FrameLayout
         android:id="@+id/fl_container"

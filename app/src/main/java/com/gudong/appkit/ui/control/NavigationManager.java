@@ -58,7 +58,7 @@ public class NavigationManager {
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
         emailIntent.setType("plain/text");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL,new String[]{"maoruibin9035@gmail.com"});
+        emailIntent.putExtra(Intent.EXTRA_EMAIL,new String[]{"gudong.name@gmail.com"});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.title_email_opinion));
 
         try{

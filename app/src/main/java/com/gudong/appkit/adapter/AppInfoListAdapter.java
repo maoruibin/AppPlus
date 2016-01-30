@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gudong.appkit.R;
@@ -45,11 +46,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by mao on 15/7/8.
  */
-public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.ViewHolder> implements View.OnClickListener {
-
+public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
     private List<AppEntity> mListData;
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
@@ -130,9 +131,6 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         if(!isBrief){
             holder.tvVersion.setText(FormatUtil.formatVersionName(entity));
             holder.tvPackName.setText(entity.getPackageName());
-
-        }else{
-
         }
 
 
@@ -142,6 +140,8 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         holder.view.setTag(entity);
         holder.ivOverFlow.setOnClickListener(this);
         holder.ivOverFlow.setTag(entity);
+        holder.rlRoot.setOnLongClickListener(this);
+        holder.rlRoot.setTag(entity);
     }
 
     private void showBriefWithAnim(){}
@@ -198,6 +198,17 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
         }
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        AppEntity entity = (AppEntity) v.getTag();
+        switch (v.getId()){
+            case R.id.rl_item:
+                mClickListItem.onLongClickListItem(v,entity);
+                break;
+        }
+        return false;
+    }
+
     public interface IClickPopupMenuItem{
         void onClickMenuItem(int itemId,AppEntity entity);
     }
@@ -205,6 +216,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     public interface IClickListItem{
         void onClickListItemContent(View view,AppEntity entity);
         void onClickListItemIcon(View iconView,AppEntity entity);
+        void onLongClickListItem(View iconView,AppEntity entity);
     }
 
 
@@ -216,6 +228,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder{
         public View view;
         public ImageView ivIcon;
+        public RelativeLayout rlRoot;
         public LinearLayout llAppInfo;
         public ImageView ivOverFlow;
         private TextView tvName;
@@ -225,6 +238,7 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
             super(itemView);
             view = itemView;
             ivIcon = (ImageView) view.findViewById(R.id.iv_icon);
+            rlRoot = (RelativeLayout) view.findViewById(R.id.rl_item);
             llAppInfo = (LinearLayout) view.findViewById(R.id.ll_app_info);
             ivOverFlow = (ImageView) view.findViewById(R.id.iv_over_flow);
             tvName = (TextView) view.findViewById(android.R.id.text1);

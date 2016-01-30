@@ -9,12 +9,17 @@
 
     <string name="tab_recent">Running</string>
     <string name="tab_installed">Installed</string>
+    <string name="tab_exported">Exported</string>
 
     <string name="menu_pop_item_file">Export to local</string>
     <string name="menu_pop_item_share">Share apk</string>
     <string name="menu_pop_item_detail">Watch detail</string>
     <string name="menu_pop_item_open">Open</string>
     <string name="menu_pop_item_more">More</string>
+
+    <string name="menu_cab_export">Export</string>
+    <string name="menu_cab_share">Share</string>
+    <string name="menu_cab_select_all">Select all</string>
 
     <string name="menu_main_support">Support Development</string>
     <string name="menu_main_theme">Shift theme</string>

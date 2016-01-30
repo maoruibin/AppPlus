@@ -4,13 +4,13 @@
             android:title="@string/category_advanced"
             android:key="@string/category_advanced_key">
 
-        <com.jenzz.materialpreference.CheckBoxPreference
+        <com.jenzz.materialpreference.SwitchPreference
             android:title="@string/switch_preference_show_self_title"
             android:key="@string/switch_preference_key_show_self"
-            android:summaryOn="@string/switch_preference_show_self_on"
-            android:summaryOff="@string/switch_preference_show_self_off"/>
+            android:defaultValue="true"
+            android:summary="@string/switch_preference_show_self_on"/>
 
-        <com.jenzz.materialpreference.CheckBoxPreference
+        <com.jenzz.materialpreference.SwitchPreference
             android:title="@string/switch_preference_list_item_brief_mode"
             android:key="@string/switch_preference_key_list_item_brief_mode"
             android:defaultValue="true"

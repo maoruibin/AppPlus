@@ -9,12 +9,17 @@
 
     <string name="tab_recent">最近打开</string>
     <string name="tab_installed">已安装</string>
+    <string name="tab_exported">已导出APK</string>
 
     <string name="menu_pop_item_file">导出到本地</string>
     <string name="menu_pop_item_share">分享安装包</string>
     <string name="menu_pop_item_detail">查看应用详情</string>
     <string name="menu_pop_item_open">打开此软件</string>
     <string name="menu_pop_item_more">更多操作</string>
+
+    <string name="menu_cab_export">导出</string>
+    <string name="menu_cab_share">分享</string>
+    <string name="menu_cab_select_all">全选</string>
 
     <string name="menu_main_support">支持开发者</string>
     <string name="menu_main_theme">切换主题</string>
@@ -57,12 +62,12 @@
 
     <string name="switch_preference_show_self_title">最近列表显示AppPlus</string>
     <string name="switch_preference_key_show_self">show_self</string>
-    <string name="switch_preference_show_self_on">最近打开列表将会显示AppPlus</string>
+    <string name="switch_preference_show_self_on">最近运行程序列表将会显示 AppPlus </string>
     <string name="switch_preference_show_self_off">最近打开列表将会过滤掉AppPlus</string>
 
     <string name="switch_preference_list_item_brief_mode">简洁模式</string>
     <string name="switch_preference_key_list_item_brief_mode">list_item_brief_mode</string>
-    <string name="switch_preference_list_item_brief_mode_on">简洁模式开，列表将只显示应用名称和图标信息</string>
+    <string name="switch_preference_list_item_brief_mode_on">应用列表将只显示应用名称和图标信息</string>
 
     <string name="preference_title_theme_primary">主题颜色</string>
     <string name="preference_summary_theme_primary">界面主色调，默认为Material蓝色</string>

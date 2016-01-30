@@ -34,13 +34,19 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.afollestad.materialcab.MaterialCab;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppEntity;
@@ -48,6 +54,7 @@ import com.gudong.appkit.dao.DataHelper;
 import com.gudong.appkit.event.RxBus;
 import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.activity.AppActivity;
+import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ActionUtil;
 import com.gudong.appkit.utils.Utils;
@@ -59,6 +66,7 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -66,7 +74,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by mao on 15/7/8.
  */
-public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem {
+public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem, MaterialCab.Callback {
 
     public static final String KEY_TYPE = "type";
 
@@ -74,6 +82,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AppInfoListAdapter mAdapter;
+
+    private BaseActivity parent;
+
     /**
      * Fragment列表的类型变量，小于0表示是搜索结果对应的列表Fragment，大于等于0，则是正常的用于显示App的列表Fragment
      **/
@@ -95,6 +106,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mType = getArguments().getInt(KEY_TYPE);
+        parent = (BaseActivity) getActivity();
         // subscribe event from RxBus
         subscribeEvents();
     }
@@ -131,10 +143,10 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 }
                 break;
             case LIST_ITEM_BRIEF_MODE_CHANGE:
-                if (Utils.isBriefMode(getActivity())) {
+                if (getActivity()!=null && Utils.isBriefMode(getActivity())) {
                     MobclickAgent.onEvent(getActivity(), "setting_brief_is_true");
+                    mAdapter.setBriefMode(!Utils.isBriefMode(getActivity()));
                 }
-                mAdapter.setBriefMode(!Utils.isBriefMode(getActivity()));
                 break;
             case UNINSTALL_APPLICATION_FROM_SYSTEM:
                 AppEntity uninstalledEntity = msg.getData().getParcelable("entity");
@@ -168,6 +180,15 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(initLayout(), container, false);
+        Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
+        toolbar.setTitle(getTitleString(mType));
+
+        final ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setDisplayHomeAsUpEnabled(true);
+
         setupSwipeLayout(rootView);
         setupRecyclerView(rootView);
         return rootView;
@@ -275,21 +296,29 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
         if (listObservable == null) return;
 
+        Subscriber<List<AppEntity>> subscriber = new Subscriber<List<AppEntity>>() {
+            @Override
+            public void onNext(List<AppEntity> appEntities) {
+                loadingFinish();
+                setData(appEntities, mType);
+            }
+
+            @Override
+            public void onCompleted() {
+                loadingFinish();
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        };
+
         listObservable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<AppEntity>>() {
-                    @Override
-                    public void call(List<AppEntity> appEntities) {
-                        loadingFinish();
-                        setData(appEntities, mType);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
-                });
+                .subscribe(subscriber);
+
     }
 
     /**
@@ -357,6 +386,13 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         animationSet.start();
     }
 
+    private MaterialCab mCab;
+
+    @Override
+    public void onLongClickListItem(View iconView, AppEntity entity) {
+
+    }
+
     private String getErrorInfo(int type) {
         if (type == 0) {
             return getString(R.string.app_list_error_recent);
@@ -364,6 +400,16 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             return getString(R.string.app_list_error_all);
         } else {
             return getString(R.string.app_list_error_all);
+        }
+    }
+
+    private String getTitleString(int type) {
+        if (type == 0) {
+            return getString(R.string.tab_recent);
+        } else if (type == 1) {
+            return getString(R.string.tab_installed);
+        } else {
+            return "";
         }
     }
 
@@ -375,6 +421,21 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         } else {
             return getString(R.string.app_list_empty_search);
         }
+    }
+
+    @Override
+    public boolean onCabCreated(MaterialCab materialCab, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onCabItemClicked(MenuItem menuItem) {
+        return false;
+    }
+
+    @Override
+    public boolean onCabFinished(MaterialCab materialCab) {
+        return false;
     }
 }
 

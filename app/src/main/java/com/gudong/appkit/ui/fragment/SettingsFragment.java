@@ -92,14 +92,14 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             MobclickAgent.onEventValue(getActivity(), "show_self_or_no", map_value, flag);
             //EventCenter.getInstance().triggerEvent(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE,null);
             RxBus.getInstance().send(RxEvent.get(EEvent.RECENT_LIST_IS_SHOW_SELF_CHANGE));
-            getActivity().finish();
+//            getActivity().finish();
         }
 
         if (key.equals(getString(R.string.switch_preference_key_list_item_brief_mode))) {
             MobclickAgent.onEvent(mContext, "setting_brief");
 //            EventCenter.getInstance().triggerEvent(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE,null);
             RxBus.getInstance().send(RxEvent.get(EEvent.LIST_ITEM_BRIEF_MODE_CHANGE));
-            getActivity().finish();
+//            getActivity().finish();
         }
 
         return true;

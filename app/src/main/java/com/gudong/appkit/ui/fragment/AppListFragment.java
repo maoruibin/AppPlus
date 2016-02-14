@@ -130,8 +130,8 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         switch (msg.getType()) {
             case RECENT_LIST_IS_SHOW_SELF_CHANGE:
                 if (mType == 0) {
-                    boolean isShowSelf = !Utils.isShowSelf(getActivity());
-                    AppEntity appPlus = DataHelper.getAppPlusEntity(getActivity());
+                    boolean isShowSelf = !Utils.isShowSelf();
+                    AppEntity appPlus = DataHelper.getAppPlusEntity();
                     if (isShowSelf) {
                         mAdapter.addItem(0, appPlus);
                     } else {
@@ -143,10 +143,10 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 }
                 break;
             case LIST_ITEM_BRIEF_MODE_CHANGE:
-                if (getActivity()!=null && Utils.isBriefMode(getActivity())) {
+                if (getActivity()!=null && Utils.isBriefMode()) {
                     MobclickAgent.onEvent(getActivity(), "setting_brief_is_true");
-                    mAdapter.setBriefMode(!Utils.isBriefMode(getActivity()));
                 }
+                mAdapter.setBriefMode(!Utils.isBriefMode());
                 break;
             case UNINSTALL_APPLICATION_FROM_SYSTEM:
                 AppEntity uninstalledEntity = msg.getData().getParcelable("entity");
@@ -183,7 +183,9 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        toolbar.setTitle(getTitleString(mType));
+        toolbar.setTitle(R.string.app_name);
+
+        toolbar.setSubtitle(getTitleString(mType));
 
         final ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         ab.setHomeAsUpIndicator(R.drawable.ic_menu);
@@ -269,7 +271,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         //every item's height is fix so use this method
         //RecyclerView can perform several optimizations
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new AppInfoListAdapter(getActivity(), Utils.isBriefMode(getActivity()));
+        mAdapter = new AppInfoListAdapter(getActivity(), Utils.isBriefMode());
         mAdapter.setClickPopupMenuItem(this);
         mAdapter.setClickListItem(this);
 

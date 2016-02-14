@@ -88,7 +88,7 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
         mTvAppVersion.setText(FormatUtil.formatVersionName(mAppEntity));
         mTvAppPackageName.setText(mAppEntity.getPackageName());
         mTvAppVersionCode.setText("VersionCode:"+mAppEntity.getVersionCode());
-        if(Utils.isBriefMode(this)){
+        if(Utils.isBriefMode()){
             mTvAppVersionCode.setVisibility(View.GONE);
         }
     }

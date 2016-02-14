@@ -27,11 +27,14 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.gudong.appkit.App;
+import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.RxUtil;
 import com.gudong.appkit.utils.Utils;
+import com.gudong.appkit.utils.logger.Logger;
 import com.jaredrummler.android.processes.ProcessManager;
 import com.litesuits.orm.db.assit.QueryBuilder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -86,11 +89,10 @@ public class DataHelper {
 
     /**
      * get AppEntity for Application of AppPlus
-     * @param context
      * @return AppEntity
      */
-    public static AppEntity getAppPlusEntity(Context context){
-        return getAppByPackageName(context.getPackageName());
+    public static AppEntity getAppPlusEntity(){
+        return getAppByPackageName(App.sContext.getPackageName());
     }
 
     /**
@@ -116,6 +118,29 @@ public class DataHelper {
         });
     }
 
+    public static Observable<List<AppEntity>>getExportedAppEntity(){
+        return RxUtil.makeObservable(new Callable<List<AppEntity>>() {
+            @Override
+            public List<AppEntity> call() throws Exception {
+                File parent = FileUtil.createDir(FileUtil.getSDPath(),FileUtil.KEY_EXPORT_DIR);
+                File[]exportArray = parent.listFiles();
+                List<AppEntity>exportList = new ArrayList<>();
+                AppEntity entity = null;
+                for(File file : exportArray){
+                    String[]fileNameTemp = file.getName().replace(".apk","").split("_");
+                    entity = new AppEntity();
+                    entity.setAppName(fileNameTemp[0]);
+                    entity.setVersionName(fileNameTemp[1]);
+                    entity.setSrcPath(file.getAbsolutePath());
+                    exportList.add(entity);
+                    Logger.i("name "+file.getName());
+                    Logger.i("path "+file.getAbsolutePath());
+                }
+                return exportList;
+            }
+        });
+    }
+
 
     /**
      * check running list should show AppPlus or not
@@ -123,6 +148,6 @@ public class DataHelper {
      * @return true if show else false
      */
     private static boolean isNotShowSelf(Context ctx, String packagename) {
-        return !Utils.isShowSelf(ctx) && packagename.equals(ctx.getPackageName());
+        return !Utils.isShowSelf() && packagename.equals(ctx.getPackageName());
     }
 }

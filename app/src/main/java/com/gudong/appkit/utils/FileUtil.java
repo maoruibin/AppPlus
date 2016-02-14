@@ -24,6 +24,8 @@ package com.gudong.appkit.utils;
 
 import android.os.Environment;
 
+import com.gudong.appkit.dao.AppEntity;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -117,6 +119,12 @@ public class FileUtil {
             createdFile.mkdir();
         }
         return createdFile;
+    }
+
+    public static boolean deleteExportedFile(AppEntity entity){
+        if(entity == null)return false;
+        File file = new File(entity.getSrcPath());
+        return file.delete();
     }
 }
 

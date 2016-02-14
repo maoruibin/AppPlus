@@ -17,6 +17,9 @@
     <string name="menu_pop_item_open">Open</string>
     <string name="menu_pop_item_more">More</string>
 
+    <string name="menu_pop_item_file_delete">Delete</string>
+    <string name="menu_pop_item_file_install">Install</string>
+
     <string name="menu_cab_export">Export</string>
     <string name="menu_cab_share">Share</string>
     <string name="menu_cab_select_all">Select all</string>
@@ -30,6 +33,7 @@
     <string name="dialog_message_no_sdcard">Your device has not Sdcard,please check it and retry.</string>
     <string name="dialog_message_file_exist">Package %1$s has exists upon %2$s ，is override?</string>
     <string name="dialog_message_export">"Are you sure export %1$s package to local directory %2$s ?</string>
+    <string name="dialog_message_delete">"Are you sure delete %1$s 's package file ?</string>
 
     <string name="dialog_know">Know</string>
     <string name="dialog_confirm">Confirm</string>
@@ -43,6 +47,7 @@
     <string name="dialog_confirm_watch">Yes，check now</string>
     <string name="dialog_confirm_yes">Yes</string>
     <string name="dialog_confirm_export">Confirm sure</string>
+    <string name="dialog_confirm_delete">Confirm delete</string>
     <string name="dialog_action_exist_not_override">Not override</string>
     <string name="dialog_action_exist_override">Override</string>
     <string name="dialog_action_exist_watch_now">Check file</string>
@@ -109,4 +114,5 @@
     <string name="fail_open_app">Open %1$s fail,please check it exists or not.</string>
     <string name="fail_export_app">Export %1$s package fail,please check it exists or not.</string>
     <string name="fail_share_app">Share %1$s package fail,please check it exists or not.</string>
+    <string name="fail_install_app">Install %1$s fail,please check it exists or not.</string>
 </resources>

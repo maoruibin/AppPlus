@@ -32,6 +32,7 @@ import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 
+import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.control.ThemeControl;
 
@@ -112,24 +113,20 @@ public class Utils {
 
     /**
      * running list is show AppPlus or not
-     *
-     * @param context Context
      * @return return true if recent list view need show appplus
      */
-    public static boolean isShowSelf(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(context.getString(R.string.switch_preference_key_show_self), false);
+    public static boolean isShowSelf() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.sContext);
+        return prefs.getBoolean(App.sContext.getString(R.string.switch_preference_key_show_self), false);
     }
 
     /**
      * list item is brief mode or not
-     *
-     * @param context Context
      * @return return true if brief mode else not
      */
-    public static boolean isBriefMode(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(context.getString(R.string.switch_preference_key_list_item_brief_mode), true);
+    public static boolean isBriefMode() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.sContext);
+        return prefs.getBoolean(App.sContext.getString(R.string.switch_preference_key_list_item_brief_mode), true);
     }
 
 

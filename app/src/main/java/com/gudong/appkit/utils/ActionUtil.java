@@ -31,6 +31,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -40,6 +41,9 @@ import android.widget.TextView;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.RxBus;
+import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.view.CircularProgressDrawable;
 
@@ -74,8 +78,28 @@ public class ActionUtil {
         intent.setType("application/vnd.android.package-archive");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(Intent.createChooser(intent, FormatUtil.warpChooserTitle(activity,entity.getAppName())));
-
     }
+
+    /**
+     * 安装APK
+     * @param entity
+     */
+    public static void installApp(Activity activity, AppEntity entity) {
+        final File srcFile = new File(entity.getSrcPath());
+        if(!srcFile.exists()){
+            Snackbar.make(activity.getWindow().getDecorView(),String.format(activity.getString(R.string.fail_install_app),entity.getAppName()),Snackbar.LENGTH_LONG).show();
+            return;
+        }
+
+        Intent mIntent = new Intent();
+        mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mIntent.setAction(Intent.ACTION_VIEW);
+        mIntent.setDataAndType(Uri.fromFile(srcFile),
+                "application/vnd.android.package-archive");
+        activity.startActivity(mIntent);
+    }
+
+
 
     /**
      * the first version for share apk
@@ -168,6 +192,27 @@ public class ActionUtil {
                     .show();
 
         }
+    }
+
+    public static void deleteApkFile(final Activity activity, final AppEntity entity){
+        String pointInfo = String.format(activity.getString(R.string.dialog_message_delete),entity.getAppName());
+        new AlertDialog.Builder(activity)
+                .setTitle(R.string.title_point)
+                .setMessage(pointInfo)
+                .setPositiveButton(R.string.dialog_confirm_delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(FileUtil.deleteExportedFile(entity)){
+                            Bundle data = new Bundle();
+                            data.putParcelable("entity",entity);
+                            RxBus.getInstance().send(new RxEvent(EEvent.DELETE_SINGLE_EXPORT_FILE_SUC,data));
+                        }else{
+                            RxBus.getInstance().send(RxEvent.get(EEvent.DELETE_SINGLE_EXPORT_FILE_FAIL));
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.dialog_cancel,null)
+                .show();
     }
 
     private static void copyFile(final Activity activity,File srcFile, final File exportFile) {

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/menu_pop_item_file_delete"
+        android:icon="?attr/ic_menu_file_delete"
+        android:id="@+id/pop_file_delete"/>
+    <item
+        android:title="@string/menu_pop_item_file_install"
+        android:icon="?attr/ic_menu_file_install"
+        android:id="@+id/pop_file_install"/>
+
+</menu>

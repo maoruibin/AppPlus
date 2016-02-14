@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:fitsSystemWindows="?attr/fits_windows">
+    android:fitsSystemWindows="true">
 
 
     <android.support.percent.PercentRelativeLayout

@@ -142,7 +142,7 @@ public class AppInfoEngine {
      * @return true if show else false
      */
     private boolean isShowSelf(String packagename){
-        return !Utils.isShowSelf(mContext) && packagename.equals(mContext.getPackageName());
+        return !Utils.isShowSelf() && packagename.equals(mContext.getPackageName());
     }
 
     /**

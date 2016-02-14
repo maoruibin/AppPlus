@@ -5,7 +5,19 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/module_toolbar"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/module_toolbar_with_title_margin"/>
+
+        <ViewStub
+            android:id="@+id/cab_stub"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"/>
+    </FrameLayout>
+
+
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"

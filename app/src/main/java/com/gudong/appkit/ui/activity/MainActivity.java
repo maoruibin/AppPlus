@@ -37,16 +37,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.event.RxBus;
-import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.control.NavigationManager;
+import com.gudong.appkit.ui.fragment.AppFileListFragment;
 import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
-
-import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity {
     DrawerLayout mDrawerLayout;
@@ -78,9 +75,10 @@ public class MainActivity extends BaseActivity {
         setupDrawerContent(mNavigationView);
 
         versionCheck();
-        subscribeEvent();
 
         selectRecent();
+
+
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -95,6 +93,8 @@ public class MainActivity extends BaseActivity {
                 });
     }
 
+
+    Fragment currentFragment=null;
     private void updatePosition(final MenuItem menuItem) {
         Fragment fragment = null;
 
@@ -106,14 +106,18 @@ public class MainActivity extends BaseActivity {
                 fragment = AppListFragment.getInstance(1);
                 break;
             case R.id.nav_exported:
+                fragment = new AppFileListFragment();
+
                 break;
             case R.id.nav_settings:
+                mDrawerLayout.closeDrawers();
                 Intent intentSetting = new Intent(MainActivity.this, SimpleContainerActivity.class);
                 intentSetting.putExtra(SimpleContainerActivity.KEY_TYPE, SimpleContainerActivity.FragmentType.SETTING);
                 startActivity(intentSetting);
                 MobclickAgent.onEvent(this, "setting_entry");
                 break;
             case R.id.nav_about:
+                mDrawerLayout.closeDrawers();
                 Intent intentAbout = new Intent(MainActivity.this, SimpleContainerActivity.class);
                 intentAbout.putExtra(SimpleContainerActivity.KEY_TYPE, SimpleContainerActivity.FragmentType.ABOUT);
                 startActivity(intentAbout);
@@ -127,6 +131,7 @@ public class MainActivity extends BaseActivity {
         }
 
         if (fragment != null) {
+            currentFragment=fragment;
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -151,28 +156,18 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void subscribeEvent() {
-        RxBus.getInstance()
-                .toObservable()
-                .subscribe(new Action1() {
-                    @Override
-                    public void call(Object o) {
-                        if(o instanceof RxEvent){
-                            RxEvent event = (RxEvent) o;
-                            switch (event.getType()){
-                                case RECENT_LIST_IS_SHOW_SELF_CHANGE:
-                                    //mTabLayout.getTabAt(0).select();
-                                    break;
-                            }
-                        }
-                    }
-                });
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+       if(currentFragment!=null && currentFragment instanceof AppFileListFragment ){
+           menu.findItem(R.id.action_search).setVisible(false);
+       }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

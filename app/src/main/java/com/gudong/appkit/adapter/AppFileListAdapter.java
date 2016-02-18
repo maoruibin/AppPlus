@@ -23,6 +23,8 @@
 package com.gudong.appkit.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -111,9 +113,8 @@ public class AppFileListAdapter extends RecyclerView.Adapter<AppFileListAdapter.
         final AppEntity entity = mListData.get(position);
         if(entity == null)return;
 
-        //Bitmap bitmap = BitmapFactory.decodeByteArray(entity.getAppIconData(),0,entity.getAppIconData().length);
-//        holder.ivIcon.setImageBitmap(bitmap);
-        holder.ivIcon.setImageResource(R.drawable.ic_folder_black_48dp);
+        Bitmap bitmap = BitmapFactory.decodeByteArray(entity.getAppIconData(),0,entity.getAppIconData().length);
+        holder.ivIcon.setImageBitmap(bitmap);
         holder.tvName.setText(entity.getAppName());
 
         holder.tvVersion.setVisibility(View.VISIBLE);

@@ -31,8 +31,8 @@ Changelog is available [here](/doc/Changelog.md)(write by chinese)
 ### TODO ###
 
 * ~~add anim into index view's item~~
+* ~~manage exported apk file~~
 * export Apk files batch
-* manage exported apk file
 
 ### Discuss
 

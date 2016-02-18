@@ -32,6 +32,8 @@ import com.gudong.appkit.utils.RxUtil;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 import com.jaredrummler.android.processes.ProcessManager;
+import com.jaredrummler.apkparser.ApkParser;
+import com.jaredrummler.apkparser.model.ApkMeta;
 import com.litesuits.orm.db.assit.QueryBuilder;
 
 import java.io.File;
@@ -127,10 +129,13 @@ public class DataHelper {
                 List<AppEntity>exportList = new ArrayList<>();
                 AppEntity entity = null;
                 for(File file : exportArray){
+                    ApkParser parser = ApkParser.create(file);
+                    ApkMeta meta = parser.getApkMeta();
                     String[]fileNameTemp = file.getName().replace(".apk","").split("_");
                     entity = new AppEntity();
-                    entity.setAppName(fileNameTemp[0]);
-                    entity.setVersionName(fileNameTemp[1]);
+                    entity.setAppName(meta.label);
+                    entity.setAppIconData(parser.getIconFile().data);
+                    entity.setVersionName(meta.versionName);
                     entity.setSrcPath(file.getAbsolutePath());
                     exportList.add(entity);
                     Logger.i("name "+file.getName());

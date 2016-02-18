@@ -36,8 +36,8 @@ Changelog is available [here](/doc/Changelog.md)
 ### TODO ###
 
 * ~~增加主页Item加载移除动画~~
+* ~~管理已导出Apk文件~~
 * 批量导出Apk文件
-* 管理已导出Apk文件
 
 Note:如果有人想帮助完成这些功能，很欢迎你的参与,具体交互细节可商讨。
 

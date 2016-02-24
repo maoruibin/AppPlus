@@ -22,6 +22,9 @@
 
 package com.gudong.appkit.ui.activity;
 
+import android.content.ClipData;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +33,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.content.ClipboardManager;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +42,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gudong.appkit.R;
+import com.gudong.appkit.dao.AppEntity;
+import com.gudong.appkit.dao.DataHelper;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.fragment.AppFileListFragment;
 import com.gudong.appkit.ui.fragment.AppListFragment;
@@ -88,7 +95,6 @@ public class MainActivity extends BaseActivity {
                     public boolean onNavigationItemSelected(final MenuItem menuItem) {
                         updatePosition(menuItem);
                         return true;
-
                     }
                 });
     }
@@ -97,7 +103,6 @@ public class MainActivity extends BaseActivity {
     Fragment currentFragment=null;
     private void updatePosition(final MenuItem menuItem) {
         Fragment fragment = null;
-
         switch (menuItem.getItemId()) {
             case R.id.nav_recent:
                 fragment = AppListFragment.getInstance(0);
@@ -107,7 +112,10 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.nav_exported:
                 fragment = new AppFileListFragment();
-
+                break;
+            case R.id.nav_donate:
+                showDonateDialog();
+                MobclickAgent.onEvent(this, "menu_donate");
                 break;
             case R.id.nav_settings:
                 mDrawerLayout.closeDrawers();
@@ -147,6 +155,33 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void showDonateDialog() {
+        String htmlFileName =  Utils.isChineseLanguage()?"donate_ch.html":"donate.html";
+        DialogUtil.showCustomDialogWithTwoAction(this, getSupportFragmentManager(), getString(R.string.action_donate),htmlFileName, "donate",
+                getString(R.string.action_close),null,
+                getString(R.string.action_copy_to_clipboard),new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String alipay = "com.eg.android.AlipayGphone";
+                        AppEntity alipayApp = DataHelper.getAppByPackageName(alipay);
+                        if(alipayApp!=null){
+                            //复制到粘贴板
+                            ClipboardManager cmb = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+                            cmb.setPrimaryClip(ClipData.newPlainText(null, "gudong.name@gmail.com"));
+                            Toast.makeText(MainActivity.this, R.string.copy_success, Toast.LENGTH_LONG).show();
+                            //打开支付宝
+                            try {
+                                NavigationManager.openApp(MainActivity.this,alipay);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            Toast.makeText(MainActivity.this,getString(R.string.support_exception_for_alipay), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     private void selectRecent(){
         mNavigationView.getMenu().findItem(R.id.nav_recent).setChecked(true);
         Fragment fragment = AppListFragment.getInstance(0);
@@ -154,7 +189,6 @@ public class MainActivity extends BaseActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.fl_container, fragment).commitAllowingStateLoss();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -187,6 +221,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        if(mDrawerLayout.isDrawerOpen(Gravity.LEFT)){
+            mDrawerLayout.closeDrawers();
+            return;
+        }
         if (System.currentTimeMillis() - lastTime < 2000) {
             super.onBackPressed();
         } else {

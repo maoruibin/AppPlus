@@ -23,11 +23,13 @@
 package com.gudong.appkit.ui.fragment;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +45,8 @@ import java.io.InputStreamReader;
  * @author mao
  */
 public class CustomWebViewDialog extends DialogFragment {
-
+    private DialogInterface.OnClickListener mNeutralClickCallback;
+    private DialogInterface.OnClickListener mPositiveClickCallback;
     /**
      * create a custom dialog use web view load layout by html file
      *
@@ -62,6 +65,32 @@ public class CustomWebViewDialog extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * create a CustomWebViewDialog with a neutral button
+     * @param dialogTitle
+     * @param htmlFileName
+     * @param accentColor
+     * @param neutralText neutral button text
+     * @param neutralListener click listener
+     * @return
+     */
+    public static CustomWebViewDialog create(String dialogTitle, String htmlFileName, int accentColor, String positiveText, DialogInterface.OnClickListener positiveListener, String neutralText, DialogInterface.OnClickListener neutralListener) {
+        CustomWebViewDialog dialog = new CustomWebViewDialog();
+        Bundle args = new Bundle();
+        args.putString("dialogTitle", dialogTitle);
+        args.putString("htmlFileName", htmlFileName);
+        args.putInt("accentColor", accentColor);
+
+        args.putString("positiveText", positiveText);
+        dialog.setPositiveClickCallback(positiveListener);
+
+        args.putString("neutralText", neutralText);
+        dialog.setNeutralClickCallback(neutralListener);
+
+        dialog.setArguments(args);
+        return dialog;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -73,10 +102,15 @@ public class CustomWebViewDialog extends DialogFragment {
         }
 
         String dialogTitle = getArguments().getString("dialogTitle");
+        String neutralText = getArguments().getString("neutralText");
+        String positiveText = getArguments().getString("positiveText");
+        neutralText = TextUtils.isEmpty(neutralText)?"":neutralText;
+        positiveText = TextUtils.isEmpty(neutralText)?getString(android.R.string.ok):positiveText;
         AlertDialog dialog = new AlertDialog.Builder(getActivity())
                 .setTitle(dialogTitle)
                 .setView(customView)
-                .setPositiveButton(android.R.string.ok, null)
+                .setNeutralButton(neutralText, mNeutralClickCallback)
+                .setPositiveButton(positiveText, mPositiveClickCallback)
                 .show();
 
         final WebView webView = (WebView) customView.findViewById(R.id.webview);
@@ -112,5 +146,13 @@ public class CustomWebViewDialog extends DialogFragment {
         Color.colorToHSV(color, hsv);
         hsv[2] *= (up ? 1.1f : 0.9f); // value component
         return Color.HSVToColor(hsv);
+    }
+
+    public void setNeutralClickCallback(DialogInterface.OnClickListener neutralClickCallback) {
+        mNeutralClickCallback = neutralClickCallback;
+    }
+
+    public void setPositiveClickCallback(DialogInterface.OnClickListener positiveClickCallback) {
+        mPositiveClickCallback = positiveClickCallback;
     }
 }

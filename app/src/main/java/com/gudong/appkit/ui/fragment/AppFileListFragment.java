@@ -67,7 +67,6 @@ public class AppFileListFragment extends Fragment implements AppFileListAdapter.
         mParent = (BaseActivity) getActivity();
         if(savedInstanceState != null){
             mCab = MaterialCab.restoreState(savedInstanceState,mParent,this);
-//            mAdapter.rest
         }
     }
 

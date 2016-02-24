@@ -23,6 +23,7 @@
 package com.gudong.appkit.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 
@@ -51,6 +52,16 @@ public class DialogUtil {
     public static void showCustomDialogFillInWebView(Context context, FragmentManager fragmentManager, String dialogTitle, String htmlFileName, String tag) {
         int accentColor = Utils.getAccentColor(context);
         CustomWebViewDialog.create(dialogTitle, htmlFileName, accentColor)
+                .show(fragmentManager, tag);
+    }
+
+    public static void showCustomDialogWithTwoAction(
+            Context context, FragmentManager fragmentManager,
+            String dialogTitle, String htmlFileName, String tag,
+            String positiveText, DialogInterface.OnClickListener positiveListener,
+            String neutralText, DialogInterface.OnClickListener neutralListener) {
+        int accentColor = Utils.getAccentColor(context);
+        CustomWebViewDialog.create(dialogTitle, htmlFileName, accentColor,positiveText,positiveListener,neutralText,neutralListener)
                 .show(fragmentManager, tag);
     }
 }

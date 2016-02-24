@@ -23,12 +23,8 @@
 package com.gudong.appkit.utils;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.LabeledIntent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,8 +45,6 @@ import com.gudong.appkit.view.CircularProgressDrawable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -98,41 +92,6 @@ public class ActionUtil {
                 "application/vnd.android.package-archive");
         activity.startActivity(mIntent);
     }
-
-
-
-    /**
-     * the first version for share apk
-     * @param activity
-     * @param entity
-     */
-    public static void shareApk_V1(Activity activity, AppEntity entity){
-        PackageManager pm = activity.getPackageManager();
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setType("text/plain");
-        List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
-        List<LabeledIntent> intentList = new ArrayList<LabeledIntent>();
-        for (int i = 0; i < resInfo.size(); i++) {
-            ResolveInfo ri = resInfo.get(i);
-            String packageName = ri.activityInfo.packageName;
-            if (packageName.contains("tencent") || packageName.contains("blue")) {
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
-
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(entity.getSrcPath())));
-                intent.setAction(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intentList.add(new LabeledIntent(intent, packageName, ri.loadLabel(pm), ri.icon));
-            }
-        }
-
-        LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
-
-        Intent openInChooser = Intent.createChooser(intentList.remove(0), FormatUtil.warpChooserTitle(activity,entity.getAppName()));
-        openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-        activity.startActivity(openInChooser);
-    }
-
     /**
      * export apk file
      * @param entity

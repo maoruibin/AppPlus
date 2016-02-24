@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">AppPlus</string>
 
+    <string name="action_donate">支持开发者</string>
     <string name="action_settings">设置</string>
     <string name="action_opinion">意见反馈</string>
     <string name="action_retry">重试</string>
     <string name="action_about">关于</string>
+    <string name="action_close">关闭</string>
+    <string name="action_copy_to_clipboard">复制账号并打开支付宝</string>
+    <string name="copy_success">支付宝账号已复制到粘贴板 </string>
     <string name="empty"></string>
 
     <string name="tab_recent">最近打开</string>
@@ -115,4 +119,6 @@
     <string name="fail_export_app">导出 %1$s 安装包失败,请检查应用是否存在。</string>
     <string name="fail_share_app">分享 %1$s 安装包失败,请检查应用是否存在。</string>
     <string name="fail_install_app">安装 %1$s 失败,请检查应用是否存在。</string>
+
+    <string name="support_exception_for_alipay">检测到你还没有安装支付宝，不能进行打赏，但还是谢谢你的好意 ^_^</string>
 </resources>

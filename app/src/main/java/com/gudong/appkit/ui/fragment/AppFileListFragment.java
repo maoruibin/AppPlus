@@ -12,14 +12,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Toast;
 
-import com.afollestad.materialcab.MaterialCab;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppFileListAdapter;
 import com.gudong.appkit.dao.AppEntity;
@@ -46,13 +43,13 @@ import rx.schedulers.Schedulers;
  * Created by GuDong on 2/4/16 22:25.
  * Contact with 1252768410@qq.com.
  */
-public class AppFileListFragment extends Fragment implements AppFileListAdapter.IClickPopupMenuItem, AppFileListAdapter.IClickListItem, MaterialCab.Callback {
+public class AppFileListFragment extends Fragment implements AppFileListAdapter.IClickPopupMenuItem, AppFileListAdapter.IClickListItem{
 
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private AppFileListAdapter mAdapter;
 
-    MaterialCab mCab;
+//    MaterialCab mCab;
 
     private BaseActivity mParent;
 
@@ -65,21 +62,6 @@ public class AppFileListFragment extends Fragment implements AppFileListAdapter.
         super.onCreate(savedInstanceState);
         subscribeEvents();
         mParent = (BaseActivity) getActivity();
-        if(savedInstanceState != null){
-            mCab = MaterialCab.restoreState(savedInstanceState,mParent,this);
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if(mCab != null){
-            mCab.saveState(outState);
-        }
-
-        if(mAdapter!=null){
-            //mAdapter.saveState(outState);
-        }
     }
 
     @Nullable
@@ -94,7 +76,7 @@ public class AppFileListFragment extends Fragment implements AppFileListAdapter.
         toolbar.setSubtitle(R.string.tab_exported);
 
         final ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         ab.setDisplayHomeAsUpEnabled(true);
 
         setupSwipeLayout(rootView);
@@ -283,31 +265,5 @@ public class AppFileListFragment extends Fragment implements AppFileListAdapter.
 
     @Override
     public void onLongClickListItem(View iconView, AppEntity entity) {
-//        if(mCab == null){
-//            BaseActivity activity = (BaseActivity) getActivity();
-//            mCab = new MaterialCab(activity,R.id.cab_stub)
-//                    .setTitle("title")
-//                    .setMenu(R.menu.item_pop_file_menu)
-//                    .start(this);
-//        }else if(!mCab.isActive()){
-//            mCab.reset().start(this);
-//        }else {
-//            mCab.setTitle("second");
-//        }
-    }
-
-    @Override
-    public boolean onCabCreated(MaterialCab materialCab, Menu menu) {
-        return true;
-    }
-
-    @Override
-    public boolean onCabItemClicked(MenuItem menuItem) {
-        return true;
-    }
-
-    @Override
-    public boolean onCabFinished(MaterialCab materialCab) {
-        return true;
     }
 }

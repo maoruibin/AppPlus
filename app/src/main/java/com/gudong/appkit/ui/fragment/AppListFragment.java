@@ -40,13 +40,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.afollestad.materialcab.MaterialCab;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppEntity;
@@ -74,7 +71,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by mao on 15/7/8.
  */
-public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem, MaterialCab.Callback {
+public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem{
 
     public static final String KEY_TYPE = "type";
 
@@ -188,7 +185,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         toolbar.setSubtitle(getTitleString(mType));
 
         final ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+        ab.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         ab.setDisplayHomeAsUpEnabled(true);
 
         setupSwipeLayout(rootView);
@@ -388,7 +385,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         animationSet.start();
     }
 
-    private MaterialCab mCab;
 
     @Override
     public void onLongClickListItem(View iconView, AppEntity entity) {
@@ -423,21 +419,6 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         } else {
             return getString(R.string.app_list_empty_search);
         }
-    }
-
-    @Override
-    public boolean onCabCreated(MaterialCab materialCab, Menu menu) {
-        return false;
-    }
-
-    @Override
-    public boolean onCabItemClicked(MenuItem menuItem) {
-        return false;
-    }
-
-    @Override
-    public boolean onCabFinished(MaterialCab materialCab) {
-        return false;
     }
 }
 

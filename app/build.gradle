@@ -122,11 +122,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Google
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:gridlayout-v7:23.1.1'
-    compile 'com.android.support:percent:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:recyclerview-v7:23.2.0'
+    compile 'com.android.support:design:23.2.0'
+    compile 'com.android.support:gridlayout-v7:23.2.0'
+    compile 'com.android.support:percent:23.2.0'
 
     // Reactivex
     compile 'io.reactivex:rxjava:1.0.1'
@@ -138,9 +138,6 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.jaredrummler:android-processes:1.0.2'
     compile 'jp.wasabeef:recyclerview-animators:2.1.0'
-    compile('com.afollestad:material-cab:0.1.8@aar') {
-        transitive = true
-    }
     compile 'com.jaredrummler:apk-parser:1.0.1'
 }
 

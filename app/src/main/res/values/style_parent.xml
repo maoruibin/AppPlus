@@ -5,12 +5,11 @@
         <item name="theme_color_dark">@color/colorPrimaryDark</item>
         <item name="theme_accent_color">@color/colorAccent</item>
 
-        <item name="ic_menu_export">@drawable/ic_exit_to_app_black_24dp</item>
-        <item name="ic_menu_detail">@drawable/ic_info_outline_black_24dp</item>
+        <item name="ic_menu_export">@drawable/ic_export_black_24dp</item>
+        <item name="ic_menu_detail">@drawable/ic_detail_black_24dp</item>
         <item name="ic_menu_share">@drawable/ic_share_black_24dp</item>
 
         <item name="ic_menu_file_delete">@drawable/ic_delete_black_24dp</item>
-        <item name="ic_menu_file_install">@drawable/ic_open_with_black_24dp</item>
 
         <item name="appColorPrimary">@color/colorPrimary</item>
         <item name="fits_windows">false</item>

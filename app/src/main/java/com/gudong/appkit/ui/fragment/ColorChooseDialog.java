@@ -106,7 +106,7 @@ public class ColorChooseDialog extends DialogFragment implements View.OnClickLis
         int widthMargin = Utils.convertDensityPix(context, 4);
 
         ImageView imageView = new ImageView(context);
-        imageView.setImageResource(R.drawable.ic_check);
+        imageView.setImageResource(R.drawable.ic_done_white_24dp);
 
         FrameLayout.LayoutParams ivParams = new FrameLayout.LayoutParams(widthImageCheckView, widthImageCheckView);
         ivParams.gravity = Gravity.CENTER;

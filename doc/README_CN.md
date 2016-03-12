@@ -18,6 +18,7 @@ AppPlus是一个可以用于传送Apk文件，提取APK文件等的工具软件�
 
 ### <a name="jump">知识点</a> ###
 * 官方support design库的使用
+* 使用 RxJava 控制异步请求
 * 主题颜色切换(主要原理是通过切换事先定义好的Theme，然后重新启动Activity)
 * 友盟统计(包括事件统计以及自动更新)
 * RecycleView 分割线以及Item动画的应用
@@ -29,6 +30,7 @@ AppPlus是一个可以用于传送Apk文件，提取APK文件等的工具软件�
 * [systembartint](https://github.com/jgilfelt/SystemBarTint) -- 沉浸式效果
 * [AndroidProcesses](https://github.com/jaredrummler/AndroidProcesses)
 * [recyclerview-animators](https://github.com/wasabeef/recyclerview-animators)
+* [RxJava](https://github.com/ReactiveX/RxJava)
 
 ### 更新日志 ###
 Changelog is available [here](/doc/Changelog.md)

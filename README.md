@@ -24,6 +24,7 @@ AppPlus is a open source android application,and used to manage app,export apk,w
 * [systembartint](https://github.com/jgilfelt/SystemBarTint)  
 * [AndroidProcesses](https://github.com/jaredrummler/AndroidProcesses) 
 * [recyclerview-animators](https://github.com/wasabeef/recyclerview-animators)
+* [RxJava](https://github.com/ReactiveX/RxJava)
 
 ### Changelog ###
 Changelog is available [here](/doc/Changelog.md)(write by chinese)

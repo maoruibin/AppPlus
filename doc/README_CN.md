@@ -9,7 +9,7 @@ AppPlus是一个可以用于传送Apk文件，提取APK文件等的工具软件�
 
 ### 开发初衷 ###
 
-[为什么开发了 AppPlus](http://maoruibin.github.io/technology/2015/12/21/reason-for-appplus.html)
+[为什么开发了 AppPlus](http://maoruibin.github.io/2015/12/21/reason-for-appplus.html)
 
 ### 截图 ###
 

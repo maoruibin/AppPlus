@@ -30,12 +30,20 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
+import com.gudong.appkit.dao.DataHelper;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.RxBus;
+import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ActionUtil;
 import com.gudong.appkit.utils.FormatUtil;
@@ -52,7 +60,7 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
     public static final String VIEW_NAME_HEADER_TITLE = "detail:header:title";
 
     public static final String EXTRA_APP_ENTITY = "APP_ENTITY";
-
+    private Menu mMenu;
     private ImageView mImageView;
     private TextView mTvAppName;
     private TextView mTvAppVersion;
@@ -80,8 +88,45 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
         addListener();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_app_detail, menu);
+        mMenu = menu;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        updateFavoriteIcon(mAppEntity);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    private void updateFavoriteIcon(AppEntity appEntity){
+        mMenu.findItem(R.id.menu_favorite).setIcon(appEntity.isFavorite()? R.drawable.ic_favorite_white_24dp:R.drawable.ic_favorite_not_white_24dp);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_favorite:
+                String point = mAppEntity.isFavorite()? "取消收藏"+mAppEntity.getAppName() : "收藏"+mAppEntity.getAppName()+"成功";
+                mAppEntity.setFavorite(!mAppEntity.isFavorite());
+                Toast.makeText(this,point, Toast.LENGTH_SHORT).show();
+                App.sDb.update(mAppEntity);
+                updateFavoriteIcon(mAppEntity);
+
+                Bundle data = new Bundle();
+                data.putParcelable("entity",mAppEntity);
+                RxBus.getInstance().send(new RxEvent(EEvent.UPDATE_ENTITY_FAVORIE_STATUS,data));
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void fillData() {
         mAppEntity = (AppEntity) getIntent().getParcelableExtra(EXTRA_APP_ENTITY);
+        mAppEntity = DataHelper.getAppByPackageName(mAppEntity.getPackageName());
         Bitmap bitmap = BitmapFactory.decodeByteArray(mAppEntity.getAppIconData(), 0, mAppEntity.getAppIconData().length);
         mImageView.setImageBitmap(bitmap);
         mTvAppName.setText(mAppEntity.getAppName());

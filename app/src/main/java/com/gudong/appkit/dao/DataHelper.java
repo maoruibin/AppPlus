@@ -30,6 +30,7 @@ import com.gudong.appkit.App;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.RxUtil;
 import com.gudong.appkit.utils.Utils;
+import com.gudong.appkit.utils.logger.Logger;
 import com.jaredrummler.android.processes.ProcessManager;
 import com.jaredrummler.apkparser.ApkParser;
 import com.jaredrummler.apkparser.model.ApkMeta;
@@ -83,9 +84,33 @@ public class DataHelper {
         return RxUtil.makeObservable(new Callable<List<AppEntity>>() {
             @Override
             public List<AppEntity> call() throws Exception {
-                return App.sDb.query(AppEntity.class);
+                List<AppEntity> list = App.sDb.query(AppEntity.class);
+                for (int i = 0; i < list.size(); i++) {
+                    Logger.i(""+list.get(i).getAppName()+" is favorite "+list.get(i).isFavorite());
+                }
+                return list;
             }
         });
+    }
+
+    public static Observable<List<AppEntity>>getFavoriteEntityByDbAsyn(){
+        return RxUtil.makeObservable(new Callable<List<AppEntity>>() {
+            @Override
+            public List<AppEntity> call() throws Exception {
+                return App.sDb.query(new QueryBuilder<AppEntity>(AppEntity.class)
+                        .whereEquals(AppEntity.COLUMN_FAVORITE, true));
+            }
+        });
+    }
+
+    public static AppEntity getEntityByPackageName(String packageName){
+        List<AppEntity>list = App.sDb.query(
+                new QueryBuilder<AppEntity>(AppEntity.class)
+                .whereEquals(AppEntity.COLUMN_PACKAGE_NAME, packageName).limit(0,1));
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
     }
 
     /**

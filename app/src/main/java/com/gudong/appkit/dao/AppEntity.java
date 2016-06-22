@@ -26,6 +26,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.litesuits.orm.db.annotation.Column;
+import com.litesuits.orm.db.annotation.Default;
 import com.litesuits.orm.db.annotation.PrimaryKey;
 import com.litesuits.orm.db.annotation.Table;
 import com.litesuits.orm.db.enums.AssignType;
@@ -35,16 +36,22 @@ import com.litesuits.orm.db.enums.AssignType;
  * Created by mao on 15/7/8.
  */
 @Table("app_entity") public class AppEntity  implements Parcelable{
+    public static final String COLUMN_FAVORITE = "favorite";
+    public static final String COLUMN_PACKAGE_NAME = "packageName";
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     @Column("_id") protected long id;
 
     @Column("appName") private String appName="";
-    @Column("packageName") private String packageName="";
+    @Column(COLUMN_PACKAGE_NAME) private String packageName="";
     @Column("versionName") private String versionName="";
     @Column("versionCode") private int versionCode=0;
     @Column("appIconData") private byte[] appIconData=null;
     @Column("srcPath") private String srcPath;
     @Column("uid") private int uid;
+
+    //add in 2016.6.21
+    @Default("false")
+    @Column(COLUMN_FAVORITE) private boolean isFavorite;
 
     private int status;
 
@@ -127,6 +134,14 @@ import com.litesuits.orm.db.enums.AssignType;
         this.status = status;
     }
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -152,6 +167,22 @@ import com.litesuits.orm.db.enums.AssignType;
         return packageName != null ? packageName.hashCode() : 0;
     }
 
+
+
+    @Override
+    public String toString() {
+        return "AppEntity{" +
+                "appIconData size =" + appIconData.length +
+                ", id=" + id +
+                ", appName='" + appName + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", versionName='" + versionName + '\'' +
+                ", versionCode=" + versionCode +
+                ", srcPath='" + srcPath + '\'' +
+                ", uid=" + uid +
+                '}';
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -167,9 +198,11 @@ import com.litesuits.orm.db.enums.AssignType;
         dest.writeByteArray(this.appIconData);
         dest.writeString(this.srcPath);
         dest.writeInt(this.uid);
+        dest.writeByte(this.isFavorite ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.status);
     }
 
-    private AppEntity(Parcel in) {
+    protected AppEntity(Parcel in) {
         this.id = in.readLong();
         this.appName = in.readString();
         this.packageName = in.readString();
@@ -178,29 +211,19 @@ import com.litesuits.orm.db.enums.AssignType;
         this.appIconData = in.createByteArray();
         this.srcPath = in.readString();
         this.uid = in.readInt();
+        this.isFavorite = in.readByte() != 0;
+        this.status = in.readInt();
     }
 
     public static final Creator<AppEntity> CREATOR = new Creator<AppEntity>() {
+        @Override
         public AppEntity createFromParcel(Parcel source) {
             return new AppEntity(source);
         }
 
+        @Override
         public AppEntity[] newArray(int size) {
             return new AppEntity[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "AppEntity{" +
-                "appIconData size =" + appIconData.length +
-                ", id=" + id +
-                ", appName='" + appName + '\'' +
-                ", packageName='" + packageName + '\'' +
-                ", versionName='" + versionName + '\'' +
-                ", versionCode=" + versionCode +
-                ", srcPath='" + srcPath + '\'' +
-                ", uid=" + uid +
-                '}';
-    }
 }

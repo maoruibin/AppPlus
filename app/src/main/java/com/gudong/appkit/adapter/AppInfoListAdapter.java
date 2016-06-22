@@ -86,6 +86,15 @@ public class AppInfoListAdapter extends RecyclerView.Adapter<AppInfoListAdapter.
        }
     }
 
+    public void update(AppEntity entity){
+        int index = getListData().indexOf(entity);
+        if(index>0){
+            getListData().remove(index);
+            getListData().add(index,entity);
+            notifyDataSetChanged();
+        }
+    }
+
     public void clear(){
         notifyItemRangeRemoved(0,mListData.size());
         this.mListData.clear();

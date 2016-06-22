@@ -105,10 +105,13 @@ public class MainActivity extends BaseActivity {
         Fragment fragment = null;
         switch (menuItem.getItemId()) {
             case R.id.nav_recent:
-                fragment = AppListFragment.getInstance(0);
+                fragment = AppListFragment.getInstance(AppListFragment.TYPE_RECENT);
                 break;
             case R.id.nav_installed:
-                fragment = AppListFragment.getInstance(1);
+                fragment = AppListFragment.getInstance(AppListFragment.TYPE_INSTALLED);
+                break;
+            case R.id.nav_favorite:
+                fragment = AppListFragment.getInstance(AppListFragment.TYPE_FAVORITE);
                 break;
             case R.id.nav_exported:
                 fragment = new AppFileListFragment();

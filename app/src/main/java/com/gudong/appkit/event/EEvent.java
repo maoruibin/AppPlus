@@ -56,5 +56,7 @@ public enum EEvent {
     /**
      * delete exported file fail
      */
-    DELETE_SINGLE_EXPORT_FILE_SUC;
+    DELETE_SINGLE_EXPORT_FILE_SUC,
+
+    UPDATE_ENTITY_FAVORIE_STATUS;
 }

@@ -43,7 +43,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Toast;
 
+import com.gudong.appkit.App;
 import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppEntity;
@@ -75,6 +77,10 @@ import rx.schedulers.Schedulers;
 public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem{
 
     public static final String KEY_TYPE = "type";
+    public static final int TYPE_RECENT = 0;
+    public static final int TYPE_INSTALLED = 1;
+    public static final int TYPE_FAVORITE = 2;
+    public static final int TYPE_SEARCH = 3;
 
 
     private RecyclerView mRecyclerView;
@@ -130,7 +136,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     private void dealRxEvent(RxEvent msg, List<AppEntity> list) {
         switch (msg.getType()) {
             case RECENT_LIST_IS_SHOW_SELF_CHANGE:
-                if (mType == 0) {
+                if (mType == AppListFragment.TYPE_RECENT) {
                     boolean isShowSelf = !Utils.isShowSelf();
                     AppEntity appPlus = DataHelper.getAppPlusEntity();
                     if (isShowSelf) {
@@ -161,10 +167,14 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 break;
             case INSTALL_APPLICATION_FROM_SYSTEM:
                 AppEntity installedEntity = msg.getData().getParcelable("entity");
-                if (mType == 1 && !list.contains(installedEntity)) {
+                if (mType == AppListFragment.TYPE_INSTALLED && !list.contains(installedEntity)) {
                     mAdapter.addItem(0,installedEntity);
                     Logger.i("this is all type and list not contain " + installedEntity.getAppName() + "now add it");
                 }
+                break;
+            case UPDATE_ENTITY_FAVORIE_STATUS:
+                AppEntity updateEntity = msg.getData().getParcelable("entity");
+                //mAdapter.update();
                 break;
             case PREPARE_FOR_ALL_INSTALLED_APP_FINISH:
                 mRecyclerView.post(new Runnable() {
@@ -290,11 +300,14 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
          */
         Observable<List<AppEntity>> listObservable = null;
         switch (mType) {
-            case 0:
+            case TYPE_RECENT:
                 listObservable = DataHelper.getRunningAppEntity(getActivity());
                 break;
-            case 1:
+            case TYPE_INSTALLED:
                 listObservable = DataHelper.getAllEntityByDbAsyn();
+                break;
+            case TYPE_FAVORITE:
+                listObservable = DataHelper.getFavoriteEntityByDbAsyn();
                 break;
         }
 
@@ -362,6 +375,16 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 NavigationManager.openAppDetail(getActivity(), entity.getPackageName());
                 MobclickAgent.onEvent(getActivity(), "pop_detail");
                 break;
+            case R.id.pop_favorite:
+                String point = entity.isFavorite()? "取消收藏"+entity.getAppName() : "收藏"+entity.getAppName()+"成功";
+                entity.setFavorite(!entity.isFavorite());
+                Toast.makeText(getContext(),point, Toast.LENGTH_SHORT).show();
+                App.sDb.update(entity);
+                if(!entity.isFavorite()){
+                    mAdapter.removeItem(entity);
+                }
+                MobclickAgent.onEvent(getActivity(), "pop_favorite");
+                break;
         }
     }
 
@@ -407,10 +430,12 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
     }
 
     private String getTitleString(int type) {
-        if (type == 0) {
+        if (type == TYPE_RECENT) {
             return getString(R.string.tab_recent);
-        } else if (type == 1) {
+        } else if (type == TYPE_INSTALLED) {
             return getString(R.string.tab_installed);
+        } else if (type == TYPE_FAVORITE) {
+            return getString(R.string.tab_favorite);
         } else {
             return "";
         }

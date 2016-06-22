@@ -12,6 +12,7 @@
     <string name="empty"></string>
 
     <string name="tab_recent">最近打开</string>
+    <string name="tab_favorite">收藏</string>
     <string name="tab_installed">已安装</string>
     <string name="tab_exported">已导出APK</string>
 

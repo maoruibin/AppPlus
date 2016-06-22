@@ -10,6 +10,10 @@
             android:icon="@drawable/ic_recent_black_24dp"
             android:title="@string/tab_recent" />
         <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_recent_black_24dp"
+            android:title="@string/tab_recent" />
+        <item
             android:id="@+id/nav_installed"
             android:icon="@drawable/ic_installed_black_24dp"
             android:title="@string/tab_installed" />

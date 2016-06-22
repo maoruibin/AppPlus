@@ -12,6 +12,7 @@
     <string name="empty"></string>
 
     <string name="tab_recent">Running</string>
+    <string name="tab_favorite">Favorite</string>
     <string name="tab_installed">Installed</string>
     <string name="tab_exported">Exported</string>
 

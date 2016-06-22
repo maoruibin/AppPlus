@@ -30,6 +30,9 @@ import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.AppInfoEngine;
 import com.gudong.appkit.dao.AppStatus;
 import com.gudong.appkit.dao.DataHelper;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.RxBus;
+import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.logger.Logger;
@@ -55,12 +58,12 @@ public class SplashActivity extends BaseActivity {
         setStatusBarColorRes(R.color.colorPrimary);
         checkAndUpdateLocalDb();
         checkExportDirectoryIsChange();
-        //gotoMainActivity();
+        gotoMainActivity();
     }
 
     private void gotoMainActivity() {
         //delay 1500 mill and enter MainActivity
-        Observable.timer(1500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+        Observable.timer(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .map(new Func1<Long, Object>() {
                     @Override
                     public Object call(Long aLong) {
@@ -124,7 +127,9 @@ public class SplashActivity extends BaseActivity {
                 }, new Action0() {
                     @Override
                     public void call() {
-                        NavigationManager.gotoMainActivityFromSplashView(SplashActivity.this);
+                        //NavigationManager.gotoMainActivityFromSplashView(SplashActivity.this);
+                        RxBus.getInstance().send(RxEvent.get(EEvent.PREPARE_FOR_ALL_INSTALLED_APP_FINISH));
+                        Logger.i("PREPARE_FOR_ALL_INSTALLED_APP_FINISH");
                     }
                 });
     }

@@ -59,6 +59,7 @@ import com.gudong.appkit.utils.logger.Logger;
 import com.gudong.appkit.view.DividerItemDecoration;
 import com.umeng.analytics.MobclickAgent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
@@ -116,7 +117,10 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                     public void call(Object o) {
                         if(o instanceof RxEvent){
                             RxEvent msg = (RxEvent) o;
-                            List<AppEntity> list = mAdapter.getListData();
+                            List<AppEntity> list = new ArrayList<AppEntity>();
+                            if(mAdapter!=null){
+                                list = mAdapter.getListData();
+                            }
                             dealRxEvent(msg, list);
                         }
                     }
@@ -167,6 +171,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                     @Override
                     public void run() {
                         fillData();
+                        Logger.i("reload ");
                     }
                 });
                 break;

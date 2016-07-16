@@ -80,7 +80,9 @@
     <string name="switch_preference_list_item_brief_mode_on">应用列表将只显示应用名称和图标信息</string>
 
     <string name="preference_title_theme_primary">主题颜色</string>
+    <string name="preference_title_wechat_helper">微信助手</string>
     <string name="preference_summary_theme_primary">界面主色调，默认为Material蓝色</string>
+    <string name="preference_summary_wechat_helper">格式化 APK 文件</string>
 
     <string name="preference_title_about">关于AppPlus</string>
     <string name="preference_title_score">去市场评分</string>

@@ -23,8 +23,10 @@
 package com.gudong.appkit.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.widget.Toast;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.event.EEvent;
@@ -32,9 +34,11 @@ import com.gudong.appkit.event.RxBus;
 import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.ThemeControl;
+import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +54,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         //设置点击监听
         findPreference(getString(R.string.preference_key_theme_primary)).setOnPreferenceClickListener(this);
+        findPreference(getString(R.string.preference_key_wechat_helper)).setOnPreferenceClickListener(this);
         findPreference(getString(R.string.switch_preference_key_show_self)).setOnPreferenceChangeListener(this);
         findPreference(getString(R.string.switch_preference_key_list_item_brief_mode)).setOnPreferenceChangeListener(this);
     }
@@ -63,7 +68,37 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             dialog.show(mContext, mContext.getThemeUtils().getThemePosition());
             MobclickAgent.onEvent(mContext, "setting_theme_color");
         }
+        if(key.equals(getString(R.string.preference_key_wechat_helper))){
+
+
+        }
         return false;
+    }
+
+    private void startWeChatHelper(){
+        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+        {
+            File tencent = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"tencent");
+            if(tencent.exists()){
+                File wechatDownload = new File(tencent,"MicroMsg/Download");
+                if(wechatDownload.exists()){
+                    File[]files = wechatDownload.listFiles();
+                    for(File file:files){
+                        String fileName = file.getName();
+                        if(fileName.contains("apk")){
+                            String newName = fileName.substring(0,fileName.lastIndexOf("."));
+                            File fileTo = new File(file.getParent(),newName);
+                            if(file.renameTo(fileTo)){
+                                if(file.delete()){
+                                    Toast.makeText(getActivity(), "原始文件已被删除", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    }
+                    DialogUtil.showSinglePointDialog(getActivity(),"已成功将微信中的 APK 文件重命名！");
+                }
+            }
+        }
     }
 
     @Override

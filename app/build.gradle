@@ -139,6 +139,8 @@ dependencies {
     compile 'com.jaredrummler:android-processes:1.0.2'
     compile 'jp.wasabeef:recyclerview-animators:2.1.0'
     compile 'com.jaredrummler:apk-parser:1.0.1'
+    //A small Android library to manage one-off operations.
+    compile 'com.jonathanfinerty.once:once:1.0.3'
 }
 
 task showMeCache << {

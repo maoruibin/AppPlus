@@ -40,13 +40,16 @@ public class DialogUtil {
      * @param context context
      */
     public static void showSinglePointDialog(Context context, String message){
+        showSinglePointDialog(context,message,context.getString(R.string.dialog_confirm),null);
+    }
+
+    public static void showSinglePointDialog(Context context, String message, String positiveButtonText, DialogInterface.OnClickListener positiveButtonCallback){
         new AlertDialog.Builder(context)
                 .setTitle(R.string.title_point)
                 .setMessage(message)
-                .setPositiveButton(R.string.dialog_confirm, null)
+                .setPositiveButton(positiveButtonText, positiveButtonCallback)
                 .show();
     }
-
 
 
     public static void showCustomDialogFillInWebView(Context context, FragmentManager fragmentManager, String dialogTitle, String htmlFileName, String tag) {

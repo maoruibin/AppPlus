@@ -125,4 +125,5 @@
     <string name="fail_install_app">Install %1$s fail,please check it exists or not.</string>
 
     <string name="support_exception_for_alipay">after check,your phone has not install alipay,so can not reward me,but thank you anyway ^_^</string>
+    <string name="about_wechat_helper">微信助手的作用：当你在自己的微信接受到一个 APK 安装包文件，微信会将 APK 文件名加一个数字的后缀，这样会导致你无法正常安装接受到的安装包，AppPlus 的微信助手</string>
 </resources>

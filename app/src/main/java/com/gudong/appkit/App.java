@@ -27,6 +27,8 @@ import android.content.Context;
 
 import com.litesuits.orm.LiteOrm;
 
+import jonathanfinerty.once.Once;
+
 /**
  * 应用程序入口
  * Created by mao on 7/16/15.
@@ -40,5 +42,6 @@ public class App extends Application {
         super.onCreate();
         sDb = LiteOrm.newSingleInstance(this, DB_NAME);
         sContext = this;
+        Once.initialise(this);
     }
 }

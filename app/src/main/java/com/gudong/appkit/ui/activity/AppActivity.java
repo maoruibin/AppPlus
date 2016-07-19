@@ -182,8 +182,8 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void showMoreDialog() {
-        new AlertDialog.Builder(this).
-                setItems(R.array.more_action, new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this)
+                .setItems(R.array.more_action, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){

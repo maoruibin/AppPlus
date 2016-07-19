@@ -184,12 +184,7 @@ public class ActionUtil {
             progressBar.setIndeterminateDrawable(new CircularProgressDrawable(Utils.getColorWarp(activity, R.color.colorAccent), activity.getResources().getDimension(R.dimen.loading_border_width)));
         }
 
-        final AlertDialog progressDialog = new AlertDialog.Builder(activity)
-                .setTitle(R.string.title_export)
-                .setView(view).create();
-        //设置显示文字
-        textView.setText(R.string.please_wait);
-
+        final AlertDialog progressDialog = DialogUtil.getProgressDialog(activity,activity.getString(R.string.title_point),activity.getString(R.string.please_wait));
         progressDialog.show();
         try {
             FileUtil.copyFileUsingFileChannelsAsyn(srcFile, exportFile)

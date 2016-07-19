@@ -21,6 +21,11 @@
             android:id="@+id/nav_exported"
             android:icon="@drawable/ic_exported_list_black_24dp"
             android:title="@string/tab_exported" />
+
+        <item
+            android:id="@+id/nav_wechat_helper"
+            android:icon="@drawable/ic_toys_black_24dp"
+            android:title="@string/tab_wechat" />
     </group>
 
     <group

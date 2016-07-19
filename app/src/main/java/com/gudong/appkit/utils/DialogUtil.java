@@ -22,13 +22,20 @@
 
 package com.gudong.appkit.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.fragment.CustomWebViewDialog;
+import com.gudong.appkit.view.CircularProgressDrawable;
 
 /**
  * tool for dialog
@@ -66,5 +73,24 @@ public class DialogUtil {
         int accentColor = Utils.getAccentColor(context);
         CustomWebViewDialog.create(dialogTitle, htmlFileName, accentColor,positiveText,positiveListener,neutralText,neutralListener)
                 .show(fragmentManager, tag);
+    }
+
+    public static AlertDialog getProgressDialog(Activity context,String title, String message){
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_progress, null);
+        ProgressBar progressBar = (ProgressBar) view.findViewById(android.R.id.progress);
+        TextView textView = (TextView) view.findViewById(R.id.content);
+
+        //改变Progress的背景为MaterialDesigner规范的样式
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            progressBar.setIndeterminateDrawable(new CircularProgressDrawable(Utils.getColorWarp(context, R.color.colorAccent), context.getResources().getDimension(R.dimen.loading_border_width)));
+        }
+
+        final AlertDialog progressDialog = new AlertDialog.Builder(context)
+                .setTitle(title)
+                .setView(view).create();
+        //设置显示文字
+        textView.setText(message);
+
+        return progressDialog;
     }
 }

@@ -6,6 +6,7 @@
     <string name="action_opinion">Send opinion</string>
     <string name="action_retry">Reload</string>
     <string name="action_about">About</string>
+    <string name="action_wechat_helper">WechatHelper</string>
     <string name="action_close">Close</string>
     <string name="action_copy_to_clipboard">Copy and open Alipay</string>
     <string name="copy_success">copy successfully </string>
@@ -15,6 +16,7 @@
     <string name="tab_favorite">Favorite</string>
     <string name="tab_installed">Installed</string>
     <string name="tab_exported">Exported</string>
+    <string name="tab_wechat">WechatHelper</string>
 
     <string name="menu_pop_item_file">Export to local</string>
     <string name="menu_pop_item_share">Share apk</string>
@@ -34,6 +36,7 @@
 
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_point">Point</string>
+    <string name="title_prepare_move">Prepare Move</string>
     <string name="title_export">Export...</string>
     <string name="dialog_message_no_sdcard">Your device has not Sdcard,please check it and retry.</string>
     <string name="dialog_message_file_exist">Package %1$s has exists upon %2$s ，is override?</string>
@@ -81,6 +84,7 @@
 
     <string name="preference_title_theme_primary">Theme Color</string>
     <string name="preference_title_wechat_helper">WeChat Helper</string>
+    <string name="preference_title_open_wechat_download">Open Wechat Download</string>
     <string name="preference_summary_theme_primary">Primary color,default is Material blue</string>
     <string name="preference_summary_wechat_helper">Use WeChat Helper</string>
 
@@ -99,6 +103,7 @@
     <string name="preference_key_check_update">check_update</string>
     <string name="preference_key_theme_primary">theme_primary</string>
     <string name="preference_key_wechat_helper">wechat_helper</string>
+    <string name="preference_key_open_wechat_download">open_wechat_download</string>
     <string name="change_log">Changelog</string>
     <string name="title_activity_app_detail">AppDetailActivity</string>
 

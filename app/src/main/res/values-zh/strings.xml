@@ -6,6 +6,7 @@
     <string name="action_opinion">意见反馈</string>
     <string name="action_retry">重试</string>
     <string name="action_about">关于</string>
+    <string name="action_wechat_helper">微信助手</string>
     <string name="action_close">关闭</string>
     <string name="action_copy_to_clipboard">复制账号并打开支付宝</string>
     <string name="copy_success">支付宝账号已复制到粘贴板 </string>
@@ -15,6 +16,7 @@
     <string name="tab_favorite">收藏</string>
     <string name="tab_installed">已安装</string>
     <string name="tab_exported">已导出APK</string>
+    <string name="tab_wechat">微信助手</string>
 
     <string name="menu_pop_item_file">导出到本地</string>
     <string name="menu_pop_item_share">分享安装包</string>
@@ -34,6 +36,7 @@
 
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_point">提示</string>
+    <string name="title_prepare_move">准备移动</string>
     <string name="title_export">导出中...</string>
     <string name="dialog_message_no_sdcard">你的设备尚未挂载SD卡，请检查后重试。</string>
     <string name="dialog_message_file_exist">安装包 %1$s 已存在于文件夹 %2$s 下，是否覆盖？</string>
@@ -81,6 +84,7 @@
 
     <string name="preference_title_theme_primary">主题颜色</string>
     <string name="preference_title_wechat_helper">微信助手</string>
+    <string name="preference_title_open_wechat_download">打开微信下载目录</string>
     <string name="preference_summary_theme_primary">界面主色调，默认为Material蓝色</string>
     <string name="preference_summary_wechat_helper">格式化 APK 文件</string>
 

@@ -116,6 +116,13 @@ public class MainActivity extends BaseActivity {
             case R.id.nav_exported:
                 fragment = new AppFileListFragment();
                 break;
+            case R.id.nav_wechat_helper:
+                mDrawerLayout.closeDrawers();
+                Intent intentWechatHelper =  new Intent(MainActivity.this, SimpleContainerActivity.class);
+                intentWechatHelper.putExtra(SimpleContainerActivity.KEY_TYPE, SimpleContainerActivity.FragmentType.WECHAT_HELPER);
+                startActivity(intentWechatHelper);
+                MobclickAgent.onEvent(this, "open_wechat_helper");
+                break;
             case R.id.nav_donate:
                 showDonateDialog();
                 MobclickAgent.onEvent(this, "menu_donate");

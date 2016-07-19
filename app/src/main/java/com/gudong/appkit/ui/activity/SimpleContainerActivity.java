@@ -29,6 +29,7 @@ import android.os.Bundle;
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.fragment.AboutFragment;
 import com.gudong.appkit.ui.fragment.SettingsFragment;
+import com.gudong.appkit.ui.fragment.WechatHelperFragment;
 
 import java.io.Serializable;
 
@@ -67,13 +68,17 @@ public class SimpleContainerActivity extends BaseActivity {
             case ABOUT:
                 fragment = new AboutFragment();
                 break;
+            case WECHAT_HELPER:
+                fragment = new WechatHelperFragment();
+                break;
         }
         return fragment;
     }
 
     public enum FragmentType implements Serializable{
         SETTING(R.string.action_settings),
-        ABOUT(R.string.action_about);
+        ABOUT(R.string.action_about),
+        WECHAT_HELPER(R.string.action_wechat_helper);
 
         int mResTitle;
 

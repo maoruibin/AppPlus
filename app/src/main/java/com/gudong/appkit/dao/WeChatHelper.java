@@ -45,7 +45,7 @@ public class WeChatHelper {
     private void showDownloadListDialog(final List<File> listTencentDownloads) {
         if (listTencentDownloads != null) {
             if (listTencentDownloads.isEmpty()) {
-                DialogUtil.showSinglePointDialog(mContext, "在你的微信下载目录没有发现任何安装包文件");
+                DialogUtil.showSinglePointDialog(mContext, mContext.getString(R.string.dialog_point_no_file));
             } else {
                 CharSequence[] nameList = new CharSequence[listTencentDownloads.size()];
                 boolean[] nameListCheckInit = new boolean[listTencentDownloads.size()];
@@ -58,7 +58,7 @@ public class WeChatHelper {
                 final boolean[] nameListCheckByUser = nameListCheckInit;
                 new AlertDialog.Builder(mContext)
                         .setTitle(R.string.title_prepare_move)
-                        .setPositiveButton("开始复制", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("开始复制并重命名", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
@@ -72,7 +72,7 @@ public class WeChatHelper {
                                             }
                                         })
                                         .setNegativeButton(R.string.dialog_cancel, null)
-                                        .setNegativeButton("复制并删除源文件", new DialogInterface.OnClickListener() {
+                                        .setNeutralButton("复制并删除源文件", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 moveOrCopyFileList(nameListCheckByUser, listTencentDownloads,false);

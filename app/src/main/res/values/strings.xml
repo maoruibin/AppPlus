@@ -85,8 +85,9 @@
     <string name="preference_title_theme_primary">Theme Color</string>
     <string name="preference_title_wechat_helper">WeChat Helper</string>
     <string name="preference_title_open_wechat_download">Open Wechat Download</string>
+    <string name="preference_title_wechat_helper_auto_check">Auto Check Apk In WeChat</string>
     <string name="preference_summary_theme_primary">Primary color,default is Material blue</string>
-    <string name="preference_summary_wechat_helper">Use WeChat Helper</string>
+    <string name="preference_summary_wechat_helper_auto_check">When app start,it will check apk file in WeChat Download auto.</string>
 
     <string name="preference_title_about">About AppPlus</string>
     <string name="preference_title_score">Go score</string>
@@ -103,6 +104,7 @@
     <string name="preference_key_check_update">check_update</string>
     <string name="preference_key_theme_primary">theme_primary</string>
     <string name="preference_key_wechat_helper">wechat_helper</string>
+    <string name="preference_key_wechat_helper_auto_check">wechat_helper_auto_check</string>
     <string name="preference_key_open_wechat_download">open_wechat_download</string>
     <string name="change_log">Changelog</string>
     <string name="title_activity_app_detail">AppDetailActivity</string>

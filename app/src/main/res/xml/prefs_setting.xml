@@ -21,4 +21,20 @@
             android:summary="@string/preference_summary_theme_primary"
             android:title="@string/preference_title_theme_primary"/>
     </com.jenzz.materialpreference.PreferenceCategory>
+    <com.jenzz.materialpreference.PreferenceCategory
+        android:title="@string/action_wechat_helper">
+        <com.jenzz.materialpreference.SwitchPreference
+            android:key="@string/preference_key_wechat_helper_auto_check"
+            android:defaultValue="true"
+            android:summary="@string/preference_summary_wechat_helper_auto_check"
+            android:title="@string/preference_title_wechat_helper_auto_check"/>
+
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/preference_key_wechat_helper"
+            android:title="@string/preference_title_wechat_helper"/>
+
+        <com.jenzz.materialpreference.Preference
+            android:key="@string/preference_key_open_wechat_download"
+            android:title="@string/preference_title_open_wechat_download"/>
+    </com.jenzz.materialpreference.PreferenceCategory>
 </PreferenceScreen>

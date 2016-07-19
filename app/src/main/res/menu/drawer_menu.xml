@@ -25,6 +25,7 @@
         <item
             android:id="@+id/nav_wechat_helper"
             android:icon="@drawable/ic_toys_black_24dp"
+            android:visible="false"
             android:title="@string/tab_wechat" />
     </group>
 

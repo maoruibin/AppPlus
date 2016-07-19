@@ -45,6 +45,7 @@
 
     <string name="dialog_know">Know</string>
     <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_open">Open</string>
     <string name="dialog_go_setting_safe">Go set</string>
     <string name="dialog_cancel">Cancel</string>
     <string name="dialog_do_not_point">Not point</string>

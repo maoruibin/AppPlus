@@ -23,6 +23,7 @@
 package com.gudong.appkit.ui.activity;
 
 import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,9 +32,9 @@ import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.content.ClipboardManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,13 +45,20 @@ import android.widget.Toast;
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.DataHelper;
+import com.gudong.appkit.dao.WeChatHelper;
+import com.gudong.appkit.event.EEvent;
+import com.gudong.appkit.event.RxBus;
+import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.fragment.AppFileListFragment;
 import com.gudong.appkit.ui.fragment.AppListFragment;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
+import com.gudong.appkit.utils.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
+
+import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity {
     DrawerLayout mDrawerLayout;
@@ -85,7 +93,20 @@ public class MainActivity extends BaseActivity {
 
         selectRecent();
 
+        subscribeEvents();
 
+        checkWeChatDownloadFile();
+    }
+
+    private void checkWeChatDownloadFile() {
+        if(Utils.isAutoCheckWeChat()){
+            mNavigationView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new WeChatHelper(MainActivity.this).checkDownloadListDialog(true);
+                }
+            },5000);
+        }
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -98,7 +119,6 @@ public class MainActivity extends BaseActivity {
                     }
                 });
     }
-
 
     Fragment currentFragment=null;
     private void updatePosition(final MenuItem menuItem) {
@@ -152,16 +172,18 @@ public class MainActivity extends BaseActivity {
             currentFragment=fragment;
             menuItem.setChecked(true);
             mDrawerLayout.closeDrawers();
+
             FragmentManager fragmentManager = getSupportFragmentManager();
-            final android.support.v4.app.FragmentTransaction transaction = fragmentManager.beginTransaction()
-                    .replace(R.id.fl_container, fragment);
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
+            final FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fl_container, fragment);
+
+            new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    transaction.commit();
+                    transaction.commitAllowingStateLoss();
                 }
             }, 350);
+
         }
     }
 
@@ -258,4 +280,23 @@ public class MainActivity extends BaseActivity {
         UmengUpdateAgent.update(this);
     }
 
+    private void subscribeEvents() {
+        RxBus.getInstance()
+                .toObservable()
+                .subscribe(new Action1() {
+                    @Override
+                    public void call(Object o) {
+                        Logger.i("open 1 ");
+                        if(o instanceof RxEvent){
+                            RxEvent msg = (RxEvent) o;
+                            EEvent event = msg.getType();
+                            if(event == EEvent.OPEN_EXPORT_DIR){
+                                mNavigationView.setCheckedItem(R.id.nav_exported);
+                                updatePosition(mNavigationView.getMenu().findItem(R.id.nav_exported));
+                                Logger.i("open");
+                            }
+                        }
+                    }
+                });
+    }
 }

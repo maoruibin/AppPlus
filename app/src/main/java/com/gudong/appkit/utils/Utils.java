@@ -129,6 +129,11 @@ public class Utils {
         return prefs.getBoolean(App.sContext.getString(R.string.switch_preference_key_list_item_brief_mode), true);
     }
 
+    public static boolean isAutoCheckWeChat() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(App.sContext);
+        return prefs.getBoolean(App.sContext.getString(R.string.preference_key_wechat_helper_auto_check), false);
+    }
+
 
     /**
      * get app version info
@@ -231,5 +236,6 @@ public class Utils {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return sp.getBoolean(key, false);
     }
+
 }
 

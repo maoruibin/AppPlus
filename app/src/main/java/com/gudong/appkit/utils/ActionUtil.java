@@ -40,6 +40,7 @@ import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.RxBus;
 import com.gudong.appkit.event.RxEvent;
+import com.gudong.appkit.ui.activity.MainActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.view.CircularProgressDrawable;
 
@@ -201,7 +202,11 @@ public class ActionUtil {
                             .setPositiveButton(R.string.dialog_confirm_watch, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    NavigationManager.browseFile(activity,exportFile.getParentFile());
+                                    RxBus.getInstance().send(new RxEvent(EEvent.OPEN_EXPORT_DIR));
+
+                                    if(!(activity instanceof MainActivity)){
+                                        activity.finish();
+                                    }
                                 }
                             })
                             .setNegativeButton(R.string.dialog_cancel_watch, null)

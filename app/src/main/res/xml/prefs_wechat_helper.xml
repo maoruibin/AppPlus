@@ -3,7 +3,6 @@
 
     <com.jenzz.materialpreference.Preference
         android:key="@string/preference_key_wechat_helper"
-        android:summary="@string/preference_summary_wechat_helper"
         android:title="@string/preference_title_wechat_helper"/>
 
     <com.jenzz.materialpreference.Preference

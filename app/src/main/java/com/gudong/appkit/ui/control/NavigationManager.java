@@ -52,30 +52,32 @@ public class NavigationManager {
 
     /**
      * 给作者发送邮件 反馈意见
+     *
      * @param context
      */
-    public static void gotoSendOpinion(Activity context){
+    public static void gotoSendOpinion(Activity context) {
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
         emailIntent.setType("plain/text");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL,new String[]{"gudong.name@gmail.com"});
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"gudong.name@gmail.com"});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.title_email_opinion));
 
-        try{
+        try {
             context.startActivity(emailIntent);
-        }catch (ActivityNotFoundException e){
-            Log.e("----",e.getMessage());
+        } catch (ActivityNotFoundException e) {
+            Log.e("----", e.getMessage());
             Toast.makeText(context, "There are no email applications installed.", Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
      * 去评分
+     *
      * @param activity
      */
-    public static void gotoMarket(Activity activity, String packageName){
-        Uri uri = Uri.parse("market://details?id="+packageName);
-        Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+    public static void gotoMarket(Activity activity, String packageName) {
+        Uri uri = Uri.parse("market://details?id=" + packageName);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
     }
@@ -83,7 +85,7 @@ public class NavigationManager {
     /**
      * 给朋友分享
      */
-    public static void gotoShare(Activity activity){
+    public static void gotoShare(Activity activity) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.setType("text/*");
@@ -91,16 +93,16 @@ public class NavigationManager {
         activity.startActivity(sendIntent);
     }
 
-    public static void openApp(Context context,String packageName) throws Exception{
+    public static void openApp(Context context, String packageName) throws Exception {
         Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
         context.startActivity(intent);
     }
 
-    public static void uninstallApp(Activity activity,String packageName){
+    public static void uninstallApp(Activity activity, String packageName) {
         Intent intent = new Intent(Intent.ACTION_UNINSTALL_PACKAGE);
-        intent.setData(Uri.parse("package:"+packageName));
-        intent.putExtra(Intent.EXTRA_RETURN_RESULT,true);
-        activity.startActivityForResult(intent,UNINSTALL_REQUEST_CODE);
+        intent.setData(Uri.parse("package:" + packageName));
+        intent.putExtra(Intent.EXTRA_RETURN_RESULT, true);
+        activity.startActivityForResult(intent, UNINSTALL_REQUEST_CODE);
     }
 
     /**
@@ -108,7 +110,7 @@ public class NavigationManager {
      *
      * @param file
      */
-    public static void browseFile(Context context,File file) {
+    public static void browseFile(Context context, File file) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         Uri uri = Uri.fromFile(file);
         intent.setDataAndType(uri, "file/*");
@@ -117,6 +119,7 @@ public class NavigationManager {
 
     /**
      * open app detail info
+     *
      * @param packageName
      */
     public static void openAppDetail(Context context, String packageName) {
@@ -140,7 +143,7 @@ public class NavigationManager {
         context.startActivity(intent);
     }
 
-    public static void gotoMainActivityFromSplashView(Activity context){
+    public static void gotoMainActivityFromSplashView(Activity context) {
         context.startActivity(new Intent(context, MainActivity.class));
         context.finish();
     }

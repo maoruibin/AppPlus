@@ -22,34 +22,43 @@
 
 package com.gudong.appkit.ui.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.gudong.appkit.R;
+import com.gudong.appkit.dao.WeChatHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.RxBus;
 import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.activity.BaseActivity;
+import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.control.ThemeControl;
+import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import jonathanfinerty.once.Once;
+
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener, ColorChooseDialog.IClickColorSelectCallback, Preference.OnPreferenceChangeListener {
     private BaseActivity mContext;
-
+    private WeChatHelper mHelper;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = (BaseActivity) getActivity();
+        mHelper = new WeChatHelper(getActivity());
         addPreferencesFromResource(R.xml.prefs_setting);
 
         //设置点击监听
         findPreference(getString(R.string.preference_key_theme_primary)).setOnPreferenceClickListener(this);
+        findPreference(getString(R.string.preference_key_wechat_helper)).setOnPreferenceClickListener(this);
+        findPreference(getString(R.string.preference_key_open_wechat_download)).setOnPreferenceClickListener(this);
 
         findPreference(getString(R.string.switch_preference_key_show_self)).setOnPreferenceChangeListener(this);
         findPreference(getString(R.string.switch_preference_key_list_item_brief_mode)).setOnPreferenceChangeListener(this);
@@ -63,6 +72,26 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
             dialog.setColorSelectCallback(this);
             dialog.show(mContext, mContext.getThemeUtils().getThemePosition());
             MobclickAgent.onEvent(mContext, "setting_theme_color");
+        }
+        //用if判断 效率不会很好 待改善
+        if (key.equals(getString(R.string.preference_key_wechat_helper))) {
+            final String showWhatsNew = "showWhatsWeChatHelper";
+            if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
+                DialogUtil.showSinglePointDialog(getActivity(), mContext.getString(R.string.about_wechat_helper), mContext.getString(R.string.dialog_know), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Once.markDone(showWhatsNew);
+                        mHelper.checkDownloadListDialog(false);
+                    }
+                });
+            }else{
+                mHelper.checkDownloadListDialog(false);
+            }
+
+
+        }
+        if (key.equals(getString(R.string.preference_key_open_wechat_download))) {
+            NavigationManager.browseFile(getActivity(),mHelper.getWeChatDownloadDir());
         }
         return false;
     }

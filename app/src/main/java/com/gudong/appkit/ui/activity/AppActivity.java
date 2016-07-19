@@ -117,7 +117,7 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
 
                 Bundle data = new Bundle();
                 data.putParcelable("entity",mAppEntity);
-                RxBus.getInstance().send(new RxEvent(EEvent.UPDATE_ENTITY_FAVORIE_STATUS,data));
+                RxBus.getInstance().send(new RxEvent(EEvent.UPDATE_ENTITY_FAVORITE_STATUS,data));
 
                 break;
         }

@@ -58,5 +58,10 @@ public enum EEvent {
      */
     DELETE_SINGLE_EXPORT_FILE_SUC,
 
-    UPDATE_ENTITY_FAVORIE_STATUS;
+    UPDATE_ENTITY_FAVORITE_STATUS,
+
+    /**
+     * OPEN export dir
+     */
+    OPEN_EXPORT_DIR;
 }

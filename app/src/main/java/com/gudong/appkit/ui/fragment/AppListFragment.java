@@ -172,7 +172,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                     Logger.i("this is all type and list not contain " + installedEntity.getAppName() + "now add it");
                 }
                 break;
-            case UPDATE_ENTITY_FAVORIE_STATUS:
+            case UPDATE_ENTITY_FAVORITE_STATUS:
                 AppEntity updateEntity = msg.getData().getParcelable("entity");
                 //mAdapter.update();
                 break;

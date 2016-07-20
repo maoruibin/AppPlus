@@ -58,13 +58,13 @@ public class WeChatHelper {
                 final boolean[] nameListCheckByUser = nameListCheckInit;
                 new AlertDialog.Builder(mContext)
                         .setTitle(R.string.title_prepare_move)
-                        .setPositiveButton("开始复制并重命名", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(mContext.getString(R.string.start_copy_and_rename), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
                                 new AlertDialog.Builder(mContext)
                                         .setTitle(R.string.title_point)
-                                        .setMessage("确定要将选中的文件重命名并复制到 AppPlus 的导出目录吗？")
+                                        .setMessage(mContext.getString(R.string.dialog_message_copy_and_rename))
                                         .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
@@ -72,7 +72,7 @@ public class WeChatHelper {
                                             }
                                         })
                                         .setNegativeButton(R.string.dialog_cancel, null)
-                                        .setNeutralButton("复制并删除源文件", new DialogInterface.OnClickListener() {
+                                        .setNeutralButton(mContext.getString(R.string.copy_with_delete), new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 moveOrCopyFileList(nameListCheckByUser, listTencentDownloads,false);
@@ -93,7 +93,7 @@ public class WeChatHelper {
                         .show();
             }
         } else {
-            DialogUtil.showSinglePointDialog(mContext, "检测失败");
+            DialogUtil.showSinglePointDialog(mContext, mContext.getString(R.string.file_check_wechat));
         }
 
     }
@@ -102,7 +102,7 @@ public class WeChatHelper {
         if (operateFileList(nameListCheckByUser, listTencentDownloads,isKeepSource)) {
             new AlertDialog.Builder(mContext)
                     .setTitle(R.string.title_point)
-                    .setMessage("文件已拷贝至 AppPlus 导出目录，是否查看？")
+                    .setMessage(mContext.getString(R.string.dialog_message_copy_success))
                     .setPositiveButton(R.string.dialog_open, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

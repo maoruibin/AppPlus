@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.AlertDialog;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.WeChatHelper;
@@ -35,7 +36,6 @@ import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.ui.control.ThemeControl;
-import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
@@ -77,18 +77,20 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         if (key.equals(getString(R.string.preference_key_wechat_helper))) {
             final String showWhatsNew = "showWhatsWeChatHelper";
             if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
-                DialogUtil.showSinglePointDialog(getActivity(), mContext.getString(R.string.about_wechat_helper), mContext.getString(R.string.dialog_know), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Once.markDone(showWhatsNew);
-                        mHelper.checkDownloadListDialog(false);
-                    }
-                });
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(mContext.getString(R.string.title_about_wechat_helper))
+                        .setMessage(R.string.about_wechat_helper)
+                        .setPositiveButton(R.string.dialog_know, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Once.markDone(showWhatsNew);
+                                mHelper.checkDownloadListDialog(false);
+                            }
+                        })
+                        .show();
             }else{
                 mHelper.checkDownloadListDialog(false);
             }
-
-
         }
         if (key.equals(getString(R.string.preference_key_open_wechat_download))) {
             NavigationManager.browseFile(getActivity(),mHelper.getWeChatDownloadDir());

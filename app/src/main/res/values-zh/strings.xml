@@ -130,6 +130,15 @@
     <string name="fail_install_app">安装 %1$s 失败,请检查应用是否存在。</string>
 
     <string name="support_exception_for_alipay">检测到你还没有安装支付宝，不能进行打赏，但还是谢谢你的好意 ^_^</string>
-    <string name="about_wechat_helper">微信助手的作用：当你在自己的微信接受到一个 APK 安装包文件，微信会将 APK 文件名加一个数字的后缀，这样会导致你无法正常安装接受到的安装包，AppPlus 的微信助手将会自动帮你找到这些被重命名的文件，并重命名为 .apk 结尾的文件，以方便安装。</string>
+    <string name="about_wechat_helper">当你在自己的微信接受到一个 APK 安装包文件，微信会将 APK 文件名加一个数字的后缀，这样会导致你无法正常安装接受到的安装包，AppPlus 的微信助手将会自动帮你找到这些被重命名的文件，并重命名为 .apk 结尾的文件，以方便安装。</string>
     <string name="dialog_point_no_file">在你的微信下载目录没有发现任何安装包文件</string>
+    <string name="start_copy_and_rename">开始复制并重命名</string>
+    <string name="copy_with_delete">复制并删除源文件</string>
+    <string name="file_check_wechat">检测失败</string>
+    <string name="dialog_message_copy_success">文件已拷贝至 AppPlus 导出目录，是否查看？</string>
+    <string name="dialog_message_copy_and_rename">确定要将选中的文件重命名并复制到 AppPlus 的导出目录吗？</string>
+    <string name="preference_key_wechat_helper">wechat_helper</string>
+    <string name="preference_key_wechat_helper_auto_check">wechat_helper_auto_check</string>
+    <string name="preference_key_open_wechat_download">open_wechat_download</string>
+    <string name="title_about_wechat_helper">关于微信助手</string>
 </resources>

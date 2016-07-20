@@ -188,7 +188,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void showDonateDialog() {
-        String htmlFileName =  Utils.isChineseLanguage()?"donate_ch.html":"donate.html";
+        String htmlFileName =  Utils.isChineseLanguage()?"donate_ch.html":"donate_ch.html";
         DialogUtil.showCustomDialogWithTwoAction(this, getSupportFragmentManager(), getString(R.string.action_donate),htmlFileName, "donate",
                 getString(R.string.action_close),null,
                 getString(R.string.action_copy_to_clipboard),new DialogInterface.OnClickListener(){

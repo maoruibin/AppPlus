@@ -112,8 +112,7 @@ public class MainActivity extends BaseActivity {
                 .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
                     @Override
                     public void onClickButton(int which) {
-
-                        Toast.makeText(MainActivity.this, "which is "+which, Toast.LENGTH_SHORT).show();
+                        MobclickAgent.onEvent(MainActivity.this, "rate_score_"+which);
                     }
                 })
                 .monitor();

@@ -70,7 +70,7 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
             MobclickAgent.onEvent(mContext, "setting_about");
         }
         if(key.equals(getString(R.string.preference_key_score))){
-            //NavigationManager.gotoMarket(mContext,getActivity().getPackageName());
+//            NavigationManager.gotoMarket(mContext,getActivity().getPackageName());
             AppRate.with(getActivity()).showRateDialog(getActivity());
             MobclickAgent.onEvent(mContext, "setting_market");
         }

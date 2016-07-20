@@ -247,6 +247,10 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
                 MobclickAgent.onEvent(this, "search");
                 break;
+            case R.id.action_opinion:
+                NavigationManager.gotoSendOpinion(this);
+                MobclickAgent.onEvent(this, "send_email");
+                break;
         }
         return true;
     }

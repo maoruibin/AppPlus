@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_recent"
+            android:icon="@drawable/ic_recent_black_24dp"
+            android:title="@string/tab_recent" />
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_grade_black_24dp"
+            android:title="@string/tab_favorite" />
+        <item
+            android:id="@+id/nav_installed"
+            android:icon="@drawable/ic_installed_black_24dp"
+            android:title="@string/tab_installed" />
+        <item
+            android:id="@+id/nav_exported"
+            android:icon="@drawable/ic_exported_list_black_24dp"
+            android:title="@string/tab_exported" />
+
+        <item
+            android:id="@+id/nav_wechat_helper"
+            android:icon="@drawable/ic_toys_black_24dp"
+            android:visible="false"
+            android:title="@string/tab_wechat" />
+    </group>
+
+    <group
+        android:id="@+id/group2"
+        android:checkableBehavior="none">
+
+        <item android:id="@+id/nav_donate"
+              android:icon="@drawable/ic_favorite_black_24dp"
+              android:title="@string/action_donate"/>
+
+        <item android:id="@+id/nav_settings"
+              android:icon="@drawable/ic_settings_black_24dp"
+              android:title="@string/action_settings"/>
+
+        <item android:id="@+id/nav_about"
+              android:icon="@drawable/ic_about_black_24dp"
+              android:title="@string/action_about"/>
+
+        <item android:id="@+id/nav_opinion"
+              android:icon="@drawable/ic_help_black_24dp"
+              android:visible="false"
+              android:title="@string/action_opinion"/>
+    </group>
+
+</menu>

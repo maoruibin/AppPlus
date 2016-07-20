@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="action_search" type="id"/>
+    <item name="action_opinion" type="id"/>
+</resources>

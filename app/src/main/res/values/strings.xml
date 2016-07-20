@@ -141,4 +141,5 @@
     <string name="file_check_wechat">check file fail</string>
     <string name="dialog_message_copy_success">File has been copy to AppPlus export dir,watch it right now?</string>
     <string name="title_about_wechat_helper">About WeChat Helper</string>
+    <string name="action_visit_host">Visit Host Page</string>
 </resources>

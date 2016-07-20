@@ -141,4 +141,5 @@
     <string name="preference_key_wechat_helper_auto_check">wechat_helper_auto_check</string>
     <string name="preference_key_open_wechat_download">open_wechat_download</string>
     <string name="title_about_wechat_helper">关于微信助手</string>
+    <string name="action_visit_host">访问主页</string>
 </resources>

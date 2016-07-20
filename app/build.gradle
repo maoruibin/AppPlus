@@ -36,6 +36,9 @@ android {
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode Integer.parseInt(project.VERSION_CODE)
         versionName project.VERSION_NAME
+        //当前项目是不是出于 Debug 模式
+
+        buildConfigField "Boolean", "IS_RELEASE", "false"
     }
 
     lintOptions {
@@ -54,7 +57,10 @@ android {
             // remove useless resource file
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+
+            if (signingConfigs.release != null) {
+                signingConfig signingConfigs.release
+            }
 
             //set the output file name
             applicationVariants.all { variant ->
@@ -67,12 +73,27 @@ android {
                     }
                 }
             }
+            buildConfigField "Boolean", "IS_RELEASE", "true"
         }
         debug {
+            if (signingConfigs.release != null) {
+                signingConfig signingConfigs.release
+            }
+            //设置压缩对齐
+            zipAlignEnabled true
+            //移除无用的资源文件
+            shrinkResources false
+            //设置是否混淆
+            minifyEnabled false
+            //设置混淆配置文件
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 
     productFlavors {
+        beta {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE:"beta"]
+        }
         xiaomi {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE:"xiaomi"]
         }

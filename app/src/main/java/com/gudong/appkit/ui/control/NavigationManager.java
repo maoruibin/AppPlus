@@ -25,12 +25,12 @@ package com.gudong.appkit.ui.control;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.util.Log;
-import android.widget.Toast;
+import android.support.v7.app.AlertDialog;
 
 import com.gudong.appkit.R;
 import com.gudong.appkit.ui.activity.MainActivity;
@@ -55,7 +55,7 @@ public class NavigationManager {
      *
      * @param context
      */
-    public static void gotoSendOpinion(Activity context) {
+    public static void gotoSendOpinion(final Activity context) {
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
         emailIntent.setType("plain/text");
@@ -65,9 +65,27 @@ public class NavigationManager {
         try {
             context.startActivity(emailIntent);
         } catch (ActivityNotFoundException e) {
-            Log.e("----", e.getMessage());
-            Toast.makeText(context, "There are no email applications installed.", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.title_point)
+                    .setMessage("意见反馈需要你安装邮件客户端，检测到你的手机尚未使用任何邮件客户端，你可以立即去配置手机自带的邮件应用，也可以通过访问我个人主页的方式，跟我取得联系，再次感谢你对 AppPlus 支持！\n\n我的主页地址：gudong.name")
+                    .setPositiveButton(R.string.dialog_know,null)
+                    .setNegativeButton(R.string.dialog_cancel,null)
+                    .setNeutralButton(context.getString(R.string.action_visit_host), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            NavigationManager.openUrl(context,"http://gudong.name/");
+                        }
+                    })
+                    .show();
         }
+    }
+
+    public static void openUrl(Activity activity,String url){
+        Uri uri=Uri.parse(url);   //指定网址
+        Intent intent=new Intent();
+        intent.setAction(Intent.ACTION_VIEW);           //指定Action
+        intent.setData(uri);                            //设置Uri
+        activity.startActivity(intent);
     }
 
     /**

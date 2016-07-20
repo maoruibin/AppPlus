@@ -25,6 +25,8 @@ package com.gudong.appkit;
 import android.app.Application;
 import android.content.Context;
 
+import com.gudong.appkit.utils.logger.LogLevel;
+import com.gudong.appkit.utils.logger.Logger;
 import com.litesuits.orm.LiteOrm;
 
 import jonathanfinerty.once.Once;
@@ -43,5 +45,7 @@ public class App extends Application {
         sDb = LiteOrm.newSingleInstance(this, DB_NAME);
         sContext = this;
         Once.initialise(this);
+        Logger.init("AppPlusLog").setLogLevel(BuildConfig.IS_RELEASE?LogLevel.NONE:LogLevel.FULL);
+        sDb.setDebugged(!BuildConfig.IS_RELEASE);
     }
 }

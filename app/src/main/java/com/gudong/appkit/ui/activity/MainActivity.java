@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity {
                 .setLaunchTimes(5) // default 10
                 .setRemindInterval(2) // default 1
                 .setShowLaterButton(true) // default true
-                .setDebug(!BuildConfig.IS_RELEASE) // default false
+                .setDebug(BuildConfig.IS_DEBUG) // default false
                 .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
                     @Override
                     public void onClickButton(int which) {

@@ -38,7 +38,7 @@ android {
         versionName project.VERSION_NAME
         //当前项目是不是出于 Debug 模式
 
-        buildConfigField "Boolean", "IS_RELEASE", "false"
+        buildConfigField "Boolean", "IS_DEBUG", "true"
     }
 
     lintOptions {
@@ -73,7 +73,7 @@ android {
                     }
                 }
             }
-            buildConfigField "Boolean", "IS_RELEASE", "true"
+            buildConfigField "Boolean", "IS_DEBUG", "false"
         }
         debug {
             if (signingConfigs.release != null) {

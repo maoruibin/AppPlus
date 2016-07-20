@@ -45,7 +45,7 @@ public class App extends Application {
         sDb = LiteOrm.newSingleInstance(this, DB_NAME);
         sContext = this;
         Once.initialise(this);
-        Logger.init("AppPlusLog").setLogLevel(BuildConfig.IS_RELEASE?LogLevel.NONE:LogLevel.FULL);
-        sDb.setDebugged(!BuildConfig.IS_RELEASE);
+        Logger.init("AppPlusLog").setLogLevel(BuildConfig.IS_DEBUG?LogLevel.FULL:LogLevel.NONE);
+        sDb.setDebugged(BuildConfig.IS_DEBUG);
     }
 }

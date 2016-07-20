@@ -195,7 +195,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         Toolbar toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-        toolbar.setTitle(R.string.app_name);
+        toolbar.setTitle(R.string.app_name_inner);
 
         toolbar.setSubtitle(getTitleString(mType));
 

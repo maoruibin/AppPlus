@@ -42,6 +42,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gudong.appkit.BuildConfig;
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.DataHelper;
@@ -104,11 +105,11 @@ public class MainActivity extends BaseActivity {
 
     private void rateApp() {
         AppRate.with(this)
-                .setInstallDays(0) // default 10, 0 means install day.
-                .setLaunchTimes(3) // default 10
+                .setInstallDays(1) // default 10, 0 means install day.
+                .setLaunchTimes(5) // default 10
                 .setRemindInterval(2) // default 1
                 .setShowLaterButton(true) // default true
-                .setDebug(false) // default false
+                .setDebug(!BuildConfig.IS_RELEASE) // default false
                 .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
                     @Override
                     public void onClickButton(int which) {
@@ -272,7 +273,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.action_opinion:
                 NavigationManager.gotoSendOpinion(this);
-                MobclickAgent.onEvent(this, "send_email");
+                MobclickAgent.onEvent(MainActivity.this, "title_send_opinion");
                 break;
         }
         return true;

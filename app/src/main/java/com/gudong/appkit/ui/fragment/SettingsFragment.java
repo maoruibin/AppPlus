@@ -75,6 +75,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         }
         //用if判断 效率不会很好 待改善
         if (key.equals(getString(R.string.preference_key_wechat_helper))) {
+            MobclickAgent.onEvent(getActivity(), "wechat_helper");
             final String showWhatsNew = "showWhatsWeChatHelper";
             if (!Once.beenDone(Once.THIS_APP_VERSION, showWhatsNew)) {
                 new AlertDialog.Builder(getActivity())
@@ -94,6 +95,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         }
         if (key.equals(getString(R.string.preference_key_open_wechat_download))) {
             NavigationManager.browseFile(getActivity(),mHelper.getWeChatDownloadDir());
+            MobclickAgent.onEvent(getActivity(), "open_wechat_download");
         }
         return false;
     }

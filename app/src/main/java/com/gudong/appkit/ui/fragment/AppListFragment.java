@@ -383,7 +383,7 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
                 if(!entity.isFavorite()){
                     mAdapter.removeItem(entity);
                 }
-                MobclickAgent.onEvent(getActivity(), "pop_favorite");
+                MobclickAgent.onEvent(getActivity(), "favoriteInList");
                 break;
         }
     }

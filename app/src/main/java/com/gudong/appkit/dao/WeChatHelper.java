@@ -13,6 +13,7 @@ import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.utils.DialogUtil;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,6 +70,7 @@ public class WeChatHelper {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 moveOrCopyFileList(nameListCheckByUser, listTencentDownloads,true);
+                                                MobclickAgent.onEvent(mContext, "moveCopy");
                                             }
                                         })
                                         .setNegativeButton(R.string.dialog_cancel, null)
@@ -76,6 +78,7 @@ public class WeChatHelper {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 moveOrCopyFileList(nameListCheckByUser, listTencentDownloads,false);
+                                                MobclickAgent.onEvent(mContext, "moveDelete");
                                             }
                                         })
                                         .show();

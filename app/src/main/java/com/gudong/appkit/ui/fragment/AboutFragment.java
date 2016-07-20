@@ -37,6 +37,8 @@ import com.umeng.update.UmengUpdateListener;
 import com.umeng.update.UpdateResponse;
 import com.umeng.update.UpdateStatus;
 
+import hotchemi.android.rate.AppRate;
+
 /**
  * 关于页面
  */
@@ -68,7 +70,8 @@ public class AboutFragment extends PreferenceFragment implements Preference.OnPr
             MobclickAgent.onEvent(mContext, "setting_about");
         }
         if(key.equals(getString(R.string.preference_key_score))){
-            NavigationManager.gotoMarket(mContext,getActivity().getPackageName());
+            //NavigationManager.gotoMarket(mContext,getActivity().getPackageName());
+            AppRate.with(getActivity()).showRateDialog(getActivity());
             MobclickAgent.onEvent(mContext, "setting_market");
         }
         if(key.equals(getString(R.string.preference_key_opinion))){

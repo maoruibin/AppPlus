@@ -1,0 +1,7 @@
+<resources>
+    <string name="rate_dialog_title">给五颗星的评价鼓励？</string>
+    <string name="rate_dialog_message">如果你喜欢 AppPlus，希望你能给予五颗星的评价，让更多人下载使用它！</string>
+    <string name="rate_dialog_ok">给五颗星</string>
+    <string name="rate_dialog_cancel">稍候提醒我</string>
+    <string name="rate_dialog_no">不，谢谢</string>
+</resources>

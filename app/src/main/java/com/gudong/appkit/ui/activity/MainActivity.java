@@ -58,6 +58,8 @@ import com.gudong.appkit.utils.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.update.UmengUpdateAgent;
 
+import hotchemi.android.rate.AppRate;
+import hotchemi.android.rate.OnClickButtonListener;
 import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity {
@@ -96,6 +98,28 @@ public class MainActivity extends BaseActivity {
         subscribeEvents();
 
         checkWeChatDownloadFile();
+
+        rateApp();
+    }
+
+    private void rateApp() {
+        AppRate.with(this)
+                .setInstallDays(0) // default 10, 0 means install day.
+                .setLaunchTimes(3) // default 10
+                .setRemindInterval(2) // default 1
+                .setShowLaterButton(true) // default true
+                .setDebug(false) // default false
+                .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
+                    @Override
+                    public void onClickButton(int which) {
+
+                        Toast.makeText(MainActivity.this, "which is "+which, Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .monitor();
+
+        // Show a dialog if meets conditions
+        AppRate.showRateDialogIfMeetsConditions(this);
     }
 
     private void checkWeChatDownloadFile() {

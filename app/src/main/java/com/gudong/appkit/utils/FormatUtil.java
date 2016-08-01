@@ -31,6 +31,9 @@ import android.text.style.ForegroundColorSpan;
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by GuDong on 12/6/15 15:36.
  * Contact with 1252768410@qq.com.
@@ -60,5 +63,10 @@ public class FormatUtil {
      */
     public static String formatVersionName(AppEntity entity){
         return "(".concat(entity.getVersionName()).concat(")");
+    }
+
+    public static String formatTimeToMinute(long time){
+        String format = "MM-dd HH:mm";
+        return new SimpleDateFormat(format).format(new Date(time));
     }
 }

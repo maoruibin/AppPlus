@@ -3,6 +3,7 @@
     <string name="app_name_inner">AppPlus</string>
 
     <string name="action_settings">Setting</string>
+    <string name="action_export">export</string>
     <string name="action_donate">Support Developer</string>
     <string name="action_opinion">Send opinion</string>
     <string name="action_retry">Reload</string>

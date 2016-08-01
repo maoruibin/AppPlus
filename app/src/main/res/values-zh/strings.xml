@@ -4,6 +4,7 @@
 
     <string name="action_donate">支持开发者</string>
     <string name="action_settings">设置</string>
+    <string name="action_export">导出</string>
     <string name="action_opinion">意见反馈</string>
     <string name="action_retry">重试</string>
     <string name="action_about">关于</string>

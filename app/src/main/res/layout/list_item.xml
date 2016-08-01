@@ -58,7 +58,7 @@
             android:ellipsize="end"
             tools:text="com.gudong.appplus"
             android:singleLine="true"
-            tools:visibility="gone"
+            tools:visibility="visible"
             android:textSize="@dimen/text_size_item_body"
             style="@style/TextAppearance.AppCompat.Widget.ActionMode.Subtitle"/>
 

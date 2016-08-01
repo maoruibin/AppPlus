@@ -120,9 +120,10 @@ public class AppFileListAdapter extends RecyclerView.Adapter<AppFileListAdapter.
         holder.tvVersion.setVisibility(View.VISIBLE);
 
         holder.tvVersion.setText(FormatUtil.formatVersionName(entity));
-        holder.tvPackName.setText(entity.getSrcPath());
-        holder.tvPackName.setSingleLine(false);
-        holder.tvPackName.setMaxLines(2);
+//        holder.tvPackName.setText(entity.getSrcPath());
+//        holder.tvPackName.setSingleLine(false);
+//        holder.tvPackName.setMaxLines(2);
+        holder.tvPackName.setText(FormatUtil.formatTimeToMinute(entity.getLastModifyTime())+" "+mContext.getString(R.string.action_export));
 
 
         holder.ivIcon.setOnClickListener(this);

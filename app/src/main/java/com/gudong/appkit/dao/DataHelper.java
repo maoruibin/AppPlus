@@ -160,6 +160,7 @@ public class DataHelper {
                     entity.setAppIconData(parser.getIconFile().data);
                     entity.setVersionName(meta.versionName);
                     entity.setSrcPath(file.getAbsolutePath());
+                    entity.setLastModifyTime(file.lastModified());
                     exportList.add(entity);
                 }
                 return exportList;

@@ -38,6 +38,7 @@ import com.litesuits.orm.db.enums.AssignType;
 @Table("app_entity") public class AppEntity  implements Parcelable{
     public static final String COLUMN_FAVORITE = "favorite";
     public static final String COLUMN_PACKAGE_NAME = "packageName";
+    public static final String COLUMN_LAST_MODIFY_TIME = "lastModifyTime";
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     @Column("_id") protected long id;
 
@@ -52,6 +53,8 @@ import com.litesuits.orm.db.enums.AssignType;
     //add in 2016.6.21
     @Default("false")
     @Column(COLUMN_FAVORITE) private boolean isFavorite;
+    //add in 2016.8.1
+    @Column(COLUMN_LAST_MODIFY_TIME) private long lastModifyTime;
 
     private int status;
 
@@ -142,6 +145,14 @@ import com.litesuits.orm.db.enums.AssignType;
         isFavorite = favorite;
     }
 
+    public long getLastModifyTime() {
+        return lastModifyTime;
+    }
+
+    public void setLastModifyTime(long lastModifyTime) {
+        this.lastModifyTime = lastModifyTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -199,6 +210,7 @@ import com.litesuits.orm.db.enums.AssignType;
         dest.writeString(this.srcPath);
         dest.writeInt(this.uid);
         dest.writeByte(this.isFavorite ? (byte) 1 : (byte) 0);
+        dest.writeLong(this.lastModifyTime);
         dest.writeInt(this.status);
     }
 
@@ -212,6 +224,7 @@ import com.litesuits.orm.db.enums.AssignType;
         this.srcPath = in.readString();
         this.uid = in.readInt();
         this.isFavorite = in.readByte() != 0;
+        this.lastModifyTime = in.readLong();
         this.status = in.readInt();
     }
 

@@ -43,6 +43,7 @@ import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.utils.FormatUtil;
 
 import java.lang.reflect.Field;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +124,10 @@ public class AppFileListAdapter extends RecyclerView.Adapter<AppFileListAdapter.
 //        holder.tvPackName.setText(entity.getSrcPath());
 //        holder.tvPackName.setSingleLine(false);
 //        holder.tvPackName.setMaxLines(2);
-        holder.tvPackName.setText(FormatUtil.formatTimeToMinute(entity.getLastModifyTime())+" "+mContext.getString(R.string.action_export));
+        float size = (float)entity.getTotalSpace()/(1024*1024);
+        DecimalFormat decimalFormat=new DecimalFormat(".00");
+        String stringSize = decimalFormat.format(size);
+        holder.tvPackName.setText(stringSize+"Mb  "+FormatUtil.formatTimeToMinute(entity.getLastModifyTime()));
 
 
         holder.ivIcon.setOnClickListener(this);

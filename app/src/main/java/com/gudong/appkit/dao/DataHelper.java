@@ -22,13 +22,16 @@
 
 package com.gudong.appkit.dao;
 
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.usage.UsageStats;
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.gudong.appkit.App;
 import com.gudong.appkit.utils.FileUtil;
 import com.gudong.appkit.utils.RxUtil;
+import com.gudong.appkit.utils.UStats;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 import com.jaredrummler.android.processes.ProcessManager;
@@ -131,9 +134,33 @@ public class DataHelper {
             @Override
             public List<AppEntity> call() throws Exception {
                 List<ActivityManager.RunningAppProcessInfo> runningList = ProcessManager.getRunningAppProcessInfo(ctx);
+                Logger.i("=====","runing size is "+runningList.size());
                 List<AppEntity> list = new ArrayList<>();
                 for (ActivityManager.RunningAppProcessInfo processInfo : runningList) {
                     String packageName = processInfo.processName;
+                    if (isNotShowSelf(ctx, packageName)) continue;
+                    AppEntity entity = DataHelper.getAppByPackageName(packageName);
+                    if (entity == null) continue;
+                    list.add(entity);
+                }
+                return list;
+            }
+        });
+    }
+
+    @TargetApi(24)
+    public static Observable<List<AppEntity>>getAppList(final Context ctx){
+        return RxUtil.makeObservable(new Callable<List<AppEntity>>() {
+            @Override
+            public List<AppEntity> call() throws Exception {
+                List<UsageStats> listStats = UStats.getUsageStatsList(ctx);
+                List<AppEntity> list = new ArrayList<>();
+                for (UsageStats stats:listStats) {
+                    stats.getPackageName();
+                    String packageName = stats.getPackageName();
+                    if(packageName.contains("android") || packageName.contains("google")){
+                        continue;
+                    }
                     if (isNotShowSelf(ctx, packageName)) continue;
                     AppEntity entity = DataHelper.getAppByPackageName(packageName);
                     if (entity == null) continue;
@@ -161,6 +188,7 @@ public class DataHelper {
                     entity.setVersionName(meta.versionName);
                     entity.setSrcPath(file.getAbsolutePath());
                     entity.setLastModifyTime(file.lastModified());
+                    entity.setTotalSpace(file.length());
                     exportList.add(entity);
                 }
                 return exportList;

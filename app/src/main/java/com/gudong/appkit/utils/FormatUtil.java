@@ -66,7 +66,7 @@ public class FormatUtil {
     }
 
     public static String formatTimeToMinute(long time){
-        String format = "MM-dd HH:mm";
+        String format = "yyyy-MM-dd HH:mm";
         return new SimpleDateFormat(format).format(new Date(time));
     }
 }

@@ -22,7 +22,11 @@
 
 package com.gudong.appkit.ui.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 
 import com.gudong.appkit.App;
 import com.gudong.appkit.R;
@@ -35,7 +39,10 @@ import com.gudong.appkit.event.RxBus;
 import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.FileUtil;
+import com.gudong.appkit.utils.UStats;
+import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +57,7 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class SplashActivity extends BaseActivity {
+    private static final int GRUNT_RECENT_PREMISSION = 100;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // make view full screen
@@ -58,20 +66,58 @@ public class SplashActivity extends BaseActivity {
         setStatusBarColorRes(R.color.colorPrimary);
         checkAndUpdateLocalDb();
         checkExportDirectoryIsChange();
-        gotoMainActivity();
+        if(Utils.isAndroidN()){
+            if (UStats.getUsageStatsList(this).isEmpty() && !Utils.dontShowAndroidNPermission(this)){
+                new AlertDialog.Builder(this)
+                        .setMessage("检测到您使用的是 Android N 设备，为了获取到最近运行的 App 列表，你需要授予 AppPlus 相关的权限，是否授予？")
+                        .setPositiveButton(R.string.action_grunt, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                                startActivityForResult(intent,GRUNT_RECENT_PREMISSION);
+                                MobclickAgent.onEvent(SplashActivity.this, "android_N_and_grant_permission");
+                            }
+                        })
+                        .setNegativeButton(R.string.action_refuse, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Utils.addAndroidNRefuseFlag(SplashActivity.this);
+                                gotoMainActivity(false);
+                            }
+                        })
+                        .setNeutralButton(R.string.dialog_do_not_point, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Utils.addNotShowAndroidNRefuseFlag(SplashActivity.this);
+                                gotoMainActivity(false);
+                            }
+                        })
+                        .show();
+            }else{
+                gotoMainActivity(true);
+            }
+        }else{
+            gotoMainActivity(true);
+        }
+
     }
 
-    private void gotoMainActivity() {
-        //delay 1500 mill and enter MainActivity
-        Observable.timer(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .map(new Func1<Long, Object>() {
-                    @Override
-                    public Object call(Long aLong) {
-                        NavigationManager.gotoMainActivityFromSplashView(SplashActivity.this);
-                        return null;
-                    }
-                })
-                .subscribe();
+    private void gotoMainActivity(boolean withDelayTime) {
+        if(withDelayTime){
+            //delay 1500 mill and enter MainActivity
+            Observable.timer(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                    .map(new Func1<Long, Object>() {
+                        @Override
+                        public Object call(Long aLong) {
+                            NavigationManager.gotoMainActivityFromSplashView(SplashActivity.this);
+                            return null;
+                        }
+                    })
+                    .subscribe();
+        }else{
+            NavigationManager.gotoMainActivityFromSplashView(SplashActivity.this);
+        }
+
     }
 
     /**
@@ -177,5 +223,13 @@ public class SplashActivity extends BaseActivity {
     protected int initLayout() {
         //splash layout is set by Theme in AndroidManifest file
         return -1;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == GRUNT_RECENT_PREMISSION){
+            gotoMainActivity(false);
+        }
     }
 }

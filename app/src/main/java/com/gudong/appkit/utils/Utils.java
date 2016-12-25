@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Resources;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
@@ -43,12 +44,30 @@ import java.util.Locale;
  * Created by mao on 7/21/15.
  */
 public class Utils {
+    private static final String KEY_IS_REFUSE_ANDROID_N_GET_RESENT_APP_LIST = "is_refuse_android_n_get_resent_app_list";
+    private static final String KEY_DONT_SHOW_ANDROID_N_PERMISSION = "key_dont_show_android_n_get_resent_app_list";
     public static void setCurrentVersion(Context context, String version) {
         putStringPreference(context, "current_version", version);
     }
 
     public static String getLocalVersion(Context context) {
         return getStringPreference(context, "current_version", "");
+    }
+
+    public static void addAndroidNRefuseFlag(Context context) {
+        putBooleanPreference(context, KEY_IS_REFUSE_ANDROID_N_GET_RESENT_APP_LIST, true);
+    }
+
+    public static boolean isResuleAndroidNPermission(Context context){
+        return getBooleanPreference(context,KEY_IS_REFUSE_ANDROID_N_GET_RESENT_APP_LIST);
+    }
+
+    public static void addNotShowAndroidNRefuseFlag(Context context) {
+        putBooleanPreference(context, KEY_DONT_SHOW_ANDROID_N_PERMISSION, true);
+    }
+
+    public static boolean dontShowAndroidNPermission(Context context){
+        return getBooleanPreference(context,KEY_DONT_SHOW_ANDROID_N_PERMISSION);
     }
 
     /**
@@ -237,5 +256,8 @@ public class Utils {
         return sp.getBoolean(key, false);
     }
 
+    public static boolean isAndroidN(){
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N;
+    }
 }
 

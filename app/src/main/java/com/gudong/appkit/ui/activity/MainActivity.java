@@ -42,7 +42,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gudong.appkit.BuildConfig;
 import com.gudong.appkit.R;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.DataHelper;
@@ -64,6 +63,7 @@ import hotchemi.android.rate.OnClickButtonListener;
 import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity {
+
     DrawerLayout mDrawerLayout;
     NavigationView mNavigationView;
 
@@ -89,10 +89,7 @@ public class MainActivity extends BaseActivity {
         songtitle = (TextView) header.findViewById(R.id.song_title);
         songartist = (TextView) header.findViewById(R.id.song_artist);
 
-
         setupDrawerContent(mNavigationView);
-
-        versionCheck();
 
         selectRecent();
 
@@ -100,8 +97,11 @@ public class MainActivity extends BaseActivity {
 
         checkWeChatDownloadFile();
 
+        versionCheck();
         rateApp();
+
     }
+
 
     private void rateApp() {
         AppRate.with(this)
@@ -109,7 +109,6 @@ public class MainActivity extends BaseActivity {
                 .setLaunchTimes(5) // default 10
                 .setRemindInterval(2) // default 1
                 .setShowLaterButton(true) // default true
-                .setDebug(BuildConfig.IS_DEBUG) // default false
                 .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
                     @Override
                     public void onClickButton(int which) {

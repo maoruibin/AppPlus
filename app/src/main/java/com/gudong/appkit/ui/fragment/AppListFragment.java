@@ -27,6 +27,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -39,6 +40,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,12 +52,14 @@ import com.gudong.appkit.R;
 import com.gudong.appkit.adapter.AppInfoListAdapter;
 import com.gudong.appkit.dao.AppEntity;
 import com.gudong.appkit.dao.DataHelper;
+import com.gudong.appkit.event.PermissionException;
 import com.gudong.appkit.event.RxBus;
 import com.gudong.appkit.event.RxEvent;
 import com.gudong.appkit.ui.activity.AppActivity;
 import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ActionUtil;
+import com.gudong.appkit.utils.UStats;
 import com.gudong.appkit.utils.Utils;
 import com.gudong.appkit.utils.logger.Logger;
 import com.gudong.appkit.view.DividerItemDecoration;
@@ -75,7 +79,7 @@ import rx.schedulers.Schedulers;
  * Created by mao on 15/7/8.
  */
 public class AppListFragment extends Fragment implements AppInfoListAdapter.IClickPopupMenuItem, AppInfoListAdapter.IClickListItem{
-
+    private static final int GRUNT_RECENT_PREMISSION = 100;
     public static final String KEY_TYPE = "type";
     public static final int TYPE_RECENT = 0;
     public static final int TYPE_INSTALLED = 1;
@@ -301,7 +305,16 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
         Observable<List<AppEntity>> listObservable = null;
         switch (mType) {
             case TYPE_RECENT:
-                listObservable = DataHelper.getRunningAppEntity(getActivity());
+                if(Utils.isAndroidN()){
+                    //Check if permission enabled
+                    if (UStats.getUsageStatsList(getActivity()).isEmpty()){
+                        listObservable = Observable.error(new PermissionException());
+                    }else{
+                        listObservable = DataHelper.getAppList(getActivity());
+                    }
+                }else{
+                    listObservable = DataHelper.getRunningAppEntity(getActivity());
+                }
                 break;
             case TYPE_INSTALLED:
                 listObservable = DataHelper.getAllEntityByDbAsyn();
@@ -327,7 +340,22 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
             @Override
             public void onError(Throwable throwable) {
-                throwable.printStackTrace();
+                loadingFinish();
+                if(throwable instanceof PermissionException){
+                    final Snackbar errorSnack = Snackbar.make(mRecyclerView, "获取最近运行程序列表失败，请授予 AppPlus 相关权限。", Snackbar.LENGTH_INDEFINITE);
+                    errorSnack.setAction(R.string.action_grunt, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            errorSnack.dismiss();
+                            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                            startActivityForResult(intent,GRUNT_RECENT_PREMISSION);
+                        }
+                    });
+                    errorSnack.show();
+                }else{
+                    throwable.printStackTrace();
+                }
+
             }
         };
 
@@ -448,6 +476,17 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
             return getString(R.string.app_list_empty_all);
         } else {
             return getString(R.string.app_list_empty_search);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("==== app list","resultCode "+resultCode);
+        if(requestCode == GRUNT_RECENT_PREMISSION){
+            if(resultCode == 0){
+                fillData();
+            }
         }
     }
 }

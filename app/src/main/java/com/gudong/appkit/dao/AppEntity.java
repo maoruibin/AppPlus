@@ -39,6 +39,7 @@ import com.litesuits.orm.db.enums.AssignType;
     public static final String COLUMN_FAVORITE = "favorite";
     public static final String COLUMN_PACKAGE_NAME = "packageName";
     public static final String COLUMN_LAST_MODIFY_TIME = "lastModifyTime";
+    public static final String COLUMN_TOTAL_SPACE = "totalSpace";
     @PrimaryKey(AssignType.AUTO_INCREMENT)
     @Column("_id") protected long id;
 
@@ -55,6 +56,7 @@ import com.litesuits.orm.db.enums.AssignType;
     @Column(COLUMN_FAVORITE) private boolean isFavorite;
     //add in 2016.8.1
     @Column(COLUMN_LAST_MODIFY_TIME) private long lastModifyTime;
+    @Column(COLUMN_TOTAL_SPACE) private long totalSpace;
 
     private int status;
 
@@ -153,6 +155,14 @@ import com.litesuits.orm.db.enums.AssignType;
         this.lastModifyTime = lastModifyTime;
     }
 
+    public long getTotalSpace() {
+        return totalSpace;
+    }
+
+    public void setTotalSpace(long totalSpace) {
+        this.totalSpace = totalSpace;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -211,6 +221,7 @@ import com.litesuits.orm.db.enums.AssignType;
         dest.writeInt(this.uid);
         dest.writeByte(this.isFavorite ? (byte) 1 : (byte) 0);
         dest.writeLong(this.lastModifyTime);
+        dest.writeLong(this.totalSpace);
         dest.writeInt(this.status);
     }
 
@@ -225,6 +236,7 @@ import com.litesuits.orm.db.enums.AssignType;
         this.uid = in.readInt();
         this.isFavorite = in.readByte() != 0;
         this.lastModifyTime = in.readLong();
+        this.totalSpace = in.readLong();
         this.status = in.readInt();
     }
 

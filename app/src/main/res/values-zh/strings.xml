@@ -11,10 +11,12 @@
     <string name="action_wechat_helper">微信助手</string>
     <string name="action_close">关闭</string>
     <string name="action_copy_to_clipboard">复制账号并打开支付宝</string>
+    <string name="action_grunt">授予</string>
+    <string name="action_refuse">拒绝</string>
     <string name="copy_success">支付宝账号已复制到粘贴板 </string>
     <string name="empty"></string>
 
-    <string name="tab_recent">最近打开</string>
+    <string name="tab_recent">最近运行</string>
     <string name="tab_favorite">收藏</string>
     <string name="tab_installed">已安装</string>
     <string name="tab_exported">已导出APK</string>

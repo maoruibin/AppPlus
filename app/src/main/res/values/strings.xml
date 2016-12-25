@@ -11,6 +11,8 @@
     <string name="action_wechat_helper">WechatHelper</string>
     <string name="action_close">Close</string>
     <string name="action_copy_to_clipboard">Copy and open Alipay</string>
+    <string name="action_grunt">Grunt</string>
+    <string name="action_refuse">Refuse</string>
     <string name="copy_success">copy successfully </string>
     <string name="empty"></string>
 

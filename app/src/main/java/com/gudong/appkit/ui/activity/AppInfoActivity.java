@@ -34,6 +34,7 @@ public class AppInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupToolBar(R.string.action_package, true);
         initView();
         basicViewController = new AppBasicViewController(this);
         permissionViewController = new AppPermissionViewController(this);
@@ -48,7 +49,6 @@ public class AppInfoActivity extends BaseActivity {
 
         String packageName = getIntent().getStringExtra("package");
         fillData(packageName);
-
     }
 
     private void fillData(String packageName) {

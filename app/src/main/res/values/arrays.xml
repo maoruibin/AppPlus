@@ -24,6 +24,7 @@
     <array name="more_action">
         <item>Open</item>
         <item>Uninstall</item>
+        <item>Watch detail</item>
         <item>Go market</item>
     </array>
 </resources>

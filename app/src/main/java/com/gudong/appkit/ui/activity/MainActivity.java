@@ -22,9 +22,6 @@
 
 package com.gudong.appkit.ui.activity;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,8 +40,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gudong.appkit.R;
-import com.gudong.appkit.dao.AppEntity;
-import com.gudong.appkit.dao.DataHelper;
 import com.gudong.appkit.dao.WeChatHelper;
 import com.gudong.appkit.event.EEvent;
 import com.gudong.appkit.event.RxBus;
@@ -60,6 +55,7 @@ import com.umeng.update.UmengUpdateAgent;
 
 import hotchemi.android.rate.AppRate;
 import hotchemi.android.rate.OnClickButtonListener;
+import moe.feng.alipay.zerosdk.AlipayZeroSdk;
 import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity {
@@ -217,19 +213,8 @@ public class MainActivity extends BaseActivity {
                 getString(R.string.action_copy_to_clipboard),new DialogInterface.OnClickListener(){
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String alipay = "com.eg.android.AlipayGphone";
-                        AppEntity alipayApp = DataHelper.getAppByPackageName(alipay);
-                        if(alipayApp!=null){
-                            //复制到粘贴板
-                            ClipboardManager cmb = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
-                            cmb.setPrimaryClip(ClipData.newPlainText(null, "gudong.name@gmail.com"));
-                            Toast.makeText(MainActivity.this, R.string.copy_success, Toast.LENGTH_LONG).show();
-                            //打开支付宝
-                            try {
-                                NavigationManager.openApp(MainActivity.this,alipay);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                        if(AlipayZeroSdk.hasInstalledAlipayClient(MainActivity.this)){
+                            AlipayZeroSdk.startAlipayClient(MainActivity.this, "aex07094cljuqa36ku7ml36");
                         }else{
                             Toast.makeText(MainActivity.this,getString(R.string.support_exception_for_alipay), Toast.LENGTH_SHORT).show();
                         }

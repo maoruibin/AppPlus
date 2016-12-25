@@ -8,10 +8,11 @@
     <string name="action_opinion">意见反馈</string>
     <string name="action_retry">重试</string>
     <string name="action_about">关于</string>
+    <string name="action_package">包信息</string>
     <string name="action_wechat_helper">微信助手</string>
     <string name="action_close">关闭</string>
     <string name="action_copy_to_clipboard">复制账号并打开支付宝</string>
-    <string name="action_grunt">授予</string>
+    <string name="action_grunt">前往授权页面</string>
     <string name="action_refuse">拒绝</string>
     <string name="copy_success">支付宝账号已复制到粘贴板 </string>
     <string name="empty"></string>
@@ -25,6 +26,7 @@
     <string name="menu_pop_item_file">导出到本地</string>
     <string name="menu_pop_item_share">分享安装包</string>
     <string name="menu_pop_item_detail">查看应用详情</string>
+    <string name="menu_pop_item_package">查看包信息</string>
     <string name="menu_pop_item_open">打开此软件</string>
     <string name="menu_pop_item_more">更多操作</string>
 

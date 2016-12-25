@@ -8,6 +8,7 @@
     <string name="action_opinion">Send opinion</string>
     <string name="action_retry">Reload</string>
     <string name="action_about">About</string>
+    <string name="action_package">Package Info</string>
     <string name="action_wechat_helper">WechatHelper</string>
     <string name="action_close">Close</string>
     <string name="action_copy_to_clipboard">Copy and open Alipay</string>
@@ -25,6 +26,7 @@
     <string name="menu_pop_item_file">Export to local</string>
     <string name="menu_pop_item_share">Share apk</string>
     <string name="menu_pop_item_detail">Watch detail</string>
+    <string name="menu_pop_item_package">Watch package info</string>
     <string name="menu_pop_item_open">Open</string>
     <string name="menu_pop_item_more">More</string>
 

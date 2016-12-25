@@ -55,7 +55,7 @@ android {
             minifyEnabled false
             zipAlignEnabled true
             // remove useless resource file
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             if (signingConfigs.release != null) {
@@ -112,6 +112,9 @@ android {
         play {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "play"]
         }
+        coolapk {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "coolapk"]
+        }
     }
 }
 
@@ -162,6 +165,7 @@ dependencies {
     compile 'com.jonathanfinerty.once:once:1.0.3'
     compile project(':library')
     compile 'com.github.maoruibin:ViewController:0.9.0'
+    compile "moe.feng:AlipayZeroSdk:1.1"
 }
 
 task showMeCache << {

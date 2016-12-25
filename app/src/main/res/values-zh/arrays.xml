@@ -24,6 +24,7 @@
     <array name="more_action">
         <item>打开应用</item>
         <item>卸载应用</item>
+        <item>查看应用详情</item>
         <item>去市场查看</item>
     </array>
 </resources>

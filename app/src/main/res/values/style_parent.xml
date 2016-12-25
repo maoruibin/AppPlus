@@ -6,7 +6,7 @@
         <item name="theme_accent_color">@color/colorAccent</item>
 
         <item name="ic_menu_export">@drawable/ic_export_black_24dp</item>
-        <item name="ic_menu_detail">@drawable/ic_detail_black_24dp</item>
+        <item name="ic_menu_detail">@drawable/ic_android_black_24dp</item>
         <item name="ic_menu_share">@drawable/ic_share_black_24dp</item>
         <item name="ic_menu_favorite">@drawable/ic_grade_black_24dp</item>
 

@@ -121,7 +121,7 @@
                     android:id="@+id/tv_detail"
                     style="@style/ActionButton"
                     android:drawableTop="?attr/ic_menu_detail"
-                    android:text="@string/menu_pop_item_detail"/>
+                    android:text="@string/menu_pop_item_package"/>
                 <View
                     android:layout_width="@dimen/dp_1"
                     android:layout_height="match_parent"

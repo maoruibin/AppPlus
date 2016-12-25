@@ -172,9 +172,8 @@ public class AppOperateActivity extends BaseActivity implements View.OnClickList
                 MobclickAgent.onEvent(this, "action_export");
                 break;
             case R.id.tv_detail:
-//                NavigationManager.openAppDetail(this,mAppEntity.getPackageName());
                 NavigationManager.openAppInfo(this,mAppEntity.getPackageName());
-                MobclickAgent.onEvent(this, "action_detail");
+                MobclickAgent.onEvent(this, "action_package");
                 break;
             case R.id.tv_more:
                 showMoreDialog();
@@ -198,6 +197,10 @@ public class AppOperateActivity extends BaseActivity implements View.OnClickList
                                 MobclickAgent.onEvent(AppOperateActivity.this, "more_uninstall");
                                 break;
                             case 2:
+                                NavigationManager.openAppDetail(AppOperateActivity.this,mAppEntity.getPackageName());
+                                MobclickAgent.onEvent(AppOperateActivity.this, "watch_detail");
+                                break;
+                            case 3:
                                 NavigationManager.gotoMarket(AppOperateActivity.this,mAppEntity.getPackageName());
                                 MobclickAgent.onEvent(AppOperateActivity.this, "action_market");
                                 break;

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.gudong.appkit"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest package="com.gudong.appkit"
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
 
     <!-- 往sdcard中写入数据的权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -13,19 +12,18 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
+        tools:ignore="ProtectedPermissions"/>
 
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:label="@string/app_name"
-        tools:replace="label"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme_AppPlus">
+        android:theme="@style/Theme_AppPlus"
+        tools:replace="label">
 
         <!-- begin umeng -->
         <meta-data
@@ -48,7 +46,8 @@
         <activity android:name=".ui.activity.MainActivity"/>
         <activity android:name=".ui.activity.SimpleContainerActivity">
         </activity>
-        <activity android:name=".ui.activity.SplashActivity"
+        <activity
+            android:name=".ui.activity.SplashActivity"
             android:theme="@style/Theme_Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -58,15 +57,19 @@
         </activity>
         <activity android:name=".ui.activity.SearchActivity">
         </activity>
-        <activity android:name=".ui.activity.AppActivity"/>
+        <activity android:name=".ui.activity.AppOperateActivity"/>
 
         <receiver android:name=".receiver.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_REMOVED"/>
                 <action android:name="android.intent.action.PACKAGE_ADDED"/>
+
                 <data android:scheme="package"/>
             </intent-filter>
         </receiver>
+
+        <activity android:name=".ui.activity.AppInfoActivity">
+        </activity>
     </application>
 
 </manifest>

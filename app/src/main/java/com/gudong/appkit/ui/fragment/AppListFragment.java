@@ -55,7 +55,7 @@ import com.gudong.appkit.dao.DataHelper;
 import com.gudong.appkit.event.PermissionException;
 import com.gudong.appkit.event.RxBus;
 import com.gudong.appkit.event.RxEvent;
-import com.gudong.appkit.ui.activity.AppActivity;
+import com.gudong.appkit.ui.activity.AppOperateActivity;
 import com.gudong.appkit.ui.activity.BaseActivity;
 import com.gudong.appkit.ui.control.NavigationManager;
 import com.gudong.appkit.utils.ActionUtil;
@@ -419,12 +419,12 @@ public class AppListFragment extends Fragment implements AppInfoListAdapter.ICli
 
     @Override
     public void onClickListItemContent(View view, AppEntity entity) {
-        Intent intent = new Intent(getContext(), AppActivity.class);
-        intent.putExtra(AppActivity.EXTRA_APP_ENTITY, entity);
+        Intent intent = new Intent(getContext(), AppOperateActivity.class);
+        intent.putExtra(AppOperateActivity.EXTRA_APP_ENTITY, entity);
         ActivityOptionsCompat activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 getActivity(),
                 new Pair<View, String>(view.findViewById(R.id.iv_icon),
-                        AppActivity.VIEW_NAME_HEADER_IMAGE));
+                        AppOperateActivity.VIEW_NAME_HEADER_IMAGE));
 
         // Now we can start the Activity, providing the activity options as a bundle
         ActivityCompat.startActivity(getActivity(), intent, activityOptions.toBundle());

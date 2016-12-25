@@ -20,4 +20,7 @@
 
     <color name="black">#000</color>
     <color name="dark_background">#242424</color>
+
+    <color name="about_page_card_background">#ffffff</color>
+    <color name="about_page_card_shadow">#10000000</color>
 </resources>

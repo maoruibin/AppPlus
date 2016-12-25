@@ -33,6 +33,7 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 
 import com.gudong.appkit.R;
+import com.gudong.appkit.ui.activity.AppInfoActivity;
 import com.gudong.appkit.ui.activity.MainActivity;
 
 import java.io.File;
@@ -159,6 +160,13 @@ public class NavigationManager {
             intent.putExtra(appPkgName, packageName);
         }
         context.startActivity(intent);
+    }
+
+    public static void openAppInfo(Context context, String packageName) {
+        Intent intent = new Intent(context,AppInfoActivity.class);
+        intent.putExtra("package",packageName);
+        context.startActivity(intent);
+
     }
 
     public static void gotoMainActivityFromSplashView(Activity context) {

@@ -18,6 +18,7 @@ import com.umeng.analytics.MobclickAgent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -155,6 +156,9 @@ public class WeChatHelper {
         }
         if (wechatDownload.exists()) {
             File[] originList = wechatDownload.listFiles();
+            if(originList == null){
+                return Collections.EMPTY_LIST;
+            }
             List<File> apkList = new ArrayList<>();
             for (File file : originList) {
                 if (file.getName().contains("apk")) {

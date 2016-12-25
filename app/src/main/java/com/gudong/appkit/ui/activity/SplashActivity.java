@@ -92,6 +92,7 @@ public class SplashActivity extends BaseActivity {
                                 gotoMainActivity(false);
                             }
                         })
+                        .setCancelable(false)
                         .show();
             }else{
                 gotoMainActivity(true);

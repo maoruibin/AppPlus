@@ -52,7 +52,7 @@ import com.gudong.appkit.utils.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 
-public class AppActivity extends BaseActivity implements View.OnClickListener {
+public class AppOperateActivity extends BaseActivity implements View.OnClickListener {
     // View name of the header image. Used for activity scene transitions
     public static final String VIEW_NAME_HEADER_IMAGE = "detail:header:image";
 
@@ -172,7 +172,8 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
                 MobclickAgent.onEvent(this, "action_export");
                 break;
             case R.id.tv_detail:
-                NavigationManager.openAppDetail(this,mAppEntity.getPackageName());
+//                NavigationManager.openAppDetail(this,mAppEntity.getPackageName());
+                NavigationManager.openAppInfo(this,mAppEntity.getPackageName());
                 MobclickAgent.onEvent(this, "action_detail");
                 break;
             case R.id.tv_more:
@@ -183,39 +184,39 @@ public class AppActivity extends BaseActivity implements View.OnClickListener {
     }
 
     private void showMoreDialog() {
-        new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setItems(R.array.more_action, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which){
                             case 0:
                                 openApp();
-                                MobclickAgent.onEvent(AppActivity.this, "more_open");
+                                MobclickAgent.onEvent(AppOperateActivity.this, "more_open");
                                 break;
                             case 1:
                                 uninstallApp();
-                                MobclickAgent.onEvent(AppActivity.this, "more_uninstall");
+                                MobclickAgent.onEvent(AppOperateActivity.this, "more_uninstall");
                                 break;
                             case 2:
-                                NavigationManager.gotoMarket(AppActivity.this,mAppEntity.getPackageName());
-                                MobclickAgent.onEvent(AppActivity.this, "action_market");
+                                NavigationManager.gotoMarket(AppOperateActivity.this,mAppEntity.getPackageName());
+                                MobclickAgent.onEvent(AppOperateActivity.this, "action_market");
                                 break;
                         }
                     }
                 })
-                .create()
-                .show();
+                .create();
+        dialog.show();
     }
 
     private void uninstallApp() {
         if(Utils.isOwnApp(this,mAppEntity.getPackageName()))return;
-        NavigationManager.uninstallApp(AppActivity.this,mAppEntity.getPackageName());
+        NavigationManager.uninstallApp(AppOperateActivity.this,mAppEntity.getPackageName());
     }
 
     private void openApp() {
         if(Utils.isOwnApp(this,mAppEntity.getPackageName()))return;
         try {
-            NavigationManager.openApp(AppActivity.this,mAppEntity.getPackageName());
+            NavigationManager.openApp(AppOperateActivity.this,mAppEntity.getPackageName());
         } catch (Exception e) {
             e.printStackTrace();
             Snackbar.make(mTvShare,String.format(getString(R.string.fail_open_app),mAppEntity.getAppName()),Snackbar.LENGTH_LONG).show();

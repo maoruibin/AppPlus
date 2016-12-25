@@ -21,4 +21,7 @@
     <dimen name="text_size_item_body">14sp</dimen>
     <dimen name="text_size_item_small">12sp</dimen>
 
+    <dimen name="item_margin">16dp</dimen>
+    <dimen name="item_margin_small">10dp</dimen>
+
 </resources>

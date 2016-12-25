@@ -1,5 +1,9 @@
 
 #ChangeLog#
+* 0.9.5
+
+        add package info list (16/12/26)
+        adapter Android N (16/12/25)        
 
 * 0.3.2
         

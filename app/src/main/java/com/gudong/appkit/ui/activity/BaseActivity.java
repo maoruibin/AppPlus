@@ -51,7 +51,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         setTheme(mThemeUtils.getTheme(this));
         super.onCreate(savedInstanceState);
         // 设置是否对日志信息进行加密, true 加密
-        //AnalyticsConfig.enableEncrypt(true);
         // 设置布局
         if(initLayout()>0){
             setContentView(initLayout());

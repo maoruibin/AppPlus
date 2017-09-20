@@ -145,10 +145,11 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // Google
-    compile 'com.android.support:recyclerview-v7:23.2.0'
-    compile 'com.android.support:design:23.2.0'
-    compile 'com.android.support:gridlayout-v7:23.2.0'
-    compile 'com.android.support:percent:23.2.0'
+    compile "com.android.support:recyclerview-v7:${project.ANDROID_SUPPORT_VERSION}"
+    compile "com.android.support:appcompat-v7:${project.ANDROID_SUPPORT_VERSION}"
+    compile "com.android.support:design:${project.ANDROID_SUPPORT_VERSION}"
+    compile "com.android.support:gridlayout-v7:${project.ANDROID_SUPPORT_VERSION}"
+    compile "com.android.support:percent:${project.ANDROID_SUPPORT_VERSION}"
 
     // Reactivex
     compile 'io.reactivex:rxjava:1.0.1'

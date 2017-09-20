@@ -4,7 +4,7 @@ buildscript {
         maven { url 'https://dl.bintray.com/drummer-aidan/maven' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 
